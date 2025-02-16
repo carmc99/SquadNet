@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SquadNET.Application\SquadNET.Application.csproj" />
-    <ProjectReference Include="..\SquadNET.Logging\SquadNET.Logging.csproj" />
   </ItemGroup>
 
 </Project>

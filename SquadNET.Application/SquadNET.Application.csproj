@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SquadNET.Domain\SquadNET.Domain.csproj" />
+    <ProjectReference Include="..\SquadNET.LogManagement\SquadNET.LogManagement.csproj" />
+    <ProjectReference Include="..\SquadNET.Persistence\SquadNET.Persistence.csproj" />
+    <ProjectReference Include="..\SquadNET.Rcon\SquadNET.Rcon.csproj" />
+  </ItemGroup>
+
 </Project>
