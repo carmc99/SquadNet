@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SquadNET.Domain.Entities
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQDeployable::)?TakeDamage\(\): ([A-z0-9_]+)_C_[0-9]+: ([0-9.]+) damage attempt by causer ([A-z0-9_]+)_C_[0-9]+ instigator (.+) with damage type ([A-z0-9_]+)_C health remaining ([0-9.]+)")]
-    public class DeployableDamaged
+    public class DeployableDamagedInfo
     {
-        public RawData Raw { get; set; }
+        public RawDataInfo Raw { get; set; }
         public string Time { get; set; }
         public string ChainID { get; set; }
         public string Deployable { get; set; }

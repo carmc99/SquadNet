@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SquadNET.Domain.Entities
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: Player:(.+) ActualDamage=([0-9.]+) from (.+) \(Online IDs:([^|]+)\| Player Controller ID: ([^ ]+)\)caused by ([A-z_0-9-]+)_C")]
-    public class PlayerDamaged
+    public class PlayerDamagedInfo
     {
-        public RawData Raw { get; set; }
+        public RawDataInfo Raw { get; set; }
         public string Time { get; set; }
         public string ChainID { get; set; }
         public string VictimName { get; set; }

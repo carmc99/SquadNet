@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Domain.Entities
 {
-    public class Layer
+    public class LayerInfo
     {
         public string Name { get; set; }
         public string Classname { get; set; }
@@ -19,6 +19,6 @@ namespace SquadNET.Domain.Entities
         public string SizeType { get; set; }
         public int NumberOfCapturePoints { get; set; }
         public LightingInfo Lighting { get; set; }
-        public List<Team> Teams { get; set; } = new List<Team>();
+        public List<TeamInfo> Teams { get; set; } = new List<TeamInfo>();
     }
 }

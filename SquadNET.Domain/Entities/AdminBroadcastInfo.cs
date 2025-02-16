@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SquadNET.Domain.Entities
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: ADMIN COMMAND: Message broadcasted <(.+)> from (.+)")]
-    public class AdminBroadcast
+    public class AdminBroadcastInfo
     {
-        public RawData Raw { get; set; }
+        public RawDataInfo Raw { get; set; }
         public string Time { get; set; }
         public string ChainID { get; set; }
         public string Message { get; set; }

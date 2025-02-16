@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SquadNET.Domain.Entities
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQSoldier::)?Die\(\): Player:(.+) KillingDamage=(?:-)*([0-9.]+) from ([A-z_0-9]+) \(Online IDs:([^)|]+)\| Contoller ID: ([\w\d]+)\) caused by ([A-z_0-9-]+)_C")]
-    public class PlayerDied
+    public class PlayerDiedInfo
     {
-        public RawData Raw { get; set; }
+        public RawDataInfo Raw { get; set; }
         public string Time { get; set; }
         /// <summary>
         /// Se utiliza el mismo valor que Time para indicar el instante en que se produjo la herida.

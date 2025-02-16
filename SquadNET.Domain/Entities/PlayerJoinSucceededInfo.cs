@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SquadNET.Domain.Entities
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogNet: Join succeeded: (.+)")]
-    public class PlayerJoinSucceeded
+    public class PlayerJoinSucceededInfo
     {
-        public RawData Raw { get; set; }
+        public RawDataInfo Raw { get; set; }
         public string Time { get; set; }
         public int ChainID { get; set; }
         public string PlayerSuffix { get; set; }

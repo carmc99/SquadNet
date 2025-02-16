@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Domain.Entities
 {
-    public class Vehicle
+    public class VehicleInfo
     {
         public string Name { get; set; }
         public string Classname { get; set; }

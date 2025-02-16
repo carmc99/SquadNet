@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Domain.Entities
 {
-    public class RawData
+    public class RawDataInfo
     {
         public string Value { get; init; }
     }
