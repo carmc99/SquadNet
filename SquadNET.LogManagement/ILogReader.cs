@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.LogManagement.LogReaders
+namespace SquadNET.LogManagement
 {
     public interface ILogReader
     {

@@ -1,4 +1,5 @@
-﻿using Renci.SshNet;
+﻿using Microsoft.Extensions.Configuration;
+using Renci.SshNet;
 
 namespace SquadNET.LogManagement.LogReaders
 {
@@ -6,13 +7,15 @@ namespace SquadNET.LogManagement.LogReaders
     {
         private readonly SftpClient SftpClient;
         private readonly string RemoteFilePath;
-
         public event Action<string> OnLogLine;
 
-        public SftpLogReader(string host, string username, string password, string remoteFilePath)
+        public SftpLogReader(IConfiguration configuration)
         {
-            SftpClient = new SftpClient(host, username, password);
-            RemoteFilePath = remoteFilePath;
+            string host = configuration["LogReaders:Sftp:Host"];
+            string user = configuration["LogReaders:Sftp:User"];
+            string password = configuration["LogReaders:Sftp:Password"];
+            RemoteFilePath = configuration["LogReaders:Sftp:RemoteFilePath"];
+            SftpClient = new SftpClient(host, user, password); //TODO: Inyectar 
         }
 
         public async Task WatchAsync()
@@ -22,18 +25,14 @@ namespace SquadNET.LogManagement.LogReaders
             {
                 while (true)
                 {
-                    using (var stream = new MemoryStream())
+                    using var stream = new MemoryStream();
+                    SftpClient.DownloadFile(RemoteFilePath, stream);
+                    stream.Position = 0;
+                    using StreamReader reader = new(stream);
+                    while (!reader.EndOfStream)
                     {
-                        SftpClient.DownloadFile(RemoteFilePath, stream);
-                        stream.Position = 0;
-                        using (StreamReader reader = new(stream))
-                        {
-                            while (!reader.EndOfStream)
-                            {
-                                var line = await reader.ReadLineAsync();
-                                OnLogLine?.Invoke(line);
-                            }
-                        }
+                        var line = await reader.ReadLineAsync();
+                        OnLogLine?.Invoke(line);
                     }
                     await Task.Delay(5000);
                 }

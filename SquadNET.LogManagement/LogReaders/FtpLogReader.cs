@@ -1,4 +1,5 @@
 ﻿using FluentFTP;
+using Microsoft.Extensions.Configuration;
 
 namespace SquadNET.LogManagement.LogReaders
 {
@@ -9,10 +10,13 @@ namespace SquadNET.LogManagement.LogReaders
 
         public event Action<string> OnLogLine;
 
-        public FtpLogReader(string host, string username, string password, string remoteFilePath)
+        public FtpLogReader(IConfiguration configuration)
         {
-            FtpClient = new FtpClient(host, username, password);
-            RemoteFilePath = remoteFilePath;
+            string host = configuration["LogReaders:Ftp:Host"];
+            string user = configuration["LogReaders:Ftp:User"];
+            string password = configuration["LogReaders:Ftp:Password"];
+            RemoteFilePath = configuration["LogReaders:Ftp:RemoteFilePath"];
+            FtpClient = new FtpClient(host, user, password); //TODO: Inyectar 
         }
 
         public async Task WatchAsync()

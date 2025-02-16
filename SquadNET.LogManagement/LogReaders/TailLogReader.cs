@@ -1,16 +1,16 @@
-﻿
+﻿using Microsoft.Extensions.Configuration;
+
 namespace SquadNET.LogManagement.LogReaders
 {
     public class TailLogReader : ILogReader
     {
         private readonly string FilePath;
         private FileSystemWatcher Watcher;
-
         public event Action<string> OnLogLine;
 
-        public TailLogReader(string filePath)
+        public TailLogReader(IConfiguration configuration)
         {
-            FilePath = filePath;
+            FilePath = configuration["LogReaders:Tail:FilePath"];
         }
 
         public async Task WatchAsync()
@@ -31,10 +31,10 @@ namespace SquadNET.LogManagement.LogReaders
                 {
                     while (!reader.EndOfStream)
                     {
-                        var line = await reader.ReadLineAsync();
+                        string line = await reader.ReadLineAsync();
                         OnLogLine?.Invoke(line);
                     }
-                }
+                };
             }
         }
 
