@@ -1,6 +1,6 @@
 ﻿namespace SquadNET.LogManagement
 {
-    public class Class1
+    public class ServiceCollectionExtension
     {
 
     }

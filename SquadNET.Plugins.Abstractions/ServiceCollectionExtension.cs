@@ -1,6 +1,6 @@
 ﻿namespace SquadNET.Plugins.Abstractions
 {
-    public class Class1
+    public class ServiceCollectionExtension
     {
 
     }

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SquadNET.Domain\SquadNET.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

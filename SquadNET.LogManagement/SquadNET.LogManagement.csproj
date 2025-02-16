@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="LogReaders\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SquadNET.Domain\SquadNET.Domain.csproj" />
+    <ProjectReference Include="..\SquadNET.Persistence\SquadNET.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

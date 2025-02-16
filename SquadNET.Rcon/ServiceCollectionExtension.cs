@@ -1,6 +1,6 @@
 ﻿namespace SquadNET.Rcon
 {
-    public class Class1
+    public class ServiceCollectionExtension
     {
 
     }
