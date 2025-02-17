@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Domain.Entities
+namespace SquadNET.Core.Entities
 {
     public class TeamInfo
     {

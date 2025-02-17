@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Domain
+namespace SquadNET.Core
 {
     // Atributo para asociar un patrón regex a una clase
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]

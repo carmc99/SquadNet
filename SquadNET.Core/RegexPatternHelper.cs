@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Domain
+namespace SquadNET.Core
 {
     public static class RegexPatternHelper
     {
