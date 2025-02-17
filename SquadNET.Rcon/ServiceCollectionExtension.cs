@@ -2,7 +2,7 @@
 
 namespace SquadNET.Rcon
 {
-    public static class ServiceCollectionExtension
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddRconServices(this IServiceCollection services)
         {
