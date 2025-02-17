@@ -4,8 +4,9 @@ namespace SquadNET.Rcon
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddRcon(this IServiceCollection services)
+        public static IServiceCollection AddRconServices(this IServiceCollection services)
         {
+            services.AddSingleton<IRconService, SquadRcon>();
             return services;
         }
     }
