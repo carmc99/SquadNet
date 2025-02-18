@@ -22,21 +22,21 @@ namespace SquadNET.Application.Squad.Player.Queries
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly ICommandParser<ListPlayerModel> ListPlayersParser;
+            private readonly ICommandParser<ListPlayerModel> Parser;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                ICommandParser<ListPlayerModel> listPlayersParser)
+                ICommandParser<ListPlayerModel> parser)
             {
                 RconService = rconService;
                 Command = command;
-                ListPlayersParser = listPlayersParser;
+                Parser = parser;
             }
 
             public async Task<ListPlayerModel> Handle(Request request, CancellationToken cancellationToken)
             {
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListPlayers, cancellationToken);
-                ListPlayerModel players = ListPlayersParser.Parse(result);
+                ListPlayerModel players = Parser.Parse(result);
                 return players;
             }
         }

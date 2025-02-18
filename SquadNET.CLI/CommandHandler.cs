@@ -6,6 +6,7 @@ using MediatR;
 using SquadNET.Application.Squad.Admin.Commands;
 using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Core.Squad.Models;
+using SquadNET.Application.Squad.Admin.Queries;
 
 public class CommandHandler
 {
@@ -38,12 +39,12 @@ public class CommandHandler
                 break;
             }
 
-            ListPlayerModel response = await Mediator.Send(new ListPlayersQuery.Request());
+            var response = await Mediator.Send(new ListCommandsQuery.Request());
 
             //BroadcastMessageCommand.Request request = new() { Message = input };
             //string response = await Mediator.Send(request);
 
-            Console.WriteLine(response.ActivePlayers);    
+            Console.WriteLine(response);    
         }
 
         RconService.Disconnect();
