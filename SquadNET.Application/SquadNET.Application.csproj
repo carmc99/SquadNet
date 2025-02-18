@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SquadNET.Core\SquadNET.Core.csproj" />
     <ProjectReference Include="..\SquadNET.Extensions.Exceptions\SquadNET.Extensions.Exceptions.csproj" />
     <ProjectReference Include="..\SquadNET.LogManagement\SquadNET.LogManagement.csproj" />
     <ProjectReference Include="..\SquadNET.Rcon\SquadNET.Rcon.csproj" />

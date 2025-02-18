@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Squadmania.Squad.Rcon;
+using SquadNET.Core;
+using SquadNET.Core.Squad.Commands;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -56,7 +58,7 @@ namespace SquadNET.Rcon
             }
         }
 
-        public async Task<string> ExecuteCommandAsync(RconCommand command, params object[] args)
+        public async Task<string> ExecuteCommandAsync<SquadCommand>(Command<SquadCommand> command, SquadCommand commandType, params object[] args) where SquadCommand : Enum
         {
             if (!IsConnected)
             {
@@ -66,9 +68,9 @@ namespace SquadNET.Rcon
 
             try
             {
-                string formattedCommand = command.GetFormattedCommand(args);
+                string formattedCommand = command.GetFormattedCommand(commandType, args);
                 byte[] responseBytes = await RconClient.WriteCommandAsync(formattedCommand, CancellationToken.None);
-               
+
                 string response = System.Text.Encoding.UTF8.GetString(responseBytes);
 
                 Logger.LogInformation($"Comando ejecutado: {formattedCommand} | Respuesta: {response}");

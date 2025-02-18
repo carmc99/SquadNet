@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Rcon
 {
-    public enum RconCommand
+    public enum SquadCommand
     {
         WarnPlayer,
         KickPlayer,

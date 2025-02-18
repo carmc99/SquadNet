@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SquadNET.Core;
 
 namespace SquadNET.Rcon
 {

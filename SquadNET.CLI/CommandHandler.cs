@@ -1,5 +1,7 @@
 ﻿using SquadNET.Rcon;
 using Microsoft.Extensions.Logging;
+using SquadNET.Core;
+using SquadNET.Core.Squad.Commands;
 
 public class CommandHandler
 {
@@ -31,7 +33,10 @@ public class CommandHandler
                 break;
             }
 
-            RconService.ExecuteCommandAsync(RconCommand.BroadcastMessage, input);
+            RconService.ExecuteCommandAsync(
+                new SquadCommandTemplate(),
+                SquadCommand.BroadcastMessage,
+                input);
         }
 
         RconService.Disconnect();
