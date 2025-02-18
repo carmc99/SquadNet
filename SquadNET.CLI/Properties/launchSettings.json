@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SquadNET.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "sd"
+    }
+  }
+}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Events
+namespace SquadNET.Core.Squad.Events
 {
     public class LogEvents
     {

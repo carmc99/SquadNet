@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Entities
+namespace SquadNET.Core.Squad.Entities
 {
-    public class RawDataInfo
+    public class MapInfo
     {
-        public string Value { get; init; }
+        public string Name { get; set; }
     }
-
 }

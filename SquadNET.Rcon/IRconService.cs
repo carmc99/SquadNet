@@ -8,8 +8,8 @@ namespace SquadNET.Rcon
 {
     public interface IRconService
     {
-        Task ConnectAsync();
-        Task DisconnectAsync();
+        void Connect();
+        void Disconnect();
         Task<string> ExecuteCommandAsync(RconCommand command, params object[] args);
     }
 }

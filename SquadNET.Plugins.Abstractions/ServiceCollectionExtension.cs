@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SquadNET.Application.Services;
 using System.Reflection;
 
 namespace SquadNET.Plugins.Abstractions
@@ -7,6 +8,8 @@ namespace SquadNET.Plugins.Abstractions
     {
         public static IServiceCollection AddPlugins(this IServiceCollection services, string pluginsPath)
         {
+            services.AddSingleton<PluginManager>();
+
             IEnumerable<Assembly> pluginAssemblies = Directory.GetFiles(pluginsPath, "*.dll", SearchOption.TopDirectoryOnly)
                 .Select(Assembly.LoadFrom);
 

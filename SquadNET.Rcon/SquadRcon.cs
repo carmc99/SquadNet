@@ -19,16 +19,19 @@ namespace SquadNET.Rcon
             Configuration = configuration;
             Logger = logger;
 
-            string host = Configuration["Rcon:Host"] ?? throw new ArgumentNullException("Rcon:Host no está definido en la configuración.");
-            int port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
-            string password = Configuration["Rcon:Password"] ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
+            string host = Configuration["Rcon:Host"]
+                ?? throw new ArgumentNullException("Rcon:Host no está definido en la configuración.");
+            int port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? 
+                parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
+            string password = Configuration["Rcon:Password"]
+                ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
 
             RconClient = new RconClient(new IPEndPoint(
                 IPAddress.Parse(host), port),
                 password);
         }
 
-        public async Task ConnectAsync()
+        public void Connect()
         {
             try
             {
@@ -43,7 +46,7 @@ namespace SquadNET.Rcon
             }
         }
 
-        public async Task DisconnectAsync()
+        public void Disconnect()
         {
             if (IsConnected)
             {
