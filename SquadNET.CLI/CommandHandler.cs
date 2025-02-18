@@ -2,17 +2,20 @@
 using Microsoft.Extensions.Logging;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
+using MediatR;
+using SquadNET.Application.Squad.Admin.Commands;
 
 public class CommandHandler
 {
     private readonly IRconService RconService;
-
-    public CommandHandler(IRconService rconService)
+    private readonly IMediator Mediator;
+    public CommandHandler(IRconService rconService, IMediator mediator)
     {
         RconService = rconService;
+        Mediator = mediator;
     }
 
-    public void Run()
+    public async Task Run()
     {
         Console.WriteLine("CLI RCON Iniciada. Escriba 'salir' para cerrar.");
         RconService.Connect();
@@ -33,10 +36,10 @@ public class CommandHandler
                 break;
             }
 
-            RconService.ExecuteCommandAsync(
-                new SquadCommandTemplate(),
-                SquadCommand.BroadcastMessage,
-                input);
+            BroadcastMessageCommand.Request request = new() { Message = input };
+            string response = await Mediator.Send(request);
+
+            Console.WriteLine(response);    
         }
 
         RconService.Disconnect();

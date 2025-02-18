@@ -13,30 +13,40 @@ namespace SquadNET.Rcon
     {
         private readonly IConfiguration Configuration;
         private readonly ILogger<SquadRcon> Logger;
-        private readonly RconClient RconClient;
+        private RconClient RconClient;
         private bool IsConnected;
+        private readonly string Host;
+        private readonly int Port;
+        private readonly string Password;
 
         public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger)
         {
             Configuration = configuration;
             Logger = logger;
 
-            string host = Configuration["Rcon:Host"]
+            Host = Configuration["Rcon:Host"]
                 ?? throw new ArgumentNullException("Rcon:Host no está definido en la configuración.");
-            int port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? 
+            Port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? 
                 parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
-            string password = Configuration["Rcon:Password"]
+            Password = Configuration["Rcon:Password"]
                 ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
 
-            RconClient = new RconClient(new IPEndPoint(
-                IPAddress.Parse(host), port),
-                password);
+           
         }
 
         public void Connect()
         {
             try
             {
+                if (IsConnected)
+                {
+                    return;
+                }
+
+                RconClient = new RconClient(new IPEndPoint(
+                   IPAddress.Parse(Host), Port),
+                   Password);
+
                 RconClient.Start();
                 IsConnected = true;
                 Logger.LogInformation("Conectado correctamente al servidor RCON.");
@@ -68,6 +78,8 @@ namespace SquadNET.Rcon
 
             try
             {
+                Connect();
+
                 string formattedCommand = command.GetFormattedCommand(commandType, args);
                 byte[] responseBytes = await RconClient.WriteCommandAsync(formattedCommand, CancellationToken.None);
 
@@ -81,6 +93,10 @@ namespace SquadNET.Rcon
             {
                 Logger.LogError(ex, $"Error ejecutando comando RCON: {command}");
                 throw;
+            }
+            finally
+            {
+                //Disconnect(); //TODO: Revisar excepcion
             }
         }
     }

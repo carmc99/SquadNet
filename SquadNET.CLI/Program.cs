@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SquadNET.Application;
 using SquadNET.Rcon;
 
 using ServiceProvider serviceProvider = new ServiceCollection()
@@ -17,8 +18,9 @@ using ServiceProvider serviceProvider = new ServiceCollection()
             .Build();
     })
     .AddRconServices()
+    .AddSquadApplication()
     .AddSingleton<CommandHandler>()
     .BuildServiceProvider();
 
 CommandHandler commandHandler = serviceProvider.GetRequiredService<CommandHandler>();
-commandHandler.Run();
+await commandHandler.Run();
