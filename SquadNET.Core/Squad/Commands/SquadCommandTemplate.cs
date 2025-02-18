@@ -11,6 +11,12 @@ namespace SquadNET.Core.Squad.Commands
     {
         public SquadCommandTemplate()
         {
+            CommandTemplates.Add(SquadCommand.ListCommands, "ListCommands true");
+            CommandTemplates.Add(SquadCommand.ListSquads, "ListSquads");
+            CommandTemplates.Add(SquadCommand.ListPlayers, "ListPlayers");
+            CommandTemplates.Add(SquadCommand.ListLevels, "ListLevels");
+            CommandTemplates.Add(SquadCommand.ListLayers, "ListLayers");
+
             CommandTemplates.Add(SquadCommand.WarnPlayer, "AdminWarn \"{0}\" {1}");
             CommandTemplates.Add(SquadCommand.WarnPlayerById, "AdminWarnById {0} {1}");
             CommandTemplates.Add(SquadCommand.KickPlayer, "AdminKick \"{0}\" {1}");

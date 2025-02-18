@@ -11,6 +11,26 @@ namespace SquadNET.Rcon
     /// </summary>
     public enum SquadCommand
     {
+        /// <summary>Lists all available RCON commands.</summary>
+        /// <example>ListCommands true</example>
+        ListCommands,
+
+        /// <summary>Lists all squads on the server.</summary>
+        /// <example>ListSquads</example>
+        ListSquads,
+
+        /// <summary>Lists all players currently connected.</summary>
+        /// <example>ListPlayers</example>
+        ListPlayers,
+
+        /// <summary>Lists all available levels.</summary>
+        /// <example>ListLevels</example>
+        ListLevels,
+
+        /// <summary>Lists all available layers.</summary>
+        /// <example>ListLayers</example>
+        ListLayers,
+
         /// <summary>Warns a player with a specified reason.</summary>
         /// <example>AdminWarn "PlayerName" "Reason"</example>
         WarnPlayer,
