@@ -4,6 +4,10 @@ using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
 using MediatR;
 using SquadNET.Application.Squad.Admin.Commands;
+using SquadNET.Application.Squad.Player.Queries;
+using SquadNET.Core.Squad.Models;
+using SquadNET.Application.Squad.Admin.Queries;
+using SquadNET.Application.Squad.Team.Queries;
 
 public class CommandHandler
 {
@@ -36,8 +40,10 @@ public class CommandHandler
                 break;
             }
 
-            BroadcastMessageCommand.Request request = new() { Message = input };
-            string response = await Mediator.Send(request);
+            var response = await Mediator.Send(new ListPlayersQuery.Request());
+
+            //BroadcastMessageCommand.Request request = new() { Message = input };
+            //string response = await Mediator.Send(request);
 
             Console.WriteLine(response);    
         }

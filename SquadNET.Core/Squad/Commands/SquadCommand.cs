@@ -11,6 +11,26 @@ namespace SquadNET.Rcon
     /// </summary>
     public enum SquadCommand
     {
+        /// <summary>Lists all available RCON commands.</summary>
+        /// <example>ListCommands true</example>
+        ListCommands,
+
+        /// <summary>Lists all squads on the server.</summary>
+        /// <example>ListSquads</example>
+        ListSquads,
+
+        /// <summary>Lists all players currently connected.</summary>
+        /// <example>ListPlayers</example>
+        ListPlayers,
+
+        /// <summary>Lists all available levels.</summary>
+        /// <example>ListLevels</example>
+        ListLevels,
+
+        /// <summary>Lists all available layers.</summary>
+        /// <example>ListLayers</example>
+        ListLayers,
+
         /// <summary>Warns a player with a specified reason.</summary>
         /// <example>AdminWarn "PlayerName" "Reason"</example>
         WarnPlayer,
@@ -101,6 +121,58 @@ namespace SquadNET.Rcon
 
         /// <summary>Executes a custom RCON command.</summary>
         /// <example>ExecuteRaw "SomeCustomCommand"</example>
-        ExecuteRaw
+        ExecuteRaw,
+
+        /// <summary>Sets the number of reserved slots on the server.</summary>
+        /// <example>SetNumReservedSlots 10</example>
+        SetNumReservedSlots,
+
+        /// <summary>Sets the public queue limit for the server.</summary>
+        /// <example>SetPublicQueueLimit 5</example>
+        SetPublicQueueLimit,
+
+        /// <summary>Enables or disables the fog of war on the server.</summary>
+        /// <example>SetFogOfWar true</example>
+        SetFogOfWar,
+
+        /// <summary>Forces all vehicles to be available.</summary>
+        /// <example>ForceAllVehicleAvailability true</example>
+        ForceAllVehicleAvailability,
+
+        /// <summary>Forces all deployable structures to be available.</summary>
+        /// <example>ForceAllDeployableAvailability true</example>
+        ForceAllDeployableAvailability,
+
+        /// <summary>Forces all roles to be available.</summary>
+        /// <example>ForceAllRoleAvailability true</example>
+        ForceAllRoleAvailability,
+
+        /// <summary>Forces all actions to be available.</summary>
+        /// <example>ForceAllActionAvailability true</example>
+        ForceAllActionAvailability,
+
+        /// <summary>Modifies the cooldown time for team changes.</summary>
+        /// <example>NoTeamChangeTimer 30</example>
+        NoTeamChangeTimer,
+
+        /// <summary>Disables vehicle claiming, making all vehicles available.</summary>
+        /// <example>DisableVehicleClaiming true</example>
+        DisableVehicleClaiming,
+
+        /// <summary>Disables the team requirement for vehicle usage.</summary>
+        /// <example>DisableVehicleTeamRequirement true</example>
+        DisableVehicleTeamRequirement,
+
+        /// <summary>Disables the kit requirement for vehicle usage.</summary>
+        /// <example>DisableVehicleKitRequirement true</example>
+        DisableVehicleKitRequirement,
+
+        /// <summary>Allows placement of deployables and structures regardless of normal restrictions.</summary>
+        /// <example>AlwaysValidPlacement true</example>
+        AlwaysValidPlacement,
+
+        /// <summary>Adds a player as a cameraman, allowing them to use free camera mode.</summary>
+        /// <example>AddCameraman "PlayerName"</example>
+        AddCameraman,
     }
 }

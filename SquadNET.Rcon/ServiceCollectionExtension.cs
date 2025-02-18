@@ -8,7 +8,8 @@ namespace SquadNET.Rcon
     {
         public static IServiceCollection AddRconServices(this IServiceCollection services)
         {
-            services.AddSingleton<IRconService, SquadRcon>();
+            services.AddCore();
+            services.AddScoped<IRconService, SquadRcon>();
             services.AddSingleton<Command<SquadCommand>, SquadCommandTemplate>();
             return services;
         }
