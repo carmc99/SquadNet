@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Squadmania.Squad.Rcon;
+using SquadNET.Core;
+using SquadNET.Core.Squad.Commands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SquadNET.Rcon
@@ -11,66 +12,92 @@ namespace SquadNET.Rcon
     public class SquadRcon : IRconService
     {
         private readonly IConfiguration Configuration;
-        private TcpClient Client;
-        private NetworkStream Stream;
+        private readonly ILogger<SquadRcon> Logger;
+        private RconClient RconClient;
+        private bool IsConnected;
         private readonly string Host;
         private readonly int Port;
         private readonly string Password;
 
-        public SquadRcon(IConfiguration configuration)
+        public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger)
         {
             Configuration = configuration;
-            Host = Configuration["Rcon:Host"];
-            Port = int.Parse(Configuration["Rcon:Port"]);
-            Password = Configuration["Rcon:Password"];
+            Logger = logger;
+
+            Host = Configuration["Rcon:Host"]
+                ?? throw new ArgumentNullException("Rcon:Host no está definido en la configuración.");
+            Port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? 
+                parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
+            Password = Configuration["Rcon:Password"]
+                ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
+
+           
         }
 
-        public async Task ConnectAsync()
+        public void Connect()
         {
-            Client = new TcpClient(); // TODO: Inyectar?
-            await Client.ConnectAsync(Host, Port);
-            Stream = Client.GetStream();
-            await AuthenticateAsync();
+            try
+            {
+                if (IsConnected)
+                {
+                    return;
+                }
+
+                RconClient = new RconClient(new IPEndPoint(
+                   IPAddress.Parse(Host), Port),
+                   Password);
+
+                RconClient.Start();
+                IsConnected = true;
+                Logger.LogInformation("Conectado correctamente al servidor RCON.");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error al conectar con el servidor RCON.");
+                throw;
+            }
         }
 
-        private async Task AuthenticateAsync()
+        public void Disconnect()
         {
-            await SendCommandAsync(3, Password); // Auth Command
+            if (IsConnected)
+            {
+                RconClient.Stop();
+                IsConnected = false;
+                Logger.LogInformation("Desconectado del servidor RCON.");
+            }
         }
 
-        public async Task DisconnectAsync()
+        public async Task<string> ExecuteCommandAsync<SquadCommand>(Command<SquadCommand> command, SquadCommand commandType, params object[] args) where SquadCommand : Enum
         {
-            Client?.Close();
-        }
+            if (!IsConnected)
+            {
+                Logger.LogWarning("Intento de ejecutar un comando RCON sin conexión.");
+                throw new InvalidOperationException("No se puede ejecutar el comando porque no hay conexión activa.");
+            }
 
-        public async Task<string> ExecuteCommandAsync(RconCommand command, params object[] args)
-        {
-            string formattedCommand = command.GetFormattedCommand(args);
-            return await SendCommandAsync(2, formattedCommand);
-        }
+            try
+            {
+                Connect();
 
-        private async Task<string> SendCommandAsync(int type, string body)
-        {
-            byte[] buffer = new byte[4096];
-            byte[] request = EncodePacket(type, body);
-            await Stream.WriteAsync(request);
-            int responseLength = await Stream.ReadAsync(buffer);
-            return DecodePacket(buffer, responseLength);
-        }
+                string formattedCommand = command.GetFormattedCommand(commandType, args);
+                byte[] responseBytes = await RconClient.WriteCommandAsync(formattedCommand, CancellationToken.None);
 
-        private byte[] EncodePacket(int type, string body)
-        {
-            int size = body.Length + 14;
-            byte[] buffer = new byte[size];
-            BitConverter.GetBytes(size - 4).CopyTo(buffer, 0);
-            BitConverter.GetBytes(type).CopyTo(buffer, 8);
-            Encoding.UTF8.GetBytes(body).CopyTo(buffer, 12);
-            return buffer;
-        }
+                string response = System.Text.Encoding.UTF8.GetString(responseBytes);
 
-        private string DecodePacket(byte[] buffer, int length)
-        {
-            return Encoding.UTF8.GetString(buffer, 12, length - 14);
+                Logger.LogInformation($"Comando ejecutado: {formattedCommand} | Respuesta: {response}");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error ejecutando comando RCON: {command}");
+                throw;
+            }
+            finally
+            {
+                //Disconnect(); //TODO: Revisar excepcion
+            }
         }
     }
 }
