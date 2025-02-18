@@ -34,6 +34,19 @@ namespace SquadNET.Core.Squad.Commands
             CommandTemplates.Add(SquadCommand.RemovePlayerFromSquadById, "AdminRemovePlayerFromSquadById {0}");
             CommandTemplates.Add(SquadCommand.RestartMatch, "AdminRestartMatch");
             CommandTemplates.Add(SquadCommand.ExecuteRaw, "{0}");
+            CommandTemplates.Add(SquadCommand.SetNumReservedSlots, "AdminSetNumReservedSlots {0}");
+            CommandTemplates.Add(SquadCommand.SetPublicQueueLimit, "AdminSetPublicQueueLimit {0}");
+            CommandTemplates.Add(SquadCommand.SetFogOfWar, "AdminSetFogOfWar {0}");
+            CommandTemplates.Add(SquadCommand.ForceAllVehicleAvailability, "AdminForceAllVehicleAvailability {0}");
+            CommandTemplates.Add(SquadCommand.ForceAllDeployableAvailability, "AdminForceAllDeployableAvailability {0}");
+            CommandTemplates.Add(SquadCommand.ForceAllRoleAvailability, "AdminForceAllRoleAvailability {0}");
+            CommandTemplates.Add(SquadCommand.ForceAllActionAvailability, "AdminForceAllActionAvailability {0}");
+            CommandTemplates.Add(SquadCommand.NoTeamChangeTimer, "AdminNoTeamChangeTimer {0}");
+            CommandTemplates.Add(SquadCommand.DisableVehicleClaiming, "AdminDisableVehicleClaiming {0}");
+            CommandTemplates.Add(SquadCommand.DisableVehicleTeamRequirement, "AdminDisableVehicleTeamRequirement {0}");
+            CommandTemplates.Add(SquadCommand.DisableVehicleKitRequirement, "AdminDisableVehicleKitRequirement {0}");
+            CommandTemplates.Add(SquadCommand.AlwaysValidPlacement, "AdminAlwaysValidPlacement {0}");
+            CommandTemplates.Add(SquadCommand.AddCameraman, "AdminAddCameraman \"{0}\"");
         }
     }
 }

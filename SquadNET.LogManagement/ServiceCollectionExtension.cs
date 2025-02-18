@@ -7,11 +7,11 @@ namespace SquadNET.LogManagement
     {
         public static IServiceCollection AddLogManagement(this IServiceCollection services)
         {
-            services.AddKeyedSingleton<ILogReader, TailLogReader>(LogReaderType.Tail);
-            services.AddKeyedSingleton<ILogReader, FtpLogReader>(LogReaderType.Ftp);
-            services.AddKeyedSingleton<ILogReader, SftpLogReader>(LogReaderType.Sftp);
+            services.AddKeyedScoped<ILogReader, TailLogReader>(LogReaderType.Tail);
+            services.AddKeyedScoped<ILogReader, FtpLogReader>(LogReaderType.Ftp);
+            services.AddKeyedScoped<ILogReader, SftpLogReader>(LogReaderType.Sftp);
 
-            services.AddSingleton<ILogReaderFactory, LogReaderFactory>();
+            services.AddScoped<ILogReaderFactory, LogReaderFactory>();
             return services;
         }
     }

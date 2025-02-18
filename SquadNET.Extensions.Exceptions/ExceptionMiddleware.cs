@@ -27,7 +27,7 @@ namespace SquadNET.Extensions.Exceptions
         {
             try
             {
-                await Next(context); // Ejecutar la siguiente parte del pipeline
+                await Next(context);
             }
             catch (RconException rconEx)
             {
