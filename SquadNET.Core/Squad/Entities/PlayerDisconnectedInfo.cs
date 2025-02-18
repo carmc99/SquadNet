@@ -1,31 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SquadNET.Core.Squad.Entities
+﻿namespace SquadNET.Core.Squad.Entities
 {
     [RegexPattern(@"^ID: ([0-9]+) \| SteamID: ([0-9]+) \| Since Disconnect: ([0-9]+)m\.([0-9]+)s \| Name: (.*)$")]
     public class PlayerDisconnectedInfo
     {
-        public PlayerDisconnectedInfo(
-            int id,
-            ulong steamId64,
-            TimeSpan disconnectedSince,
-            string name
-        )
-        {
-            Id = id;
-            SteamId64 = steamId64;
-            DisconnectedSince = disconnectedSince;
-            Name = name;
-        }
-
-        public int Id { get; }
-        public ulong SteamId64 { get; }
-        public TimeSpan DisconnectedSince { get; }
-        public string Name { get; }
+        public int Id { get; set; }
+        public ulong SteamId { get; set; }
+        public TimeSpan DisconnectedSince { get; set; }
+        public string Name { get; set; }
 
         public bool Equals(
             PlayerDisconnectedInfo? other
@@ -33,7 +14,7 @@ namespace SquadNET.Core.Squad.Entities
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && SteamId64 == other.SteamId64 && DisconnectedSince.Equals(other.DisconnectedSince) && Name == other.Name;
+            return Id == other.Id && SteamId == other.SteamId && DisconnectedSince.Equals(other.DisconnectedSince) && Name == other.Name;
         }
 
         public override bool Equals(
@@ -45,7 +26,7 @@ namespace SquadNET.Core.Squad.Entities
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, SteamId64, DisconnectedSince, Name);
+            return HashCode.Combine(Id, SteamId, DisconnectedSince, Name);
         }
     }
 }

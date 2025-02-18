@@ -2,11 +2,8 @@
 using SquadNET.Core.Squad.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
+using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -14,58 +11,84 @@ namespace SquadNET.Core.Squad.Parsers
     {
         private const string ActivePlayersHeader = "----- Active Players -----";
         private const string DisconnectedPlayersHeader = "----- Recently Disconnected Players [Max of 15] -----";
-        public ListPlayerModel Parse(
-            string input
-        )
+
+        public ListPlayerModel Parse(string input)
         {
             input = input
+                .SanitizeInput()
                 .Replace(ActivePlayersHeader, "")
-                .Replace(DisconnectedPlayersHeader, "")
-                .Replace("\r\n", "\n");
-            string[] lines = input.Split("\n");
+                .Replace(DisconnectedPlayersHeader, "");
 
-            ListPlayerModel result = new(
-                [],
-                []
-            );
+            string[] lines = input.Split('\n');
+            ListPlayerModel result = new([], []);
 
             foreach (string line in lines)
             {
-                var match = RegexPatternHelper.GetRegex<PlayerConnectedInfo>().Match(line);
-                if (match.Success)
-                {
-                    string squadIdStr = match.Groups[5].Value;
-                    int? squadId = squadIdStr == "N/A" ? (int?)null : int.Parse(squadIdStr);
-
-                    result.ActivePlayers.Add(
-                        new PlayerConnectedInfo(
-                            int.Parse(match.Groups[1].Value),
-                            ulong.Parse(match.Groups[2].Value),
-                            match.Groups[3].Value,
-                            (TeamId)int.Parse(match.Groups[4].Value),
-                            match.Groups[6].Value == "True",
-                            match.Groups[7].Value,
-                            squadId
-                        )
-                    );
-                    continue;
-                }
-
-                match = RegexPatternHelper.GetRegex<PlayerDisconnectedInfo>().Match(line);
-                if (!match.Success)
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     continue;
                 }
 
-                result.DisconnectedPlayers.Add(
-                    new PlayerDisconnectedInfo(
-                        int.Parse(match.Groups[1].Value),
-                        ulong.Parse(match.Groups[2].Value),
-                        new TimeSpan(0, 0, int.Parse(match.Groups[3].Value), int.Parse(match.Groups[4].Value)),
-                        match.Groups[5].Value
-                    )
-                );
+                PlayerConnectedInfo playerConnectedInfo = ParsePlayerConnected(line);
+                PlayerDisconnectedInfo playerDisconnectedInfo = ParsePlayerDisconnected(line);
+
+                if (playerConnectedInfo != null)
+                {
+                    result.ActivePlayers.Add(playerConnectedInfo);
+                }
+
+                if (playerDisconnectedInfo != null)
+                {
+                    result.DisconnectedPlayers.Add(playerDisconnectedInfo);
+                }
             }
+
+            return result;
+        }
+
+        private PlayerConnectedInfo ParsePlayerConnected(string line)
+        {
+            Match match = RegexPatternHelper.GetRegex<PlayerConnectedInfo>().Match(line);
+            if (!match.Success || match.Groups.Count < 9)
+            {
+                return null;
+            }
+
+            Dictionary<string, string> parsedValues = new()
+            {
+                { "Id", match.Groups[1].Value },
+                { "EosId", match.Groups[2].Value },
+                { "SteamId", match.Groups[3].Value },
+                { "Name", match.Groups[4].Value },
+                { "TeamId", match.Groups[5].Value },
+                { "SquadId", match.Groups[6].Value },
+                { "IsLeader", match.Groups[7].Value },
+                { "Role", match.Groups[8].Value }
+            };
+
+            PlayerConnectedInfo result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedInfo>(parsedValues);
+
+            return result;
+        }
+
+        private PlayerDisconnectedInfo ParsePlayerDisconnected(string line)
+        {
+            Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedInfo>().Match(line);
+            if (!match.Success || match.Groups.Count < 6)
+            {
+                return null;
+            }
+
+            Dictionary<string, string> parsedValues = new()
+            {
+                { "Id", match.Groups[1].Value },
+                { "SteamId", match.Groups[2].Value },
+                { "Minutes", match.Groups[3].Value },
+                { "Seconds", match.Groups[4].Value },
+                { "Name", match.Groups[5].Value }
+            };
+
+            PlayerDisconnectedInfo result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedInfo>(parsedValues);
 
             return result;
         }
