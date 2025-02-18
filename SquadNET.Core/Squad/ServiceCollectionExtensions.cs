@@ -3,6 +3,7 @@ using SquadNET.Core.Squad.Models;
 using SquadNET.Core.Squad.Parsers;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using Squadmania.Squad.Rcon.Parsers;
 
 public static class ServiceCollectionExtensions
 {
@@ -11,6 +12,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ICommandParser<ListPlayerModel>, ListPlayersParser>();
         services.AddSingleton<ICommandParser<List<CommandInfo>>, ListCommandsParser>();
         services.AddSingleton<ICommandParser<List<SquadInfo>>, ListSquadsParser>();
+        services.AddSingleton<ICommandParser<List<TeamInfo>>, ListTeamsParser>();
         return services;
     }
 

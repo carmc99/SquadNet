@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ListCommandsParser : ICommandParser<List<CommandInfo>>
+    internal class ListCommandsParser : ICommandParser<List<CommandInfo>>
     {
         public List<CommandInfo> Parse(string input)
         {
