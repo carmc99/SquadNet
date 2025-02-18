@@ -9,8 +9,8 @@ namespace SquadNET.Core.Squad.Entities
     [RegexPattern(@"^Team ID: ([0-9]+) \((.+)\)$")]
     public class TeamInfo
     {
-        public TeamId Id { get; }
-        public string Name { get; }
+        public TeamId Id { get; set; }
+        public string Name { get; set; }
 
         public bool Equals(
             TeamInfo? other

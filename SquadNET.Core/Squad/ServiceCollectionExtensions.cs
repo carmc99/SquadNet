@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<ICommandParser<ListPlayerModel>, ListPlayersParser>();
         services.AddSingleton<ICommandParser<List<CommandInfo>>, ListCommandsParser>();
+        services.AddSingleton<ICommandParser<List<SquadInfo>>, ListSquadsParser>();
         return services;
     }
 

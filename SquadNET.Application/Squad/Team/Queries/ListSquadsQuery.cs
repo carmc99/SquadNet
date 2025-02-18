@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Squadmania.Squad.Rcon.Parsers;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Rcon;
@@ -16,24 +15,28 @@ namespace SquadNET.Application.Squad.Team.Queries
     /// </summary>
     public static class ListSquadsQuery
     {
-        public class Request : IRequest<List<TeamInfo>> { }
+        public class Request : IRequest<List<SquadInfo>> { }
 
-        public class Handler : IRequestHandler<Request, List<TeamInfo>>
+        public class Handler : IRequestHandler<Request, List<SquadInfo>>
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
+            private readonly ICommandParser<List<SquadInfo>> Parser;
 
-            public Handler(IRconService rconService, Command<SquadCommand> command)
+            public Handler(IRconService rconService,
+                Command<SquadCommand> command,
+                ICommandParser<List<SquadInfo>> parser)
             {
                 RconService = rconService;
                 Command = command;
+                Parser = parser;
             }
 
-            public async Task<List<TeamInfo>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<List<SquadInfo>> Handle(Request request, CancellationToken cancellationToken)
             {
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListSquads, cancellationToken);
-                return null;
-                //TODO: return ListSquadsParser.Parse(result);
+                List<SquadInfo> squads = Parser.Parse(result);
+                return squads;
             }
         }
     }
