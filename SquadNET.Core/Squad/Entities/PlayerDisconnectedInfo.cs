@@ -6,14 +6,46 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogNet: UChannel::Close: Sending CloseBunch\. ChIndex == [0-9]+\. Name: \[UChannel\] ChIndex: [0-9]+, Closing: [0-9]+ \[UNetConnection\] RemoteAddr: ([\d.]+):[\d]+, Name: EOSIpNetConnection_[0-9]+, Driver: GameNetDriver EOSNetDriver_[0-9]+, IsServer: YES, PC: ([^ ]+PlayerController_C_[0-9]+), Owner: [^ ]+PlayerController_C_[0-9]+, UniqueId: RedpointEOS:([\d\w]+)")]
+    [RegexPattern(@"^ID: ([0-9]+) \| SteamID: ([0-9]+) \| Since Disconnect: ([0-9]+)m\.([0-9]+)s \| Name: (.*)$")]
     public class PlayerDisconnectedInfo
     {
-        public RawDataInfo Raw { get; set; }
-        public string Time { get; set; }
-        public string ChainID { get; set; }
-        public string IP { get; set; }
-        public string PlayerController { get; set; }
-        public string EosID { get; set; }
+        public PlayerDisconnectedInfo(
+            int id,
+            ulong steamId64,
+            TimeSpan disconnectedSince,
+            string name
+        )
+        {
+            Id = id;
+            SteamId64 = steamId64;
+            DisconnectedSince = disconnectedSince;
+            Name = name;
+        }
+
+        public int Id { get; }
+        public ulong SteamId64 { get; }
+        public TimeSpan DisconnectedSince { get; }
+        public string Name { get; }
+
+        public bool Equals(
+            PlayerDisconnectedInfo? other
+        )
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id && SteamId64 == other.SteamId64 && DisconnectedSince.Equals(other.DisconnectedSince) && Name == other.Name;
+        }
+
+        public override bool Equals(
+            object? obj
+        )
+        {
+            return ReferenceEquals(this, obj) || obj is PlayerDisconnectedInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, SteamId64, DisconnectedSince, Name);
+        }
     }
 }

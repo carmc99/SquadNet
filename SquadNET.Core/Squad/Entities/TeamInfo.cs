@@ -6,14 +6,31 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
+    [RegexPattern(@"^Team ID: ([0-9]+) \((.+)\)$")]
     public class TeamInfo
     {
-        public string Faction { get; set; }
-        public string Name { get; set; }
-        public int Tickets { get; set; }
-        public string Commander { get; set; }
-        public List<VehicleInfo> Vehicles { get; set; } = [];
-        public int NumberOfTanks { get; set; }
-        public int NumberOfHelicopters { get; set; }
+        public TeamId Id { get; }
+        public string Name { get; }
+
+        public bool Equals(
+            TeamInfo? other
+        )
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id && Name == other.Name;
+        }
+
+        public override bool Equals(
+            object? obj
+        )
+        {
+            return ReferenceEquals(this, obj) || obj is TeamInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine((int)Id, Name);
+        }
     }
 }
