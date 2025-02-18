@@ -1,8 +1,7 @@
-﻿using SquadNET.Core.Squad.Entities;
+﻿using SquadNET.Core;
+using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -57,16 +56,20 @@ namespace SquadNET.Core.Squad.Parsers
             Dictionary<string, string> parsedValues = new()
             {
                 { "Id", match.Groups[1].Value },
-                { "EosId", match.Groups[2].Value },
-                { "SteamId", match.Groups[3].Value },
                 { "Name", match.Groups[4].Value },
-                { "TeamId", match.Groups[5].Value },
+                { "Team", match.Groups[5].Value },
                 { "SquadId", match.Groups[6].Value },
                 { "IsLeader", match.Groups[7].Value },
                 { "Role", match.Groups[8].Value }
             };
 
+            // Extraer los identificadores EOS y Steam
+            string eosId = match.Groups[2].Value;
+            ulong steamId = ulong.Parse(match.Groups[3].Value);
+            CreatorOnlineIds creatorIds = new(eosId, steamId);
+
             PlayerConnectedInfo result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedInfo>(parsedValues);
+            result.CreatorIds = creatorIds;
 
             return result;
         }

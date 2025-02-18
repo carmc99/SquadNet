@@ -16,7 +16,6 @@ namespace SquadNET.Core.Squad.Entities
         public int Size { get; set; }
         public string CreatorName { get; set; }
         public CreatorOnlineIds CreatorIds { get; set; }
-        public ulong SteamId { get; set; }
         public bool IsLocked { get; set; }
 
         public bool Equals(SquadInfo? other)

@@ -40,7 +40,7 @@ public class CommandHandler
                 break;
             }
 
-            var response = await Mediator.Send(new ListSquadsQuery.Request());
+            var response = await Mediator.Send(new ListPlayersQuery.Request());
 
             //BroadcastMessageCommand.Request request = new() { Message = input };
             //string response = await Mediator.Send(request);

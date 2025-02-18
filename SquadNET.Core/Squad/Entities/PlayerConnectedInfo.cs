@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
@@ -11,33 +6,29 @@ namespace SquadNET.Core.Squad.Entities
     public class PlayerConnectedInfo
     {
         public int Id { get; set; }
-        public string EosId { get; set; }
-        public ulong SteamId { get; set; }
+        public CreatorOnlineIds CreatorIds { get; set; }  // Nueva propiedad para manejar múltiples identificadores
         public string Name { get; set; }
         public TeamId Team { get; set; }
         public bool IsLeader { get; set; }
         public string Role { get; set; }
         public int? SquadId { get; set; }
 
-        public bool Equals(
-            PlayerConnectedInfo? other
-        )
+        public bool Equals(PlayerConnectedInfo? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && SteamId == other.SteamId && Name == other.Name && Team == other.Team && IsLeader == other.IsLeader && Role == other.Role && SquadId == other.SquadId;
+            return Id == other.Id && CreatorIds.Equals(other.CreatorIds) && Name == other.Name &&
+                   Team == other.Team && IsLeader == other.IsLeader && Role == other.Role && SquadId == other.SquadId;
         }
 
-        public override bool Equals(
-            object? obj
-        )
+        public override bool Equals(object? obj)
         {
             return ReferenceEquals(this, obj) || obj is PlayerConnectedInfo other && Equals(other);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, SteamId, Name, (int)Team, IsLeader, Role, SquadId);
+            return HashCode.Combine(Id, CreatorIds, Name, (int)Team, IsLeader, Role, SquadId);
         }
     }
 }
