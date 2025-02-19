@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
-
-    [RegexPattern(@"^Next level is (.*), layer is (.*)$")]
-    [RegexPattern(@"^Current level is (.*), layer is (.*)$")]
     public class MapInfo
     {
-        public string Name { get; set; }
-        public string Level { get; set; }
+        public NextLevelInfo NextMap { get; set; }
+        public CurrentLevelInfo CurrentMap { get; set; }
     }
 
     [RegexPattern(@"^Next level is (.*), layer is (.*)$")]
