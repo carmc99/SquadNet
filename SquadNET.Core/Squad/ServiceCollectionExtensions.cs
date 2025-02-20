@@ -13,6 +13,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ICommandParser<List<CommandInfo>>, ListCommandsParser>();
         services.AddSingleton<ICommandParser<List<SquadInfo>>, ListSquadsParser>();
         services.AddSingleton<ICommandParser<List<TeamInfo>>, ListTeamsParser>();
+        services.AddSingleton<ICommandParser<CurrentMapInfo>, ShowCurrentMapParser>();
+        services.AddSingleton<ICommandParser<NextMapInfo>, ShowNextMapParser>();
+        services.AddSingleton<ICommandParser<ChatMessageInfo>, ChatMessageParser>();
+        services.AddSingleton<ICommandParser<SquadCreatedInfo>, SquadCreatedMessageParser>();
+        services.AddSingleton<ICommandParser<List<LayerInfo>>, ListLayersParser>();
+        services.AddSingleton<ICommandParser<List<LevelInfo>>, ListLevelsParser>();
         return services;
     }
 

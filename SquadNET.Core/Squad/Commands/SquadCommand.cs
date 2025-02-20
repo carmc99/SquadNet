@@ -11,6 +11,18 @@ namespace SquadNET.Rcon
     /// </summary>
     public enum SquadCommand
     {
+        /// <summary>
+        /// Retrieves the name of the next map and its associated layer.
+        /// </summary>
+        /// <example>ShowNextMap</example>
+        ShowNextMap,
+
+        /// <summary>
+        /// Retrieves the name of the current map and its associated layer.
+        /// </summary>
+        /// <example>ShowCurrentMap</example>
+        ShowCurrentMap,
+
         /// <summary>Lists all available RCON commands.</summary>
         /// <example>ListCommands true</example>
         ListCommands,

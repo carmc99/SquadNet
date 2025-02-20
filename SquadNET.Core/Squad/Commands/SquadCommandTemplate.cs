@@ -11,6 +11,8 @@ namespace SquadNET.Core.Squad.Commands
     {
         public SquadCommandTemplate()
         {
+            CommandTemplates.Add(SquadCommand.ShowCurrentMap, "ShowCurrentMap");
+            CommandTemplates.Add(SquadCommand.ShowNextMap, "ShowNextMap");
             CommandTemplates.Add(SquadCommand.ListCommands, "ListCommands true");
             CommandTemplates.Add(SquadCommand.ListSquads, "ListSquads");
             CommandTemplates.Add(SquadCommand.ListPlayers, "ListPlayers");
