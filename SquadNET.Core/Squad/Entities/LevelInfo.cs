@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
-    public class LayerInfo
+    public class LevelInfo
     {
         public string Name { get; set; }
 
         public override bool Equals(object? obj)
         {
-            return obj is LayerInfo other && Name == other.Name;
+            return obj is LevelInfo other && Name == other.Name;
         }
 
         public override int GetHashCode()

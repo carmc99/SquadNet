@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Application.Squad.Layer.Queries
+namespace SquadNET.Application.Squad.Map.Queries
 {
     /// <summary>
-    /// Query to list all available layers on the server.
+    /// Query to list all available levels on the server.
     /// </summary>
-    public static class ListLayersQuery
+    public static class ListLevelsQuery
     {
         public class Request : IRequest<List<string>> { }
 
@@ -30,10 +30,9 @@ namespace SquadNET.Application.Squad.Layer.Queries
 
             public async Task<List<string>> Handle(Request request, CancellationToken cancellationToken)
             {
-                string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListLayers, cancellationToken);
-
+                string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListLevels, cancellationToken);
                 return null;
-                //TODO: return ListLayersParser.Parse(result);
+                //TODO: return ListLevelsParser.Parse(result);
             }
         }
     }

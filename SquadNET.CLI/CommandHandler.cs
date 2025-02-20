@@ -8,6 +8,9 @@ using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Team.Queries;
+using Squadmania.Squad.Rcon.Parsers;
+using SquadNET.Core.Squad.Entities;
+using SquadNET.Application.Squad.Map.Queries;
 
 public class CommandHandler
 {
@@ -40,7 +43,7 @@ public class CommandHandler
                 break;
             }
 
-            var response = await Mediator.Send(new ListPlayersQuery.Request());
+            var response = await Mediator.Send(new MapInfoQuery.Request());
 
             //BroadcastMessageCommand.Request request = new() { Message = input };
             //string response = await Mediator.Send(request);

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ListPlayersParser : ICommandParser<ListPlayerModel>
+    internal class ListPlayersParser : ICommandParser<ListPlayerModel>
     {
         private const string ActivePlayersHeader = "----- Active Players -----";
         private const string DisconnectedPlayersHeader = "----- Recently Disconnected Players [Max of 15] -----";

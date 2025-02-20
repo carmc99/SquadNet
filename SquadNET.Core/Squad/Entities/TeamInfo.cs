@@ -13,7 +13,7 @@ namespace SquadNET.Core.Squad.Entities
         public string Name { get; set; }
 
         public bool Equals(
-            TeamInfo? other
+            TeamInfo other
         )
         {
             if (ReferenceEquals(null, other)) return false;
@@ -22,7 +22,7 @@ namespace SquadNET.Core.Squad.Entities
         }
 
         public override bool Equals(
-            object? obj
+            object obj
         )
         {
             return ReferenceEquals(this, obj) || obj is TeamInfo other && Equals(other);
