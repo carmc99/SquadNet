@@ -1,4 +1,7 @@
-﻿using FluentFTP;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using FluentFTP;
 using Microsoft.Extensions.Configuration;
 
 namespace SquadNET.LogManagement.LogReaders
@@ -9,6 +12,14 @@ namespace SquadNET.LogManagement.LogReaders
         private readonly string RemoteFilePath;
 
         public event Action<string> OnLogLine;
+        public event Action<string> OnError;
+        public event Action OnFileDeleted;
+        public event Action OnFileCreated;
+        public event Action OnFileRenamed;
+        public event Action OnConnectionLost;
+        public event Action OnConnectionRestored;
+        public event Action OnWatchStarted;
+        public event Action OnWatchStopped;
 
         public FtpLogReader(IConfiguration configuration)
         {
@@ -16,37 +27,61 @@ namespace SquadNET.LogManagement.LogReaders
             string user = configuration["LogReaders:Ftp:User"];
             string password = configuration["LogReaders:Ftp:Password"];
             RemoteFilePath = configuration["LogReaders:Ftp:RemoteFilePath"];
-            FtpClient = new FtpClient(host, user, password); //TODO: Inyectar 
+            FtpClient = new FtpClient(host, user, password); //TODO: Inject dependency
         }
 
         public async Task WatchAsync()
         {
-            FtpClient.Connect();
-            await Task.Run(async () =>
+            try
             {
-                while (true)
+                FtpClient.Connect();
+                OnWatchStarted?.Invoke();
+
+                await Task.Run(async () =>
                 {
-                    using (var stream = new MemoryStream())
+                    while (true)
                     {
-                        bool result = FtpClient.DownloadStream(stream, RemoteFilePath);
-                        stream.Position = 0;
-                        using (StreamReader reader = new(stream))
+                        if (!FtpClient.IsConnected)
                         {
-                            while (!reader.EndOfStream)
+                            OnConnectionLost?.Invoke();
+                            FtpClient.Connect();
+                            OnConnectionRestored?.Invoke();
+                        }
+
+                        using (MemoryStream stream = new())
+                        {
+                            bool result = FtpClient.DownloadStream(stream, RemoteFilePath);
+
+                            if (!result)
                             {
-                                var line = await reader.ReadLineAsync();
-                                OnLogLine?.Invoke(line);
+                                OnError?.Invoke("Failed to download log file.");
+                                continue;
+                            }
+
+                            stream.Position = 0;
+                            using (StreamReader reader = new(stream))
+                            {
+                                while (!reader.EndOfStream)
+                                {
+                                    var line = await reader.ReadLineAsync();
+                                    OnLogLine?.Invoke(line);
+                                }
                             }
                         }
+                        await Task.Delay(5000);
                     }
-                    await Task.Delay(5000);
-                }
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke(ex.Message);
+            }
         }
 
         public Task UnwatchAsync()
         {
             FtpClient.Disconnect();
+            OnWatchStopped?.Invoke();
             return Task.CompletedTask;
         }
     }

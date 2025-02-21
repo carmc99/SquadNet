@@ -13,4 +13,8 @@
     <PackageReference Include="Renci.SshNet.Async" Version="1.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SquadNET.Core\SquadNET.Core.csproj" />
+  </ItemGroup>
+
 </Project>
