@@ -9,6 +9,7 @@ namespace SquadNET.LogManagement.LogReaders
     {
         private readonly string FilePath;
         private FileSystemWatcher Watcher;
+        private long LastPosition = 0;
 
         public event Action<string> OnLogLine;
         public event Action<string> OnError;
@@ -40,6 +41,7 @@ namespace SquadNET.LogManagement.LogReaders
                 Watcher = new FileSystemWatcher(Path.GetDirectoryName(FilePath))
                 {
                     Filter = Path.GetFileName(FilePath),
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
                     EnableRaisingEvents = true
                 };
 
@@ -48,10 +50,13 @@ namespace SquadNET.LogManagement.LogReaders
                 Watcher.Renamed += (s, e) => OnFileRenamed?.Invoke();
 
                 OnWatchStarted?.Invoke();
+
+                // Initialize the last position from the existing file
+                LastPosition = new FileInfo(FilePath).Length;
             }
             catch (Exception ex)
             {
-                OnError?.Invoke(ex.Message);
+                OnError?.Invoke($"Error in WatchAsync: {ex.Message}");
             }
         }
 
@@ -60,16 +65,25 @@ namespace SquadNET.LogManagement.LogReaders
             try
             {
                 using FileStream stream = new(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                stream.Seek(LastPosition, SeekOrigin.Begin); // Move to last read position
                 using StreamReader reader = new(stream);
+
                 while (!reader.EndOfStream)
                 {
                     string line = await reader.ReadLineAsync();
-                    OnLogLine?.Invoke(line);
+
+                    if (!string.IsNullOrWhiteSpace(line)) // Ignore empty lines
+                    {
+                        OnLogLine?.Invoke(line);
+                    }
                 }
+
+                // Update last read position
+                LastPosition = stream.Position;
             }
             catch (Exception ex)
             {
-                OnError?.Invoke(ex.Message);
+                OnError?.Invoke($"Error in ReadNewLinesAsync: {ex.Message}");
             }
         }
 

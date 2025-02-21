@@ -10,6 +10,7 @@ namespace SquadNET.LogManagement.LogReaders
     {
         private readonly FtpClient FtpClient;
         private readonly string RemoteFilePath;
+        private long LastPosition = 0; // Tracks the last read position
 
         public event Action<string> OnLogLine;
         public event Action<string> OnError;
@@ -37,6 +38,9 @@ namespace SquadNET.LogManagement.LogReaders
                 FtpClient.Connect();
                 OnWatchStarted?.Invoke();
 
+                // Initialize LastPosition when starting
+                LastPosition = FtpClient.GetFileSize(RemoteFilePath);
+
                 await Task.Run(async () =>
                 {
                     while (true)
@@ -48,33 +52,45 @@ namespace SquadNET.LogManagement.LogReaders
                             OnConnectionRestored?.Invoke();
                         }
 
-                        using (MemoryStream stream = new())
+                        long fileSize = FtpClient.GetFileSize(RemoteFilePath);
+                        if (fileSize < LastPosition)
                         {
-                            bool result = FtpClient.DownloadStream(stream, RemoteFilePath);
+                            // File was truncated or replaced, restart from the beginning
+                            LastPosition = 0;
+                        }
 
-                            if (!result)
-                            {
-                                OnError?.Invoke("Failed to download log file.");
-                                continue;
-                            }
+                        using MemoryStream stream = new();
+                        bool result = FtpClient.DownloadStream(stream, RemoteFilePath);
 
-                            stream.Position = 0;
-                            using (StreamReader reader = new(stream))
+                        if (!result)
+                        {
+                            OnError?.Invoke("Failed to download log file.");
+                            await Task.Delay(5000);
+                            continue;
+                        }
+
+                        stream.Position = LastPosition; // Move to last read position
+                        using StreamReader reader = new(stream);
+
+                        while (!reader.EndOfStream)
+                        {
+                            string line = await reader.ReadLineAsync();
+                            if (!string.IsNullOrWhiteSpace(line)) // Ignore empty lines
                             {
-                                while (!reader.EndOfStream)
-                                {
-                                    var line = await reader.ReadLineAsync();
-                                    OnLogLine?.Invoke(line);
-                                }
+                                OnLogLine?.Invoke(line);
                             }
                         }
+
+                        // Update LastPosition to prevent re-reading old lines
+                        LastPosition = stream.Length;
+
                         await Task.Delay(5000);
                     }
                 });
             }
             catch (Exception ex)
             {
-                OnError?.Invoke(ex.Message);
+                OnError?.Invoke($"Error in WatchAsync: {ex.Message}");
             }
         }
 
