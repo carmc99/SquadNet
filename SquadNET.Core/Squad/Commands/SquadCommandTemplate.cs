@@ -54,7 +54,7 @@ namespace SquadNET.Core.Squad.Commands
             CommandTemplates.Add(SquadCommand.DisableVehicleTeamRequirement, "AdminDisableVehicleTeamRequirement {0}");
             CommandTemplates.Add(SquadCommand.DisableVehicleKitRequirement, "AdminDisableVehicleKitRequirement {0}");
             CommandTemplates.Add(SquadCommand.AlwaysValidPlacement, "AdminAlwaysValidPlacement {0}");
-            CommandTemplates.Add(SquadCommand.AddCameraman, "AdminAddCameraman \"{0}\"");
+            CommandTemplates.Add(SquadCommand.AddCameraman, "AdminAddCameraman \"{0}\""); //TODO: No existe en rcon
         }
     }
 }

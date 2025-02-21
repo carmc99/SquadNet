@@ -16,7 +16,7 @@ namespace SquadNET.Application.Squad.Admin.Commands
         {
             public string PlayerName { get; set; }
             public string Duration { get; set; }
-            public string Reason { get; set; }
+            public string Reason { get; set; } //TODO: Convertir en enum
         }
 
         public class Validator : AbstractValidator<Request>

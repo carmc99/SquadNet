@@ -18,7 +18,7 @@ namespace SquadNET.Application.Squad.Admin.Commands
         public class Request : IRequest<string>
         {
             public int PlayerId { get; set; }
-            public string Reason { get; set; }
+            public string Reason { get; set; } //TODO: Enum
         }
 
         public class Validator : AbstractValidator<Request>
