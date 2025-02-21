@@ -1,6 +1,0 @@
-@SquadNET.API_HostAddress = http://localhost:5255
-
-GET {{SquadNET.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

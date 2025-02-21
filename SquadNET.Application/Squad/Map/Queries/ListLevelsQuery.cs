@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Squadmania.Squad.Rcon.Parsers;
 using SquadNET.Core;
+using SquadNET.Core.Squad.Entities;
 using SquadNET.Rcon;
 using System;
 using System.Collections.Generic;
@@ -15,24 +15,28 @@ namespace SquadNET.Application.Squad.Map.Queries
     /// </summary>
     public static class ListLevelsQuery
     {
-        public class Request : IRequest<List<string>> { }
+        public class Request : IRequest<List<LevelInfo>> { }
 
-        public class Handler : IRequestHandler<Request, List<string>>
+        public class Handler : IRequestHandler<Request, List<LevelInfo>>
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
+            private readonly ICommandParser<List<LevelInfo>> Parser;
 
-            public Handler(IRconService rconService, Command<SquadCommand> command)
+            public Handler(IRconService rconService,
+                Command<SquadCommand> command,
+                ICommandParser<List<LevelInfo>> parser)
             {
                 RconService = rconService;
                 Command = command;
+                Parser = parser;
             }
 
-            public async Task<List<string>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<List<LevelInfo>> Handle(Request request, CancellationToken cancellationToken)
             {
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListLevels, cancellationToken);
-                return null;
-                //TODO: return ListLevelsParser.Parse(result);
+                List<LevelInfo> levels = Parser.Parse(result);
+                return levels;
             }
         }
     }

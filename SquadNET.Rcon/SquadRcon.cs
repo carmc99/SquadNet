@@ -70,15 +70,16 @@ namespace SquadNET.Rcon
 
         public async Task<string> ExecuteCommandAsync<SquadCommand>(Command<SquadCommand> command, SquadCommand commandType, params object[] args) where SquadCommand : Enum
         {
-            if (!IsConnected)
-            {
-                Logger.LogWarning("Intento de ejecutar un comando RCON sin conexión.");
-                throw new InvalidOperationException("No se puede ejecutar el comando porque no hay conexión activa.");
-            }
 
             try
             {
                 Connect();
+
+                if (!IsConnected)
+                {
+                    Logger.LogWarning("Intento de ejecutar un comando RCON sin conexión.");
+                    throw new InvalidOperationException("No se puede ejecutar el comando porque no hay conexión activa.");
+                }
 
                 string formattedCommand = command.GetFormattedCommand(commandType, args);
                 byte[] responseBytes = await RconClient.WriteCommandAsync(formattedCommand, CancellationToken.None);
