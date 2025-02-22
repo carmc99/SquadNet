@@ -1,6 +1,7 @@
 ﻿using System;
+using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events;
 using SquadNET.Plugins.Abstractions;
-using SquadNET.Plugins.Abstractions.Squad;
 
 namespace SquadNET.Plugins
 {
@@ -19,7 +20,7 @@ namespace SquadNET.Plugins
                 if (eventData is ChatMessageInfo chat)
                 {
                     // Aquí tu lógica: por ejemplo, imprimir mensaje en consola, guardar en DB, etc.
-                    Console.WriteLine($"[{Name}] Nuevo Chat: {chat.Name} => {chat.Message}");
+                    Console.WriteLine($"[{Name}] Nuevo Chat: {chat.PlayerName} => {chat.Message}");
                 }
             }
         }

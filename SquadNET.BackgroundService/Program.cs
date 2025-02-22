@@ -21,8 +21,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         });
 
         services.AddLogManagement();
-        services.AddPlugins($"{AppContext.BaseDirectory}/plugins");
+        services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
         services.AddHostedService<LogMonitoringService>();
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
     })
     .Build();
 

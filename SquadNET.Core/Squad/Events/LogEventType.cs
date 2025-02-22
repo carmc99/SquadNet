@@ -1,4 +1,4 @@
-﻿namespace SquadNET.Plugins.Abstractions.Squad
+﻿namespace SquadNET.Core.Squad.Events
 {
     /// <summary>
     /// Enumeración de eventos que pueden ser emitidos por el sistema.

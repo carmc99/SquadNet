@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SquadNET.Application.Squad.Chat.Queries;
 using SquadNET.Core.Squad.Entities;
-using SquadNET.Plugins.Abstractions.Squad;
+using SquadNET.Core.Squad.Events;
 using System.Threading;
 using System.Threading.Tasks;
 
