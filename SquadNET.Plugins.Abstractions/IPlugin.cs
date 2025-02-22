@@ -22,5 +22,12 @@ namespace SquadNET.Plugins.Abstractions
         /// Método de apagado del plugin.
         /// </summary>
         void Shutdown();
+
+        /// <summary>
+        /// Maneja un evento disparado por la aplicación.
+        /// </summary>
+        /// <param name="eventName">Nombre del evento (por ejemplo, "CHAT_MESSAGE").</param>
+        /// <param name="eventData">Objeto con la información relevante del evento.</param>
+        void OnEventRaised(string eventName, object eventData);
     }
 }

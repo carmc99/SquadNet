@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SquadNET.LogManagement;
+using SquadNET.Plugins.Abstractions;
 using SquadNET.Services;
 
 IHost host = Host.CreateDefaultBuilder(args)
@@ -20,6 +21,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         });
 
         services.AddLogManagement();
+        services.AddPlugins($"{AppContext.BaseDirectory}/plugins");
         services.AddHostedService<LogMonitoringService>();
     })
     .Build();

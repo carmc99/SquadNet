@@ -26,7 +26,6 @@ namespace SquadNET.Application.Services
             Logger.LogInformation("[PluginManager] Inicializando plugins...");
 
             IEnumerable<IPlugin> registeredPlugins = ServiceProvider.GetServices<IPlugin>();
-
             foreach (IPlugin plugin in registeredPlugins)
             {
                 try
@@ -37,7 +36,8 @@ namespace SquadNET.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error al inicializar el plugin {PluginName}: {Message}", plugin.Name, ex.Message);
+                    Logger.LogError("[PluginManager] Error al inicializar el plugin {PluginName}: {Message}",
+                        plugin.Name, ex.Message);
                 }
             }
         }
@@ -58,11 +58,33 @@ namespace SquadNET.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error al apagar el plugin {PluginName}: {Message}", plugin.Name, ex.Message);
+                    Logger.LogError("[PluginManager] Error al apagar el plugin {PluginName}: {Message}",
+                        plugin.Name, ex.Message);
                 }
             }
 
             Plugins.Clear();
+        }
+
+        /// <summary>
+        /// Dispara un evento para que lo consuman los plugins que lo soporten.
+        /// </summary>
+        /// <param name="eventName">Nombre del evento (p.e., "CHAT_MESSAGE").</param>
+        /// <param name="eventData">Información asociada al evento.</param>
+        public void EmitEvent(string eventName, object eventData)
+        {
+            foreach (IPlugin plugin in Plugins)
+            {
+                try
+                {
+                    plugin.OnEventRaised(eventName, eventData);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "[PluginManager] Error emitiendo evento {EventName} a plugin {PluginName}",
+                        eventName, plugin.Name);
+                }
+            }
         }
     }
 }

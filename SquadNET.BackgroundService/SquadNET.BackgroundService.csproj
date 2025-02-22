@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SquadNET.Application\SquadNET.Application.csproj" />
+    <ProjectReference Include="..\SquadNET.Plugins.Abstractions\SquadNET.Plugins.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

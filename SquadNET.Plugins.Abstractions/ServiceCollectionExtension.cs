@@ -8,6 +8,16 @@ namespace SquadNET.Plugins.Abstractions
     {
         public static IServiceCollection AddPlugins(this IServiceCollection services, string pluginsPath)
         {
+            if(string.IsNullOrWhiteSpace(pluginsPath))
+            {
+                throw new System.ArgumentException("Plugins path cannot be null or empty", nameof(pluginsPath));
+            }
+            
+            if(!Directory.Exists(pluginsPath))
+            {
+                throw new System.ArgumentException("Plugins path does not exist", nameof(pluginsPath));
+            }
+
             services.AddSingleton<PluginManager>();
 
             IEnumerable<Assembly> pluginAssemblies = Directory.GetFiles(pluginsPath, "*.dll", SearchOption.TopDirectoryOnly)

@@ -19,7 +19,7 @@ namespace SquadNET.Application.Squad.Chat.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Request, ChatMessageInfo?>
+        public class Handler : IRequestHandler<Request, ChatMessageInfo>
         {
             private readonly ICommandParser<ChatMessageInfo> Parser;
 
@@ -28,7 +28,7 @@ namespace SquadNET.Application.Squad.Chat.Queries
                 Parser = parser;
             }
 
-            public Task<ChatMessageInfo?> Handle(Request request, CancellationToken cancellationToken)
+            public Task<ChatMessageInfo> Handle(Request request, CancellationToken cancellationToken)
             {
                 ChatMessageInfo chatMessage = Parser.Parse(request.ChatMessageRaw);
                 return Task.FromResult(chatMessage);
