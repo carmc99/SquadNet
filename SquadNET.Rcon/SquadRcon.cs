@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Squadmania.Squad.Rcon;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
+using SquadNET.Core.Squad.Entities;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -18,6 +19,15 @@ namespace SquadNET.Rcon
         private readonly string Host;
         private readonly int Port;
         private readonly string Password;
+
+        public event Action Connected;
+        public event Action<Core.Squad.Packet> PacketReceived;
+        public event Action<ChatMessageInfo> ChatMessageReceived;
+        public event Action<Exception> ExceptionThrown;
+        public event Action<byte[]> BytesReceived;
+
+        private CancellationTokenSource ListeningCancellationTokenSource;
+
 
         public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger)
         {
@@ -46,6 +56,34 @@ namespace SquadNET.Rcon
                 RconClient = new RconClient(new IPEndPoint(
                    IPAddress.Parse(Host), Port),
                    Password);
+
+                // Suscribir eventos de RconClient
+                RconClient.Connected += () =>
+                {
+                    Logger.LogInformation("Conectado correctamente al servidor RCON.");
+                    Connected?.Invoke();
+                };
+                //TODO:Complete
+                //RconClient.PacketReceived += packet =>
+                //{
+                //    Logger.LogDebug($"Paquete recibido: {packet}");
+                //    PacketReceived?.Invoke(Squadmania.Squad.Rcon.Packet);
+                //};
+                //RconClient.ChatMessageReceived += message =>
+                //{
+                //    Logger.LogInformation($"Mensaje de chat recibido: {message.Message}");
+                //    ChatMessageReceived?.Invoke(message);
+                //};
+                RconClient.ExceptionThrown += exception =>
+                {
+                    Logger.LogError(exception, "Excepción en RconClient");
+                    ExceptionThrown?.Invoke(exception);
+                };
+                RconClient.BytesReceived += bytes =>
+                {
+                    Logger.LogDebug($"Bytes recibidos: {BitConverter.ToString(bytes)}");
+                    BytesReceived?.Invoke(bytes);
+                };
 
                 RconClient.Start();
                 IsConnected = true;

@@ -21,11 +21,13 @@ namespace SquadNET.Application.Squad.Chat.Queries
 
         public class Handler : IRequestHandler<Request, ChatMessageInfo>
         {
+            private readonly IRconService RconService;
             private readonly ICommandParser<ChatMessageInfo> Parser;
 
-            public Handler(ICommandParser<ChatMessageInfo> parser)
+            public Handler(ICommandParser<ChatMessageInfo> parser, IRconService rconService)
             {
                 Parser = parser;
+                RconService = rconService;
             }
 
             public Task<ChatMessageInfo> Handle(Request request, CancellationToken cancellationToken)
