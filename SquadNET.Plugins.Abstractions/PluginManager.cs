@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SquadNET.Core.Squad.Models;
 using SquadNET.Plugins.Abstractions;
 
 namespace SquadNET.Application.Services
@@ -16,14 +17,16 @@ namespace SquadNET.Application.Services
         {
             ServiceProvider = serviceProvider;
             Logger = logger;
+
+            LoadPlugins();
         }
 
         /// <summary>
-        /// Inicializa los plugins registrados en el contenedor de inyección de dependencias.
+        /// Carga los plugins registrados en el contenedor de inyección de dependencias.
         /// </summary>
-        public void InitializePlugins()
+        private void LoadPlugins()
         {
-            Logger.LogInformation("[PluginManager] Inicializando plugins...");
+            Logger.LogInformation("[PluginManager] Cargando plugins...");
 
             IEnumerable<IPlugin> registeredPlugins = ServiceProvider.GetServices<IPlugin>();
             foreach (IPlugin plugin in registeredPlugins)
@@ -32,11 +35,11 @@ namespace SquadNET.Application.Services
                 {
                     plugin.Initialize();
                     Plugins.Add(plugin);
-                    Logger.LogInformation("[PluginManager] Plugin inicializado: {PluginName}", plugin.Name);
+                    Logger.LogInformation("[PluginManager] Plugin cargado: {PluginName}", plugin.Name);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error al inicializar el plugin {PluginName}: {Message}",
+                    Logger.LogError("[PluginManager] Error al cargar el plugin {PluginName}: {Message}",
                         plugin.Name, ex.Message);
                 }
             }
@@ -69,9 +72,7 @@ namespace SquadNET.Application.Services
         /// <summary>
         /// Dispara un evento para que lo consuman los plugins que lo soporten.
         /// </summary>
-        /// <param name="eventName">Nombre del evento (p.e., "CHAT_MESSAGE").</param>
-        /// <param name="eventData">Información asociada al evento.</param>
-        public void EmitEvent(string eventName, object eventData)
+        public void EmitEvent(string eventName, IEventData eventData)
         {
             foreach (IPlugin plugin in Plugins)
             {

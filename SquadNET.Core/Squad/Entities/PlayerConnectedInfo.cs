@@ -6,7 +6,7 @@ namespace SquadNET.Core.Squad.Entities
     public class PlayerConnectedInfo
     {
         public int Id { get; set; }
-        public CreatorOnlineIds CreatorIds { get; set; }  // Nueva propiedad para manejar múltiples identificadores
+        public CreatorOnlineIds CreatorIds { get; set; }
         public string Name { get; set; }
         public TeamId Team { get; set; }
         public bool IsLeader { get; set; }

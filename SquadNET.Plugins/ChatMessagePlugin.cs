@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
+using SquadNET.Core.Squad.Models;
 using SquadNET.Plugins.Abstractions;
 
 namespace SquadNET.Plugins
@@ -12,16 +14,33 @@ namespace SquadNET.Plugins
         /// <summary>
         /// Sobrescribimos OnEventRaised para procesar CHAT_MESSAGE.
         /// </summary>
-        public override void OnEventRaised(string eventName, object eventData)
+        public override void OnEventRaised(string eventName, IEventData eventData)
         {
             if (eventName == LogEventType.CHAT_MESSAGE.ToString())
             {
-                // Convertimos eventData al tipo que esperamos (ChatMessageInfo u otro)
-                if (eventData is ChatMessageInfo chat)
+                if (eventData is ChatMessageModel chat)
                 {
-                    // Aquí tu lógica: por ejemplo, imprimir mensaje en consola, guardar en DB, etc.
-                    Console.WriteLine($"[{Name}] Nuevo Chat: {chat.PlayerName} => {chat.Message}");
+                    string message = chat.ToString();
+                    Console.WriteLine(message);
+                    WriteToLogFile(message);
                 }
+            }
+        }
+        private void WriteToLogFile(string message)
+        {
+            try
+            {
+                string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string logFilePath = Path.Combine(assemblyPath, "ChatMessages.log");
+
+                using (StreamWriter writer = new StreamWriter(logFilePath, true))
+                {
+                    writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing to log file: {ex.Message}");
             }
         }
     }

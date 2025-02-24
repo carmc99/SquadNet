@@ -23,8 +23,8 @@ namespace SquadNET.Core.Squad.Entities
                 Message = chatMessage.Message,
                 PlayerName = chatMessage.PlayerName,
                 CreatorIds = new CreatorOnlineIds(
-                    eosId: "UNKNOWN", // No se tiene EOS ID en ChatMessage
-                    steamId: chatMessage.PlayerSteamId64 // Se usa Steam ID directamente
+                    eosId: "UNKNOWN",
+                    steamId: chatMessage.PlayerSteamId64
                 )
             };
         }

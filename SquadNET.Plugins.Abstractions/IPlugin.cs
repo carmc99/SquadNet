@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SquadNET.Core.Squad.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,6 @@ namespace SquadNET.Plugins.Abstractions
         /// </summary>
         /// <param name="eventName">Nombre del evento (por ejemplo, "CHAT_MESSAGE").</param>
         /// <param name="eventData">Objeto con la información relevante del evento.</param>
-        void OnEventRaised(string eventName, object eventData);
+        void OnEventRaised(string eventName, IEventData eventData);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SquadNET.Core.Squad.Models;
+using System;
 
 namespace SquadNET.Plugins.Abstractions
 {
@@ -19,7 +20,7 @@ namespace SquadNET.Plugins.Abstractions
         /// Evento que recibe el nombre del evento y los datos asociados.
         /// Cada plugin puede sobreescribir este método para procesar los eventos deseados.
         /// </summary>
-        public virtual void OnEventRaised(string eventName, object eventData)
+        public virtual void OnEventRaised(string eventName, IEventData eventData)
         {
             // Por defecto, no hace nada. 
             // Evita lanzar excepción para que no obligue a su re-implementación inmediata.
