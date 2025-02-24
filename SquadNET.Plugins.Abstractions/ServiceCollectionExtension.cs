@@ -10,12 +10,12 @@ namespace SquadNET.Plugins.Abstractions
         {
             if(string.IsNullOrWhiteSpace(pluginsPath))
             {
-                throw new System.ArgumentException("Plugins path cannot be null or empty", nameof(pluginsPath));
+                throw new ArgumentException("Plugins path cannot be null or empty", nameof(pluginsPath));
             }
             
             if(!Directory.Exists(pluginsPath))
             {
-                throw new System.ArgumentException("Plugins path does not exist", nameof(pluginsPath));
+                Directory.CreateDirectory(pluginsPath);
             }
 
             services.AddSingleton<PluginManager>();

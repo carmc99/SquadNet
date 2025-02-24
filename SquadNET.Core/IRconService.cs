@@ -6,15 +6,15 @@ namespace SquadNET.Core
 {
     public interface IRconService
     {
-        public event Action Connected;
+        public event Action OnConnected;
 
-        public event Action<Packet> PacketReceived;
+        public event Action<Packet> OnPacketReceived;
 
-        public event Action<ChatMessageInfo> ChatMessageReceived;
+        public event Action<ChatMessageInfo> OnChatMessageReceived;
 
-        public event Action<Exception> ExceptionThrown;
+        public event Action<Exception> OnExceptionThrown;
 
-        public event Action<byte[]> BytesReceived;
+        public event Action<byte[]> OnBytesReceived;
         void Connect();
         void Disconnect();
 

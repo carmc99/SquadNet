@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Renci.SshNet;
+using SquadNET.Core;
 
 namespace SquadNET.LogManagement.LogReaders
 {
@@ -25,10 +26,12 @@ namespace SquadNET.LogManagement.LogReaders
         public SftpLogReader(IConfiguration configuration)
         {
             string host = configuration["LogReaders:Sftp:Host"];
+            int port = 22;
+            configuration["LogReaders:Sftp:Port"].TryParse(out port);
             string user = configuration["LogReaders:Sftp:User"];
             string password = configuration["LogReaders:Sftp:Password"];
             RemoteFilePath = configuration["LogReaders:Sftp:RemoteFilePath"];
-            SftpClient = new SftpClient(host, user, password); //TODO: Inject dependency
+            SftpClient = new SftpClient(host, port, user, password); //TODO: Inject dependency
         }
 
         public async Task WatchAsync()

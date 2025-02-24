@@ -7,59 +7,58 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.ParseLine
 {
-    public class ParsedEventResult
+    public static class ParseLineQueryHandler
     {
-        public string EventName { get; set; }
-        public object EventData { get; set; }
-    }
-
-    public class ParseLineQuery : IRequest<ParsedEventResult>
-    {
-        public string Line { get; }
-        public ParseLineQuery(string line)
+        public class Request : IRequest<Response>
         {
-            Line = line;
-        }
-    }
-
-    public class ParseLineQueryHandler : IRequestHandler<ParseLineQuery, ParsedEventResult>
-    {
-        private readonly IMediator Mediator;
-
-        public ParseLineQueryHandler(IMediator mediator)
-        {
-            Mediator = mediator;
+            public string Line { get; set; }
         }
 
-        public async Task<ParsedEventResult> Handle(ParseLineQuery request, CancellationToken cancellationToken)
+        public class Response
         {
-            ChatMessageInfo chatMessage = await Mediator.Send(new ChatMessageQuery.Request(request.Line), cancellationToken);
-            if (chatMessage != null)
+            public string EventName { get; set; }
+            public object EventData { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Request, Response>
+        {
+            private readonly IMediator Mediator;
+
+            public Handler(IMediator mediator)
             {
-                return new ParsedEventResult
-                {
-                    EventName = LogEventType.CHAT_MESSAGE.ToString(),
-                    EventData = chatMessage
-                };
+                Mediator = mediator;
             }
 
-            // 2) Intentamos parsear "teamkill" (si tuvieras un TeamKillQuery)
-            /*
-            var teamKill = await Mediator.Send(new TeamKillQuery.Request(request.Line), cancellationToken);
-            if (teamKill != null)
+            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return new ParsedEventResult
+                ChatMessageInfo chatMessage = await Mediator.Send(new ChatMessageQuery.Request(request.Line), cancellationToken);
+                if (chatMessage != null)
                 {
-                    EventName = LogEvents.TEAMKILL,
-                    EventData = teamKill
-                };
+                    return new Response
+                    {
+                        EventName = LogEventType.CHAT_MESSAGE.ToString(),
+                        EventData = chatMessage
+                    };
+                }
+
+                // 2) Intentamos parsear "teamkill" (si tuvieras un TeamKillQuery)
+                /*
+                var teamKill = await Mediator.Send(new TeamKillQuery.Request(request.Line), cancellationToken);
+                if (teamKill != null)
+                {
+                    return new ParsedEventResult
+                    {
+                        EventName = LogEvents.TEAMKILL,
+                        EventData = teamKill
+                    };
+                }
+                */
+
+                // 3) Otros eventos que quieras
+
+                // Si no coinciden ninguno, retornamos null
+                return null;
             }
-            */
-
-            // 3) Otros eventos que quieras
-
-            // Si no coinciden ninguno, retornamos null
-            return null;
         }
     }
 }

@@ -20,14 +20,11 @@ namespace SquadNET.Rcon
         private readonly int Port;
         private readonly string Password;
 
-        public event Action Connected;
-        public event Action<Core.Squad.Packet> PacketReceived;
-        public event Action<ChatMessageInfo> ChatMessageReceived;
-        public event Action<Exception> ExceptionThrown;
-        public event Action<byte[]> BytesReceived;
-
-        private CancellationTokenSource ListeningCancellationTokenSource;
-
+        public event Action OnConnected;
+        public event Action<Core.Squad.Packet> OnPacketReceived;
+        public event Action<ChatMessageInfo> OnChatMessageReceived;
+        public event Action<Exception> OnExceptionThrown;
+        public event Action<byte[]> OnBytesReceived;
 
         public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger)
         {
@@ -40,8 +37,6 @@ namespace SquadNET.Rcon
                 parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
             Password = Configuration["Rcon:Password"]
                 ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
-
-           
         }
 
         public void Connect()
@@ -60,8 +55,7 @@ namespace SquadNET.Rcon
                 // Suscribir eventos de RconClient
                 RconClient.Connected += () =>
                 {
-                    Logger.LogInformation("Conectado correctamente al servidor RCON.");
-                    Connected?.Invoke();
+                    OnConnected?.Invoke();
                 };
                 //TODO:Complete
                 //RconClient.PacketReceived += packet =>
@@ -76,13 +70,11 @@ namespace SquadNET.Rcon
                 //};
                 RconClient.ExceptionThrown += exception =>
                 {
-                    Logger.LogError(exception, "Excepción en RconClient");
-                    ExceptionThrown?.Invoke(exception);
+                    OnExceptionThrown?.Invoke(exception);
                 };
                 RconClient.BytesReceived += bytes =>
                 {
-                    Logger.LogDebug($"Bytes recibidos: {BitConverter.ToString(bytes)}");
-                    BytesReceived?.Invoke(bytes);
+                    OnBytesReceived?.Invoke(bytes);
                 };
 
                 RconClient.Start();

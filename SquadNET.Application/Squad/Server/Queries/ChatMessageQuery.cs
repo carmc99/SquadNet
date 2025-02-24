@@ -32,6 +32,7 @@ namespace SquadNET.Application.Squad.Chat.Queries
 
             public Task<ChatMessageInfo> Handle(Request request, CancellationToken cancellationToken)
             {
+
                 ChatMessageInfo chatMessage = Parser.Parse(request.ChatMessageRaw);
                 return Task.FromResult(chatMessage);
             }

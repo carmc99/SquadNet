@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Squad\Round\**" />
+    <EmbeddedResource Remove="Squad\Round\**" />
+    <None Remove="Squad\Round\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
@@ -18,10 +24,6 @@
     <ProjectReference Include="..\SquadNET.LogManagement\SquadNET.LogManagement.csproj" />
     <ProjectReference Include="..\SquadNET.Plugins.Abstractions\SquadNET.Plugins.Abstractions.csproj" />
     <ProjectReference Include="..\SquadNET.Rcon\SquadNET.Rcon.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Squad\Round\" />
   </ItemGroup>
 
 </Project>
