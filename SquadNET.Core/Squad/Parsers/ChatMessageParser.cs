@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ChatMessageParser : ICommandParser<ChatMessageInfo>
+    internal class ChatMessageParser : IParser<ChatMessageInfo>
     {
         private static readonly Regex ChatMessageRegex = RegexPatternHelper.GetRegex<ChatMessageInfo>();
 
@@ -15,20 +15,26 @@ namespace SquadNET.Core.Squad.Parsers
             input = input.SanitizeInput();
 
             Match match = ChatMessageRegex.Match(input);
-            if (!match.Success || match.Groups.Count < 5)
+            if (!match.Success || match.Groups.Count < 6)
             {
                 return null;
             }
 
+            string eosId = match.Groups[2].Value;
+            ulong steamId = ulong.Parse(match.Groups[3].Value);
+            CreatorOnlineIds creatorIds = new(eosId, steamId);
+
             Dictionary<string, string> parsedValues = new()
             {
                 { "Channel", match.Groups[1].Value },
-                { "PlayerSteamId64", match.Groups[2].Value },
-                { "PlayerName", match.Groups[3].Value },
-                { "Message", match.Groups[4].Value }
+                { "PlayerName", match.Groups[4].Value },
+                { "Message", match.Groups[5].Value }
             };
 
-            return DictionaryModelConverter.ConvertDictionaryToModel<ChatMessageInfo>(parsedValues);
+            ChatMessageInfo chatMessage = DictionaryModelConverter.ConvertDictionaryToModel<ChatMessageInfo>(parsedValues);
+            chatMessage.CreatorIds = creatorIds;
+
+            return chatMessage;
         }
     }
 }

@@ -24,7 +24,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddLogManagement();
         services.AddSquadApplication();
         services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
-        services.AddHostedService<LogMonitoringService>();
+        services.AddHostedService<MonitoringService>();
     })
     .Build();
 

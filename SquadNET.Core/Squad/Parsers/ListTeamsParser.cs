@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 
-namespace Squadmania.Squad.Rcon.Parsers
+namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListTeamsParser : ICommandParser<List<TeamInfo>>
+    internal class ListTeamsParser : IParser<List<TeamInfo>>
     {
         private const string Header = "----- Active Squads -----";
 

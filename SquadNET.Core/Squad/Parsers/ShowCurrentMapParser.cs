@@ -4,7 +4,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ShowCurrentMapParser : ICommandParser<CurrentMapInfo>
+    public class ShowCurrentMapParser : IParser<CurrentMapInfo>
     {
         private static readonly Regex CurrentMapRegex = RegexPatternHelper.GetRegex<CurrentMapInfo>();
 

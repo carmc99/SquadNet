@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core
 {
-    public interface ICommandParser<out T>
+    public interface IParser<out T>
     {
         public T Parse(string input);
     }

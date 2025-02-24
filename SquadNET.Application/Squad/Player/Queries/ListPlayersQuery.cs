@@ -22,11 +22,11 @@ namespace SquadNET.Application.Squad.Player.Queries
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly ICommandParser<ListPlayerModel> Parser;
+            private readonly IParser<ListPlayerModel> Parser;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                ICommandParser<ListPlayerModel> parser)
+                IParser<ListPlayerModel> parser)
             {
                 RconService = rconService;
                 Command = command;

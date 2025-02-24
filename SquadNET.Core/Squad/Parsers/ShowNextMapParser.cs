@@ -4,7 +4,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ShowNextMapParser : ICommandParser<NextMapInfo>
+    public class ShowNextMapParser : IParser<NextMapInfo>
     {
         private static readonly Regex NextMapRegex = RegexPatternHelper.GetRegex<NextMapInfo>();
 

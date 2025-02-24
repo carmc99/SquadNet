@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListSquadsParser : ICommandParser<List<SquadInfo>>
+    internal class ListSquadsParser : IParser<List<SquadInfo>>
     {
         private const string Header = "----- Active Squads -----";
 

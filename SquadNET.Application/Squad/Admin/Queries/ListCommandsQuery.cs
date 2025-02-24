@@ -16,11 +16,11 @@ namespace SquadNET.Application.Squad.Admin.Queries
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly ICommandParser<List<CommandInfo>> Parser;
+            private readonly IParser<List<CommandInfo>> Parser;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                ICommandParser<List<CommandInfo>> parser)
+                IParser<List<CommandInfo>> parser)
             {
                 RconService = rconService;
                 Command = command;

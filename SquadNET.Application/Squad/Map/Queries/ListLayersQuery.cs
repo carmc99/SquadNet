@@ -22,11 +22,11 @@ namespace SquadNET.Application.Squad.Map.Queries
         {
             private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly ICommandParser<List<LayerInfo>> Parser;
+            private readonly IParser<List<LayerInfo>> Parser;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                ICommandParser<List<LayerInfo>> parser)
+                IParser<List<LayerInfo>> parser)
             {
                 RconService = rconService;
                 Command = command;

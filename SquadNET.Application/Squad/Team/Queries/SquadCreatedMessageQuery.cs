@@ -21,9 +21,9 @@ namespace SquadNET.Application.Squad.Queries
 
         public class Handler : IRequestHandler<Request, SquadCreatedInfo>
         {
-            private readonly ICommandParser<SquadCreatedInfo> Parser;
+            private readonly IParser<SquadCreatedInfo> Parser;
 
-            public Handler(ICommandParser<SquadCreatedInfo> parser)
+            public Handler(IParser<SquadCreatedInfo> parser)
             {
                 Parser = parser;
             }

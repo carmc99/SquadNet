@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Squadmania.Squad.Rcon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace SquadNET.Core.Squad.Entities
 {
     public enum ChatChannelInfo
     {
-        All,
-        Team,
-        Admin,
-        Squad
+        ChatAll,
+        ChatTeam,
+        ChatAdmin,
+        ChatSquad
     }
 }

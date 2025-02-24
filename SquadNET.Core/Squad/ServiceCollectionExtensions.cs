@@ -3,22 +3,21 @@ using SquadNET.Core.Squad.Models;
 using SquadNET.Core.Squad.Parsers;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
-using Squadmania.Squad.Rcon.Parsers;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSquadParsers(this IServiceCollection services)
     {
-        services.AddSingleton<ICommandParser<ListPlayerModel>, ListPlayersParser>();
-        services.AddSingleton<ICommandParser<List<CommandInfo>>, ListCommandsParser>();
-        services.AddSingleton<ICommandParser<List<SquadInfo>>, ListSquadsParser>();
-        services.AddSingleton<ICommandParser<List<TeamInfo>>, ListTeamsParser>();
-        services.AddSingleton<ICommandParser<CurrentMapInfo>, ShowCurrentMapParser>();
-        services.AddSingleton<ICommandParser<NextMapInfo>, ShowNextMapParser>();
-        services.AddSingleton<ICommandParser<ChatMessageInfo>, ChatMessageParser>();
-        services.AddSingleton<ICommandParser<SquadCreatedInfo>, SquadCreatedMessageParser>();
-        services.AddSingleton<ICommandParser<List<LayerInfo>>, ListLayersParser>();
-        services.AddSingleton<ICommandParser<List<LevelInfo>>, ListLevelsParser>();
+        services.AddSingleton<IParser<ListPlayerModel>, ListPlayersParser>();
+        services.AddSingleton<IParser<List<CommandInfo>>, ListCommandsParser>();
+        services.AddSingleton<IParser<List<SquadInfo>>, ListSquadsParser>();
+        services.AddSingleton<IParser<List<TeamInfo>>, ListTeamsParser>();
+        services.AddSingleton<IParser<CurrentMapInfo>, ShowCurrentMapParser>();
+        services.AddSingleton<IParser<NextMapInfo>, ShowNextMapParser>();
+        services.AddSingleton<IParser<ChatMessageInfo>, ChatMessageParser>();
+        services.AddSingleton<IParser<SquadCreatedInfo>, SquadCreatedMessageParser>();
+        services.AddSingleton<IParser<List<LayerInfo>>, ListLayersParser>();
+        services.AddSingleton<IParser<List<LevelInfo>>, ListLevelsParser>();
         return services;
     }
 

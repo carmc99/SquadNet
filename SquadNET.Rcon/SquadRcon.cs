@@ -21,7 +21,7 @@ namespace SquadNET.Rcon
         private readonly string Password;
 
         public event Action OnConnected;
-        public event Action<Core.Squad.Packet> OnPacketReceived;
+        public event Action<PacketInfo> OnPacketReceived;
         public event Action<ChatMessageInfo> OnChatMessageReceived;
         public event Action<Exception> OnExceptionThrown;
         public event Action<byte[]> OnBytesReceived;
@@ -32,11 +32,11 @@ namespace SquadNET.Rcon
             Logger = logger;
 
             Host = Configuration["Rcon:Host"]
-                ?? throw new ArgumentNullException("Rcon:Host no está definido en la configuración.");
-            Port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ? 
-                parsedPort : throw new ArgumentException("Rcon:Port debe ser un número válido.");
+                ?? throw new ArgumentNullException("Rcon:Host is not defined in the configuration.");
+            Port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ?
+                parsedPort : throw new ArgumentException("Rcon:Port must be a valid number.");
             Password = Configuration["Rcon:Password"]
-                ?? throw new ArgumentNullException("Rcon:Password no está definido en la configuración.");
+                ?? throw new ArgumentNullException("Rcon:Password is not defined in the configuration.");
         }
 
         public void Connect()
@@ -52,22 +52,22 @@ namespace SquadNET.Rcon
                    IPAddress.Parse(Host), Port),
                    Password);
 
-                // Suscribir eventos de RconClient
+                // Subscribe to RconClient events
                 RconClient.Connected += () =>
                 {
                     OnConnected?.Invoke();
                 };
-                //TODO:Complete
-                //RconClient.PacketReceived += packet =>
-                //{
-                //    Logger.LogDebug($"Paquete recibido: {packet}");
-                //    PacketReceived?.Invoke(Squadmania.Squad.Rcon.Packet);
-                //};
-                //RconClient.ChatMessageReceived += message =>
-                //{
-                //    Logger.LogInformation($"Mensaje de chat recibido: {message.Message}");
-                //    ChatMessageReceived?.Invoke(message);
-                //};
+                RconClient.PacketReceived += packet =>
+                {
+                    OnPacketReceived?.Invoke(new PacketInfo(packet.Id,
+                        packet.Type,
+                        packet.Body,
+                        packet.IsBroken));
+                };
+                RconClient.ChatMessageReceived += message =>
+                {
+                    OnChatMessageReceived?.Invoke(ChatMessageInfo.Convert(message));
+                };
                 RconClient.ExceptionThrown += exception =>
                 {
                     OnExceptionThrown?.Invoke(exception);
@@ -79,11 +79,11 @@ namespace SquadNET.Rcon
 
                 RconClient.Start();
                 IsConnected = true;
-                Logger.LogInformation("Conectado correctamente al servidor RCON.");
+                Logger.LogInformation("Successfully connected to the RCON server.");
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Error al conectar con el servidor RCON.");
+                Logger.LogError(ex, "Error connecting to the RCON server.");
                 throw;
             }
         }
@@ -94,21 +94,20 @@ namespace SquadNET.Rcon
             {
                 RconClient.Stop();
                 IsConnected = false;
-                Logger.LogInformation("Desconectado del servidor RCON.");
+                Logger.LogInformation("Disconnected from the RCON server.");
             }
         }
 
         public async Task<string> ExecuteCommandAsync<SquadCommand>(Command<SquadCommand> command, SquadCommand commandType, params object[] args) where SquadCommand : Enum
         {
-
             try
             {
                 Connect();
 
                 if (!IsConnected)
                 {
-                    Logger.LogWarning("Intento de ejecutar un comando RCON sin conexión.");
-                    throw new InvalidOperationException("No se puede ejecutar el comando porque no hay conexión activa.");
+                    Logger.LogWarning("Attempted to execute an RCON command without a connection.");
+                    throw new InvalidOperationException("Cannot execute command because there is no active connection.");
                 }
 
                 string formattedCommand = command.GetFormattedCommand(commandType, args);
@@ -116,18 +115,18 @@ namespace SquadNET.Rcon
 
                 string response = System.Text.Encoding.UTF8.GetString(responseBytes);
 
-                Logger.LogInformation($"Comando ejecutado: {formattedCommand} | Respuesta: {response}");
+                Logger.LogInformation($"Command executed: {formattedCommand} | Response: {response}");
 
                 return response;
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error ejecutando comando RCON: {command}");
+                Logger.LogError(ex, $"Error executing RCON command: {command}");
                 throw;
             }
             finally
             {
-                //Disconnect(); //TODO: Revisar excepcion
+                //Disconnect(); //TODO: Review exception handling
             }
         }
     }

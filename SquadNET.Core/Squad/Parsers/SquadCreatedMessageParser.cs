@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class SquadCreatedMessageParser : ICommandParser<SquadCreatedInfo>
+    internal class SquadCreatedMessageParser : IParser<SquadCreatedInfo>
     {
         public SquadCreatedInfo Parse(string input)
         {

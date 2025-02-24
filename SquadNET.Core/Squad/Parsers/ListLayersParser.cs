@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListLayersParser : ICommandParser<List<LayerInfo>>
+    internal class ListLayersParser : IParser<List<LayerInfo>>
     {
         private const string Header = "List of available layers :";
 

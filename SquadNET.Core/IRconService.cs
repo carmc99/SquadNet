@@ -1,5 +1,4 @@
-﻿using SquadNET.Core.Squad;
-using SquadNET.Core.Squad.Entities;
+﻿using SquadNET.Core.Squad.Entities;
 using System.Net.Sockets;
 
 namespace SquadNET.Core
@@ -8,7 +7,7 @@ namespace SquadNET.Core
     {
         public event Action OnConnected;
 
-        public event Action<Packet> OnPacketReceived;
+        public event Action<PacketInfo> OnPacketReceived;
 
         public event Action<ChatMessageInfo> OnChatMessageReceived;
 

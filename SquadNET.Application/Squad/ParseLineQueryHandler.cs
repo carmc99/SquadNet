@@ -2,6 +2,7 @@
 using SquadNET.Application.Squad.Chat.Queries;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
+using SquadNET.Core.Squad.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace SquadNET.Application.Squad.ParseLine
         public class Response
         {
             public string EventName { get; set; }
-            public object EventData { get; set; }
+            public IEventData EventData { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -31,7 +32,11 @@ namespace SquadNET.Application.Squad.ParseLine
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                ChatMessageInfo chatMessage = await Mediator.Send(new ChatMessageQuery.Request(request.Line), cancellationToken);
+                ChatMessageInfoModel chatMessage = await Mediator.Send(new ChatMessageQuery.Request
+                {
+                    ChatMessageRaw = request.Line,
+                }, cancellationToken);
+
                 if (chatMessage != null)
                 {
                     return new Response

@@ -14,14 +14,14 @@ namespace SquadNET.Application.Squad.Map.Queries
         public class Handler : IRequestHandler<Request, MapInfo>
         {
             private readonly IRconService RconService;
-            private readonly ICommandParser<CurrentMapInfo> CurrentMapParser;
-            private readonly ICommandParser<NextMapInfo> NextMapParser;
+            private readonly IParser<CurrentMapInfo> CurrentMapParser;
+            private readonly IParser<NextMapInfo> NextMapParser;
             private readonly Command<SquadCommand> Command;
 
             public Handler(
                 IRconService rconService,
-                ICommandParser<CurrentMapInfo> currentMapParser,
-                ICommandParser<NextMapInfo> nextMapParser,
+                IParser<CurrentMapInfo> currentMapParser,
+                IParser<NextMapInfo> nextMapParser,
                 Command<SquadCommand> command)
             {
                 RconService = rconService;

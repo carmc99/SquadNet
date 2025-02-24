@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListLevelsParser : ICommandParser<List<LevelInfo>>
+    internal class ListLevelsParser : IParser<List<LevelInfo>>
     {
         private const string Header = "List of available levels :";
 

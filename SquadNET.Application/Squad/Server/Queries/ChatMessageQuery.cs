@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,32 +10,25 @@ namespace SquadNET.Application.Squad.Chat.Queries
 {
     public static class ChatMessageQuery
     {
-        public class Request : IRequest<ChatMessageInfo>
+        public class Request : IRequest<ChatMessageInfoModel>
         {
-            public string ChatMessageRaw { get; }
-
-            public Request(string chatMessageRaw)
-            {
-                ChatMessageRaw = chatMessageRaw;
-            }
+            public string ChatMessageRaw { get; set; }
         }
 
-        public class Handler : IRequestHandler<Request, ChatMessageInfo>
+        public class Handler : IRequestHandler<Request, ChatMessageInfoModel>
         {
-            private readonly IRconService RconService;
-            private readonly ICommandParser<ChatMessageInfo> Parser;
+            private readonly IParser<ChatMessageInfo> Parser;
 
-            public Handler(ICommandParser<ChatMessageInfo> parser, IRconService rconService)
+            public Handler(IParser<ChatMessageInfo> parser)
             {
                 Parser = parser;
-                RconService = rconService;
             }
 
-            public Task<ChatMessageInfo> Handle(Request request, CancellationToken cancellationToken)
+            public Task<ChatMessageInfoModel> Handle(Request request, CancellationToken cancellationToken)
             {
 
                 ChatMessageInfo chatMessage = Parser.Parse(request.ChatMessageRaw);
-                return Task.FromResult(chatMessage);
+                return Task.FromResult(ChatMessageInfoModel.FromEntity(chatMessage));
             }
         }
     }
