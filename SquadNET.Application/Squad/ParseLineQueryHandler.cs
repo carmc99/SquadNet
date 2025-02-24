@@ -32,7 +32,7 @@ namespace SquadNET.Application.Squad.ParseLine
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                ChatMessageInfoModel chatMessage = await Mediator.Send(new ChatMessageQuery.Request
+                ChatMessageModel chatMessage = await Mediator.Send(new ChatMessageQuery.Request
                 {
                     ChatMessageRaw = request.Line,
                 }, cancellationToken);

@@ -10,12 +10,12 @@ namespace SquadNET.Application.Squad.Chat.Queries
 {
     public static class ChatMessageQuery
     {
-        public class Request : IRequest<ChatMessageInfoModel>
+        public class Request : IRequest<ChatMessageModel>
         {
             public string ChatMessageRaw { get; set; }
         }
 
-        public class Handler : IRequestHandler<Request, ChatMessageInfoModel>
+        public class Handler : IRequestHandler<Request, ChatMessageModel>
         {
             private readonly IParser<ChatMessageInfo> Parser;
 
@@ -24,11 +24,11 @@ namespace SquadNET.Application.Squad.Chat.Queries
                 Parser = parser;
             }
 
-            public Task<ChatMessageInfoModel> Handle(Request request, CancellationToken cancellationToken)
+            public Task<ChatMessageModel> Handle(Request request, CancellationToken cancellationToken)
             {
 
                 ChatMessageInfo chatMessage = Parser.Parse(request.ChatMessageRaw);
-                return Task.FromResult(ChatMessageInfoModel.FromEntity(chatMessage));
+                return Task.FromResult(ChatMessageModel.FromEntity(chatMessage));
             }
         }
     }

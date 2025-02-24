@@ -6,7 +6,7 @@ namespace SquadNET.Core.Squad.Models
     /// <summary>
     /// Represents a chat message model, used for storage and serialization.
     /// </summary>
-    public class ChatMessageInfoModel : IEventData
+    public class ChatMessageModel : IEventData
     {
         /// <summary>
         /// The chat channel where the message was sent.
@@ -51,9 +51,9 @@ namespace SquadNET.Core.Squad.Models
         /// </summary>
         /// <param name="entity">The `ChatMessageInfo` entity to convert.</param>
         /// <returns>A new instance of `ChatMessageInfoModel`.</returns>
-        public static ChatMessageInfoModel FromEntity(ChatMessageInfo entity)
+        public static ChatMessageModel FromEntity(ChatMessageInfo entity)
         {
-            return new ChatMessageInfoModel
+            return new ChatMessageModel
             {
                 Channel = entity.Channel,
                 EosId = entity.CreatorIds.EosId,

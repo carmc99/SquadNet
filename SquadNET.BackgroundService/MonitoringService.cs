@@ -80,7 +80,7 @@ namespace SquadNET.Services
             });
             if (result != null)
             {
-                if (result.EventData is ChatMessageInfoModel messageInfo)
+                if (result.EventData is ChatMessageModel messageInfo)
                 {
                     Logger.LogInformation(messageInfo.ToString());
                 }
