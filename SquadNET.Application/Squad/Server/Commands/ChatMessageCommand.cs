@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
@@ -12,7 +13,15 @@ namespace SquadNET.Application.Squad.Chat.Commands
     {
         public class Request : IRequest<ChatMessageModel>
         {
-            public string ChatMessageRaw { get; set; }
+            public string RawMessage { get; set; }
+        }
+
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.RawMessage).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Request, ChatMessageModel>
@@ -26,9 +35,13 @@ namespace SquadNET.Application.Squad.Chat.Commands
 
             public Task<ChatMessageModel> Handle(Request request, CancellationToken cancellationToken)
             {
-
-                ChatMessageInfo chatMessage = Parser.Parse(request.ChatMessageRaw);
-                return Task.FromResult(ChatMessageModel.FromEntity(chatMessage));
+                ChatMessageModel model = null;
+                ChatMessageInfo chatMessage = Parser.Parse(request.RawMessage);
+                if (chatMessage != null)
+                {
+                    model = ChatMessageModel.FromEntity(chatMessage);
+                }
+                return Task.FromResult(model);
             }
         }
     }

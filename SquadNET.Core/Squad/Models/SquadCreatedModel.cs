@@ -77,13 +77,14 @@ namespace SquadNET.Core.Squad.Models
         /// <returns>A `SquadCreatedInfo` entity.</returns>
         public SquadCreatedInfo ToEntity()
         {
-            return new SquadCreatedInfo(
-                PlayerName,
-                new CreatorOnlineIds(EosId, SteamId),
-                SquadId,
-                SquadName,
-                TeamName
-            );
+            return new SquadCreatedInfo
+            {
+                PlayerName = PlayerName,
+                SquadId = SquadId,
+                SquadName = SquadName,
+                TeamName = TeamName,
+                CreatorIds = new CreatorOnlineIds(EosId, SteamId)
+            };
         }
     }
 }

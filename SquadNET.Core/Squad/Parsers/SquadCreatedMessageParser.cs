@@ -8,26 +8,35 @@ namespace SquadNET.Core.Squad.Parsers
 {
     internal class SquadCreatedMessageParser : IParser<SquadCreatedInfo>
     {
+        private static readonly Regex SquadCreatedRegex = RegexPatternHelper.GetRegex<SquadCreatedInfo>();
+
         public SquadCreatedInfo Parse(string input)
         {
             input = input.SanitizeInput();
 
-            Match match = RegexPatternHelper.GetRegex<SquadCreatedInfo>().Match(input);
-            if (!match.Success || match.Groups.Count < 6)
+            Match match = SquadCreatedRegex.Match(input);
+            if (!match.Success || match.Groups.Count < 7)
             {
                 return null;
             }
 
-            Dictionary<string, string> parsedValues = new()
-            {
-                { "PlayerNameWithoutPrefix", match.Groups[1].Value },
-                { "PlayerSteamId", match.Groups[2].Value },
-                { "SquadId", match.Groups[3].Value },
-                { "SquadName", match.Groups[4].Value },
-                { "TeamName", match.Groups[5].Value }
-            };
+            string eosId = match.Groups[2].Value;
+            ulong steamId = ulong.Parse(match.Groups[3].Value);
+            CreatorOnlineIds creatorIds = new(eosId, steamId);
 
-            return DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedInfo>(parsedValues);
+            Dictionary<string, string> parsedValues = new()
+        {
+            { "PlayerName", match.Groups[1].Value },
+            { "SquadId", match.Groups[4].Value },
+            { "SquadName", match.Groups[5].Value },
+            { "TeamName", match.Groups[6].Value }
+        };
+
+            SquadCreatedInfo squadCreated = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedInfo>(parsedValues);
+            squadCreated.CreatorIds = creatorIds;
+
+            return squadCreated;
         }
     }
+
 }

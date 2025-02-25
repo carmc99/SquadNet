@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
@@ -14,20 +15,31 @@ namespace SquadNET.Application.Squad.Team.Commands
         {
             public string RawMessage { get; set; }
         }
-
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.RawMessage).NotEmpty();
+            }
+        }
         public class Handler : IRequestHandler<Request, SquadCreatedModel>
         {
-            private readonly IParser<SquadCreatedModel> Parser;
+            private readonly IParser<SquadCreatedInfo> Parser;
 
-            public Handler(IParser<SquadCreatedModel> parser)
+            public Handler(IParser<SquadCreatedInfo> parser)
             {
                 Parser = parser;
             }
 
             public Task<SquadCreatedModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                SquadCreatedModel squadCreated = Parser.Parse(request.RawMessage);
-                return Task.FromResult(squadCreated);
+                SquadCreatedModel model = null;
+                SquadCreatedInfo squadCreated = Parser.Parse(request.RawMessage);
+                if (squadCreated != null)
+                {
+                    model = SquadCreatedModel.FromEntity(squadCreated);
+                }
+                return Task.FromResult(model);
             }
         }
     }

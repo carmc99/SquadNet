@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SquadNET.Application.Squad.Chat.Commands;
-using SquadNET.Application.Squad.Chat.Queries;
 using SquadNET.Application.Squad.Team.Commands;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
@@ -36,7 +35,7 @@ namespace SquadNET.Application.Squad.ParseLine
             {
                 ChatMessageModel chatMessage = await Mediator.Send(new ChatMessageCommand.Request
                 {
-                    ChatMessageRaw = request.Line,
+                    RawMessage = request.Line,
                 }, cancellationToken);
 
                 if (chatMessage != null)
@@ -61,7 +60,7 @@ namespace SquadNET.Application.Squad.ParseLine
                         EventData = squadCreated
                     };
                 }
-`
+
                 return null;
             }
         }

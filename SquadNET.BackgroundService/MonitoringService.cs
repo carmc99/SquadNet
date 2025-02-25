@@ -83,6 +83,10 @@ namespace SquadNET.Services
                 {
                     Logger.LogInformation(messageInfo.ToString());
                 }
+                else if(result.EventData is SquadCreatedModel squadCreated)
+                {
+                    Logger.LogInformation(squadCreated.ToString());
+                }
                 else
                 {
                     Logger.LogWarning("Event Received with unknown EventData type | EventName: {EventName} | EventDataType: {EventDataType}",

@@ -9,20 +9,11 @@ namespace SquadNET.Core.Squad.Entities
     [RegexPattern(@"^(.+) \(Online IDs: EOS: ([0-9a-f]+) steam: (\d+)\) has created Squad (\d+) \(Squad Name: (.+)\) on (.+)$")]
     public class SquadCreatedInfo
     {
-        public string PlayerName { get; }
-        public CreatorOnlineIds CreatorIds { get; }
-        public int SquadId { get; }
-        public string SquadName { get; }
-        public string TeamName { get; }
-
-        public SquadCreatedInfo(string playerName, CreatorOnlineIds creatorIds, int squadId, string squadName, string teamName)
-        {
-            PlayerName = playerName;
-            CreatorIds = creatorIds;
-            SquadId = squadId;
-            SquadName = squadName;
-            TeamName = teamName;
-        }
+        public string PlayerName { get; set; }
+        public CreatorOnlineIds CreatorIds { get; set; }
+        public int SquadId { get; set; }
+        public string SquadName { get; set; }
+        public string TeamName { get; set; }
 
         public override bool Equals(object obj)
         {
