@@ -1,11 +1,12 @@
 ﻿using MediatR;
-using SquadNET.Application.Squad.Chat.Commands;
-using SquadNET.Application.Squad.Team.Commands;
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events;
 using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Events;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SquadNET.Application.Squad.Chat.Commands;
+using SquadNET.Application.Squad.Team.Commands;
 
 namespace SquadNET.Application.Squad.ParseLine
 {
@@ -25,43 +26,46 @@ namespace SquadNET.Application.Squad.ParseLine
         public class Handler : IRequestHandler<Request, Response>
         {
             private readonly IMediator Mediator;
+            private readonly Dictionary<SquadEventType,
+                Func<string, CancellationToken, Task<IEventData>>> Parsers;
 
             public Handler(IMediator mediator)
             {
                 Mediator = mediator;
+
+                Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>>
+                {
+                    { SquadEventType.CHAT_MESSAGE, (line, ct) => ParseChatMessage(line, ct) },
+                    { SquadEventType.SQUAD_CREATED, (line, ct) => ParseSquadCreated(line, ct) }
+                };
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                ChatMessageModel chatMessage = await Mediator.Send(new ChatMessageCommand.Request
+                foreach (KeyValuePair<SquadEventType, Func<string, CancellationToken, Task<IEventData>>> entry in Parsers)
                 {
-                    RawMessage = request.Line,
-                }, cancellationToken);
-
-                if (chatMessage != null)
-                {
-                    return new Response
+                    IEventData result = await entry.Value(request.Line, cancellationToken);
+                    if (result != null)
                     {
-                        EventName = SquadEventType.CHAT_MESSAGE.ToString(),
-                        EventData = chatMessage
-                    };
-                }
-
-                SquadCreatedModel squadCreated = await Mediator.Send(new SquadCreatedMessageCommand.Request
-                {
-                    RawMessage = request.Line,
-                }, cancellationToken);
-
-                if (squadCreated != null)
-                {
-                    return new Response
-                    {
-                        EventName = SquadEventType.SQUAD_CREATED.ToString(),
-                        EventData = squadCreated
-                    };
+                        return new Response
+                        {
+                            EventName = entry.Key.ToString(),
+                            EventData = result
+                        };
+                    }
                 }
 
                 return null;
+            }
+
+            private async Task<IEventData> ParseChatMessage(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new ChatMessageCommand.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private async Task<IEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new SquadCreatedMessageCommand.Request { RawMessage = line }, cancellationToken);
             }
         }
     }
