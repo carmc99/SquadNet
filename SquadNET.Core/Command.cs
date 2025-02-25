@@ -15,7 +15,7 @@ namespace SquadNET.Core
         {
             if (!CommandTemplates.ContainsKey(command))
             {
-                throw new InvalidOperationException($"El comando '{command}' no está definido en la plantilla.");
+                throw new InvalidOperationException($"The command '{command}' is not defined in the template.");
             }
             return string.Format(CommandTemplates[command], args);
         }

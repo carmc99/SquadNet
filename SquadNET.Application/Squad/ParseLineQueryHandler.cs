@@ -41,7 +41,7 @@ namespace SquadNET.Application.Squad.ParseLine
                 {
                     return new Response
                     {
-                        EventName = LogEventType.CHAT_MESSAGE.ToString(),
+                        EventName = SquadEventType.CHAT_MESSAGE.ToString(),
                         EventData = chatMessage
                     };
                 }

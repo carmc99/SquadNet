@@ -10,25 +10,25 @@ namespace SquadNET.Plugins.Abstractions
     public interface IPlugin
     {
         /// <summary>
-        /// Nombre del plugin.
+        /// Plugin name.
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Método de inicialización del plugin.
+        /// Initializes the plugin.
         /// </summary>
         void Initialize();
 
         /// <summary>
-        /// Método de apagado del plugin.
+        /// Shuts down the plugin.
         /// </summary>
         void Shutdown();
 
         /// <summary>
-        /// Maneja un evento disparado por la aplicación.
+        /// Handles an event triggered by the application.
         /// </summary>
-        /// <param name="eventName">Nombre del evento (por ejemplo, "CHAT_MESSAGE").</param>
-        /// <param name="eventData">Objeto con la información relevante del evento.</param>
+        /// <param name="eventName">Name of the event (e.g., "CHAT_MESSAGE").</param>
+        /// <param name="eventData">Object containing relevant event information.</param>
         void OnEventRaised(string eventName, IEventData eventData);
     }
 }

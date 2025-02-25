@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core
 {
-    // Atributo para asociar un patrón regex a una clase
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class RegexPatternAttribute : Attribute
     {

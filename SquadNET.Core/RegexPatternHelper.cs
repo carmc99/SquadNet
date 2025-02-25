@@ -16,7 +16,7 @@ namespace SquadNET.Core
 
             if (attribute == null)
             {
-                throw new InvalidOperationException($"La clase {typeof(T).Name} no tiene un atributo RegexPatternAttribute.");
+                throw new InvalidOperationException($"The class {typeof(T).Name} does not have a RegexPatternAttribute.");
             }
 
             return new Regex(attribute.Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);

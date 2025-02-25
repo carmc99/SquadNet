@@ -59,10 +59,7 @@ namespace SquadNET.Rcon
                 };
                 RconClient.PacketReceived += packet =>
                 {
-                    OnPacketReceived?.Invoke(new PacketInfo(packet.Id,
-                        packet.Type,
-                        packet.Body,
-                        packet.IsBroken));
+                    OnPacketReceived?.Invoke(PacketInfo.Convert(packet));
                 };
                 RconClient.ChatMessageReceived += message =>
                 {

@@ -22,11 +22,11 @@ namespace SquadNET.Application.Services
         }
 
         /// <summary>
-        /// Carga los plugins registrados en el contenedor de inyección de dependencias.
+        /// Loads the plugins registered in the dependency injection container.
         /// </summary>
         private void LoadPlugins()
         {
-            Logger.LogInformation("[PluginManager] Cargando plugins...");
+            Logger.LogInformation("[PluginManager] Loading plugins...");
 
             IEnumerable<IPlugin> registeredPlugins = ServiceProvider.GetServices<IPlugin>();
             foreach (IPlugin plugin in registeredPlugins)
@@ -35,33 +35,33 @@ namespace SquadNET.Application.Services
                 {
                     plugin.Initialize();
                     Plugins.Add(plugin);
-                    Logger.LogInformation("[PluginManager] Plugin cargado: {PluginName}", plugin.Name);
+                    Logger.LogInformation("[PluginManager] Plugin loaded: {PluginName}", plugin.Name);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error al cargar el plugin {PluginName}: {Message}",
+                    Logger.LogError("[PluginManager] Error loading plugin {PluginName}: {Message}",
                         plugin.Name, ex.Message);
                 }
             }
         }
 
         /// <summary>
-        /// Apaga y limpia los plugins cargados.
+        /// Shuts down and clears the loaded plugins.
         /// </summary>
         public void ShutdownPlugins()
         {
-            Logger.LogInformation("[PluginManager] Apagando plugins...");
+            Logger.LogInformation("[PluginManager] Shutting down plugins...");
 
             foreach (IPlugin plugin in Plugins)
             {
                 try
                 {
                     plugin.Shutdown();
-                    Logger.LogInformation("[PluginManager] Plugin apagado: {PluginName}", plugin.Name);
+                    Logger.LogInformation("[PluginManager] Plugin shut down: {PluginName}", plugin.Name);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error al apagar el plugin {PluginName}: {Message}",
+                    Logger.LogError("[PluginManager] Error shutting down plugin {PluginName}: {Message}",
                         plugin.Name, ex.Message);
                 }
             }
@@ -70,7 +70,7 @@ namespace SquadNET.Application.Services
         }
 
         /// <summary>
-        /// Dispara un evento para que lo consuman los plugins que lo soporten.
+        /// Triggers an event to be consumed by supported plugins.
         /// </summary>
         public void EmitEvent(string eventName, IEventData eventData)
         {
@@ -82,7 +82,7 @@ namespace SquadNET.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "[PluginManager] Error emitiendo evento {EventName} a plugin {PluginName}",
+                    Logger.LogError(ex, "[PluginManager] Error emitting event {EventName} to plugin {PluginName}",
                         eventName, plugin.Name);
                 }
             }

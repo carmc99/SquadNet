@@ -3,7 +3,7 @@
     /// <summary>
     /// Enumeración de eventos que pueden ser emitidos por el sistema.
     /// </summary>
-    public enum LogEventType
+    public enum SquadEventType
     {
         CHAT_MESSAGE,
         POSSESSED_ADMIN_CAMERA,

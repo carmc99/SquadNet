@@ -60,7 +60,7 @@ namespace SquadNET.Core.Squad.Models
                 SteamId = entity.CreatorIds.SteamId,
                 PlayerName = entity.PlayerName,
                 Message = entity.Message,
-                Timestamp = DateTime.UtcNow // Stores the message time in UTC
+                Timestamp = DateTime.UtcNow
             };
         }
 

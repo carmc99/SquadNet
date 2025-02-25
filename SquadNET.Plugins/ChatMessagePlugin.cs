@@ -16,7 +16,7 @@ namespace SquadNET.Plugins
         /// </summary>
         public override void OnEventRaised(string eventName, IEventData eventData)
         {
-            if (eventName == LogEventType.CHAT_MESSAGE.ToString())
+            if (eventName == SquadEventType.CHAT_MESSAGE.ToString())
             {
                 if (eventData is ChatMessageModel chat)
                 {
