@@ -160,6 +160,16 @@ namespace SquadNET.Rcon
         /// <param name="packet">The received RCON packet.</param>
         private void ProcessPacket(PacketInfo packet)
         {
+            // Squad-specific filtering for broken packets
+            // The Squad server sometimes sends an invalid empty exec command packet.
+            // These packets have Id: 4, Type: 2 (ServerDataExecCommand), and an empty body.
+            // These packets should be ignored as they have no useful data.
+            if (packet.Id == 4 && packet.Type == PacketType.ServerDataExecCommand && packet.Body.Length == 0)
+            {
+                return;
+            }
+
+            // Filter out unnecessary empty response packets
             if (packet is { Id: 3, Type: PacketType.ServerDataResponseValue })
             {
                 return;
