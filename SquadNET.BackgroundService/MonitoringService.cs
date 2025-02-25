@@ -7,7 +7,6 @@ using SquadNET.Application.Services;
 using SquadNET.Application.Squad.ParseLine;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
-using Squadmania.Squad.Rcon;
 using System.Text;
 using SquadNET.Core.Squad.Models;
 

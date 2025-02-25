@@ -1,13 +1,7 @@
 ﻿using MediatR;
-using Squadmania.Squad.Rcon.Models;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.Player.Queries
 {

@@ -1,17 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Squadmania.Squad.Rcon;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
 using SquadNET.Core.Squad.Entities;
 using System;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SquadNET.Rcon
 {
     public class SquadRcon : IRconService
     {
+        private readonly IParser<ChatMessageInfo> Parser;
         private readonly IConfiguration Configuration;
         private readonly ILogger<SquadRcon> Logger;
         private RconClient RconClient;
@@ -26,56 +29,63 @@ namespace SquadNET.Rcon
         public event Action<Exception> OnExceptionThrown;
         public event Action<byte[]> OnBytesReceived;
 
-        public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger)
+        public SquadRcon(IConfiguration configuration,
+            ILogger<SquadRcon> logger,
+            IParser<ChatMessageInfo> parser)
         {
-            Configuration = configuration;
-            Logger = logger;
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             Host = Configuration["Rcon:Host"]
                 ?? throw new ArgumentNullException("Rcon:Host is not defined in the configuration.");
-            Port = int.TryParse(Configuration["Rcon:Port"], out int parsedPort) ?
-                parsedPort : throw new ArgumentException("Rcon:Port must be a valid number.");
+            if (!int.TryParse(Configuration["Rcon:Port"], out int parsedPort))
+            {
+                throw new ArgumentException("Rcon:Port must be a valid number.");
+            }
+            Port = parsedPort;
+
             Password = Configuration["Rcon:Password"]
                 ?? throw new ArgumentNullException("Rcon:Password is not defined in the configuration.");
+            Parser = parser;
         }
 
+        /// <summary>
+        /// Establishes a connection to the RCON server if not already connected.
+        /// Subscribes to the new RconClient's events.
+        /// </summary>
         public void Connect()
         {
             try
             {
-                if (IsConnected)
-                {
-                    return;
-                }
+                if (IsConnected) return;
 
-                RconClient = new RconClient(new IPEndPoint(
-                   IPAddress.Parse(Host), Port),
-                   Password);
+                RconClient = new RconClient(
+                    new IPEndPoint(IPAddress.Parse(Host), Port),
+                    Password
+                );
 
-                // Subscribe to RconClient events
-                RconClient.Connected += () =>
+                // Subscribe to new RconClient events
+                RconClient.OnConnected += () =>
                 {
                     OnConnected?.Invoke();
                 };
-                RconClient.PacketReceived += packet =>
+                RconClient.OnPacketReceived += packet =>
                 {
-                    OnPacketReceived?.Invoke(PacketInfo.Convert(packet));
+                    ProcessPacket(packet);
                 };
-                RconClient.ChatMessageReceived += message =>
-                {
-                    OnChatMessageReceived?.Invoke(ChatMessageInfo.Convert(message));
-                };
-                RconClient.ExceptionThrown += exception =>
+                RconClient.OnExceptionThrown += exception =>
                 {
                     OnExceptionThrown?.Invoke(exception);
                 };
-                RconClient.BytesReceived += bytes =>
+                RconClient.OnBytesReceived += bytes =>
                 {
                     OnBytesReceived?.Invoke(bytes);
                 };
 
-                RconClient.Start();
+                // Connect to the RCON server
+                RconClient.Connect();
                 IsConnected = true;
+
                 Logger.LogInformation("Successfully connected to the RCON server.");
             }
             catch (Exception ex)
@@ -85,17 +95,32 @@ namespace SquadNET.Rcon
             }
         }
 
+        /// <summary>
+        /// Disconnects from the RCON server if currently connected.
+        /// </summary>
         public void Disconnect()
         {
             if (IsConnected)
             {
-                RconClient.Stop();
+                RconClient.Disconnect();
                 IsConnected = false;
                 Logger.LogInformation("Disconnected from the RCON server.");
             }
         }
 
-        public async Task<string> ExecuteCommandAsync<SquadCommand>(Command<SquadCommand> command, SquadCommand commandType, params object[] args) where SquadCommand : Enum
+        /// <summary>
+        /// Executes an RCON command asynchronously.
+        /// </summary>
+        /// <typeparam name="SquadCommand">The enumeration type representing the command.</typeparam>
+        /// <param name="command">The command template used for execution.</param>
+        /// <param name="commandType">The specific command enum value to be executed.</param>
+        /// <param name="args">Optional arguments for the command.</param>
+        /// <returns>The server's response as a string.</returns>
+        public async Task<string> ExecuteCommandAsync<SquadCommand>(
+            Command<SquadCommand> command,
+            SquadCommand commandType,
+            params object[] args
+        ) where SquadCommand : Enum
         {
             try
             {
@@ -104,14 +129,16 @@ namespace SquadNET.Rcon
                 if (!IsConnected)
                 {
                     Logger.LogWarning("Attempted to execute an RCON command without a connection.");
-                    throw new InvalidOperationException("Cannot execute command because there is no active connection.");
+                    throw new InvalidOperationException("No active RCON connection.");
                 }
 
                 string formattedCommand = command.GetFormattedCommand(commandType, args);
-                byte[] responseBytes = await RconClient.WriteCommandAsync(formattedCommand, CancellationToken.None);
+                byte[] responseBytes = await RconClient.WriteCommandAsync(
+                    formattedCommand,
+                    CancellationToken.None
+                );
 
-                string response = System.Text.Encoding.UTF8.GetString(responseBytes);
-
+                string response = Encoding.UTF8.GetString(responseBytes);
                 Logger.LogInformation($"Command executed: {formattedCommand} | Response: {response}");
 
                 return response;
@@ -123,7 +150,47 @@ namespace SquadNET.Rcon
             }
             finally
             {
-                //Disconnect(); //TODO: Review exception handling
+                Disconnect();
+            }
+        }
+
+        /// <summary>
+        /// Processes incoming packets, specifically looking for chat messages.
+        /// </summary>
+        /// <param name="packet">The received RCON packet.</param>
+        private void ProcessPacket(PacketInfo packet)
+        {
+            if (packet is { Id: 3, Type: PacketType.ServerDataResponseValue })
+            {
+                return;
+            }
+
+            try
+            {
+                OnPacketReceived?.Invoke(packet);
+            }
+            catch (Exception e)
+            {
+                OnExceptionThrown?.Invoke(e);
+            }
+
+            if (packet.Type == PacketType.ServerDataChatMessage)
+            {
+                string rawMessage = Encoding.UTF8.GetString(packet.Body);
+
+                ChatMessageInfo chatMessage = Parser.Parse(rawMessage);
+
+                if (chatMessage != null)
+                {
+                    try
+                    {
+                        OnChatMessageReceived?.Invoke(chatMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        OnExceptionThrown?.Invoke(e);
+                    }
+                }
             }
         }
     }

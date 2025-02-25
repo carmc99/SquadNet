@@ -1,11 +1,6 @@
-﻿using Squadmania.Squad.Rcon;
-using System;
+﻿
 using System.Buffers.Binary;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
@@ -45,11 +40,6 @@ namespace SquadNET.Core.Squad.Entities
             Id = id;
             Body = body;
             IsBroken = isBroken;
-        }
-
-        public static PacketInfo Convert(Packet packetInfo)
-        {
-            return new PacketInfo(packetInfo.Id, packetInfo.Type, packetInfo.Body, packetInfo.IsBroken);
         }
 
         public static PacketInfo Read(Stream stream)

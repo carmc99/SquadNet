@@ -3,13 +3,6 @@ using Microsoft.Extensions.Logging;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
 using MediatR;
-using SquadNET.Application.Squad.Admin.Commands;
-using SquadNET.Application.Squad.Player.Queries;
-using SquadNET.Core.Squad.Models;
-using SquadNET.Application.Squad.Admin.Queries;
-using SquadNET.Application.Squad.Team.Queries;
-using Squadmania.Squad.Rcon.Parsers;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Application.Squad.Map.Queries;
 
 public class CommandHandler
