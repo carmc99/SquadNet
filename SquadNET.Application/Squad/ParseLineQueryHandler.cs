@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using SquadNET.Application.Squad.Chat.Commands;
 using SquadNET.Application.Squad.Chat.Queries;
+using SquadNET.Application.Squad.Team.Commands;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
 using SquadNET.Core.Squad.Models;
@@ -32,7 +34,7 @@ namespace SquadNET.Application.Squad.ParseLine
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                ChatMessageModel chatMessage = await Mediator.Send(new ChatMessageQuery.Request
+                ChatMessageModel chatMessage = await Mediator.Send(new ChatMessageCommand.Request
                 {
                     ChatMessageRaw = request.Line,
                 }, cancellationToken);
@@ -46,22 +48,20 @@ namespace SquadNET.Application.Squad.ParseLine
                     };
                 }
 
-                // 2) Intentamos parsear "teamkill" (si tuvieras un TeamKillQuery)
-                /*
-                var teamKill = await Mediator.Send(new TeamKillQuery.Request(request.Line), cancellationToken);
-                if (teamKill != null)
+                SquadCreatedModel squadCreated = await Mediator.Send(new SquadCreatedMessageCommand.Request
                 {
-                    return new ParsedEventResult
+                    RawMessage = request.Line,
+                }, cancellationToken);
+
+                if (squadCreated != null)
+                {
+                    return new Response
                     {
-                        EventName = LogEvents.TEAMKILL,
-                        EventData = teamKill
+                        EventName = SquadEventType.SQUAD_CREATED.ToString(),
+                        EventData = squadCreated
                     };
                 }
-                */
-
-                // 3) Otros eventos que quieras
-
-                // Si no coinciden ninguno, retornamos null
+`
                 return null;
             }
         }

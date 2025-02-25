@@ -6,19 +6,29 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
-    [RegexPattern(@"^(.*) \(Steam ID: ([0-9]+)\) has created Squad ([0-9]+) \(Squad Name: (.*)\) on (.*)$")]
+    [RegexPattern(@"^(.+) \(Online IDs: EOS: ([0-9a-f]+) steam: (\d+)\) has created Squad (\d+) \(Squad Name: (.+)\) on (.+)$")]
     public class SquadCreatedInfo
     {
-        public string PlayerNameWithoutPrefix { get; }
-        public ulong PlayerSteamId { get; }
+        public string PlayerName { get; }
+        public CreatorOnlineIds CreatorIds { get; }
         public int SquadId { get; }
         public string SquadName { get; }
         public string TeamName { get; }
+
+        public SquadCreatedInfo(string playerName, CreatorOnlineIds creatorIds, int squadId, string squadName, string teamName)
+        {
+            PlayerName = playerName;
+            CreatorIds = creatorIds;
+            SquadId = squadId;
+            SquadName = squadName;
+            TeamName = teamName;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is SquadCreatedInfo other &&
-                   PlayerNameWithoutPrefix == other.PlayerNameWithoutPrefix &&
-                   PlayerSteamId == other.PlayerSteamId &&
+                   PlayerName == other.PlayerName &&
+                   CreatorIds.Equals(other.CreatorIds) &&
                    SquadId == other.SquadId &&
                    SquadName == other.SquadName &&
                    TeamName == other.TeamName;
@@ -26,7 +36,8 @@ namespace SquadNET.Core.Squad.Entities
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(PlayerNameWithoutPrefix, PlayerSteamId, SquadId, SquadName, TeamName);
+            return HashCode.Combine(PlayerName, CreatorIds, SquadId, SquadName, TeamName);
         }
     }
+
 }

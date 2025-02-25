@@ -6,9 +6,9 @@ using SquadNET.Rcon;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SquadNET.Application.Squad.Chat.Queries
+namespace SquadNET.Application.Squad.Chat.Commands
 {
-    public static class ChatMessageQuery
+    public static class ChatMessageCommand
     {
         public class Request : IRequest<ChatMessageModel>
         {
