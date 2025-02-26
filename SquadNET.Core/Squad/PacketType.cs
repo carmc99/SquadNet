@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core
+namespace SquadNET.Core.Squad
 {
     public static class PacketType
     {

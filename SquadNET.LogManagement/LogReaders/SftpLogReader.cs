@@ -11,7 +11,7 @@ namespace SquadNET.LogManagement.LogReaders
     {
         private readonly SftpClient SftpClient;
         private readonly string RemoteFilePath;
-        private long LastPosition = 0; // Tracks the last read position
+        private long LastPosition = 0;
 
         public event Action<string> OnLogLine;
         public event Action<string> OnError;

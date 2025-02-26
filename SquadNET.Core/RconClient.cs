@@ -1,4 +1,5 @@
 ﻿using SquadNET.Core;
+using SquadNET.Core.Squad;
 using SquadNET.Core.Squad.Entities;
 using System;
 using System.Net;

@@ -6,7 +6,7 @@ namespace SquadNET.Core.Squad.Entities
 {
     public readonly struct PacketInfo
     {
-        public static readonly PacketInfo Empty = new PacketInfo(0, 0, Array.Empty<byte>());
+        public static readonly PacketInfo Empty = new(0, 0, []);
 
         public const int SizeFieldLength = 4;
 

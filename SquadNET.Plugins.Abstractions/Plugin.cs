@@ -8,10 +8,7 @@ namespace SquadNET.Plugins.Abstractions
         public abstract string Name { get; }
 
         /// <inheritdoc />
-        public virtual void Initialize()
-        {
-            Console.WriteLine($"[{Name}] Plugin inicializado.");
-        }
+        public virtual void Initialize() { }
 
         /// <inheritdoc />
         public virtual void OnEventRaised(string eventName, IEventData eventData)
@@ -21,9 +18,6 @@ namespace SquadNET.Plugins.Abstractions
         }
 
         /// <inheritdoc />
-        public virtual void Shutdown()
-        {
-            Console.WriteLine($"[{Name}] Plugin apagado.");
-        }
+        public virtual void Shutdown() { }
     }
 }

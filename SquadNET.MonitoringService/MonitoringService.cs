@@ -11,7 +11,7 @@ using System.Text;
 using SquadNET.Core.Squad.Models;
 
 
-namespace SquadNET.Services
+namespace SquadNET.MonitoringService
 {
     public class MonitoringService : BackgroundService
     {
@@ -60,9 +60,13 @@ namespace SquadNET.Services
             {
                 await Task.Delay(1000, stoppingToken);
             }
-            
+        }
+
+        public override async Task StopAsync(CancellationToken stoppingToken)
+        {
             await LogReaderService.UnwatchAsync();
             RconService.Disconnect();
+            await base.StopAsync(stoppingToken);
         }
 
         private void OnPacketReceived(PacketInfo message)
@@ -72,7 +76,7 @@ namespace SquadNET.Services
         }
         private async void OnLogLineReceived(string line)
         {
-            Logger.LogInformation("LogLine: {Line}", line);
+            Logger.LogInformation(line);
             ParseLineQueryHandler.Response result = await Mediator.Send(new ParseLineQueryHandler.Request
             {
                 Line = line,

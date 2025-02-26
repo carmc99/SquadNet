@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SquadNET.Core;
+using SquadNET.Core.Squad;
 using SquadNET.Core.Squad.Commands;
 using SquadNET.Core.Squad.Entities;
 using System;
