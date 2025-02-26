@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -47,6 +48,7 @@ namespace SquadNET.Core
                 Type t when t == typeof(int) => int.TryParse(value, out Unsafe.As<T, int>(ref result)),
                 Type t when t == typeof(ulong) => ulong.TryParse(value, out Unsafe.As<T, ulong>(ref result)),
                 Type t when t == typeof(bool) => bool.TryParse(value, out Unsafe.As<T, bool>(ref result)),
+                Type t when t == typeof(float) => float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out Unsafe.As<T, float>(ref result)),
                 _ => throw new NotSupportedException($"Conversion not supported for type: {typeof(T).Name}")
             };
         }

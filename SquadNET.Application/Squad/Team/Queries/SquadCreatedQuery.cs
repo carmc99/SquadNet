@@ -7,9 +7,9 @@ using SquadNET.Rcon;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SquadNET.Application.Squad.Team.Commands
+namespace SquadNET.Application.Squad.Team.Queries
 {
-    public static class SquadCreatedMessageCommand
+    public static class SquadCreatedQuery
     {
         public class Request : IRequest<SquadCreatedEventModel>
         {

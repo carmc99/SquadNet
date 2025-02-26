@@ -116,6 +116,21 @@ public static class DictionaryModelConverter
                         ? null
                         : rawValue.TryParseOrNull());
                 }
+                else if (propertyType == typeof(float) || propertyType == typeof(float?))
+                {
+                    if (rawValue.TryParse<float>(out float floatResult))
+                    {
+                        property.SetValue(model, floatResult);
+                    }
+                    else if (propertyType == typeof(float?))
+                    {
+                        property.SetValue(model, null);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"No se puede convertir '{rawValue}' a float para la propiedad '{property.Name}'.");
+                    }
+                }
                 else
                 {
                     // Aquí se podrían agregar más manejos personalizados o lanzar excepción si no se contempla el tipo

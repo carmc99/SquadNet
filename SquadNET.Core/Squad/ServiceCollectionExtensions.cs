@@ -3,6 +3,7 @@ using SquadNET.Core.Squad.Models;
 using SquadNET.Core.Squad.Parsers;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 
 public static class ServiceCollectionExtensions
 {
@@ -18,6 +19,17 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<SquadCreatedInfo>, SquadCreatedMessageParser>();
         services.AddSingleton<IParser<List<LayerInfo>>, ListLayersParser>();
         services.AddSingleton<IParser<List<LevelInfo>>, ListLevelsParser>();
+
+        services.AddSingleton<IParser<RoundEndedEventModel>, RoundEndedParser>();
+        services.AddSingleton<IParser<RoundTicketsEventModel>, RoundTicketsParser>();
+        services.AddSingleton<IParser<RoundWinnerEventModel>, RoundWinnerParser>();
+        services.AddSingleton<IParser<ServerTickRateEventModel>, ServerTickRateParser>();
+        services.AddSingleton<IParser<PlayerDamagedEventModel>, PlayerDamagedParser>();
+        services.AddSingleton<IParser<PlayerJoinSucceededEventModel>, PlayerJoinSucceededParser>();
+        services.AddSingleton<IParser<PlayerPossessEventModel>, PlayerPossessParser>();
+        services.AddSingleton<IParser<PlayerRevivedEventModel>, PlayerRevivedParser>();
+        services.AddSingleton<IParser<AdminBroadcastEventModel>, AdminBroadcastParser>();
+
         return services;
     }
 

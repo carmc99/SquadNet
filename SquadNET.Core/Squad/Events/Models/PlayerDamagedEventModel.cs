@@ -17,6 +17,6 @@ namespace SquadNET.Core.Squad.Events.Models
         public string AttackerName { get; set; }
         public string AttackerController { get; set; }
         public string Weapon { get; set; }
-        public Dictionary<string, string> AttackerIDs { get; set; } = new();
+        public Dictionary<string, string> AttackerIDs { get; set; } = [];
     }
 }

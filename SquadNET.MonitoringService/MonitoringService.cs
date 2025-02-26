@@ -22,6 +22,8 @@ namespace SquadNET.MonitoringService
         private readonly IMediator Mediator;
         private readonly IRconService RconService;
         private readonly ILogReader LogReaderService;
+        private readonly bool IsFilteringEnabled;
+        private readonly List<string> ExcludePatterns;
 
         public MonitoringService(
             ILogger<MonitoringService> logger,
@@ -38,6 +40,8 @@ namespace SquadNET.MonitoringService
             Mediator = mediator;
             RconService = rconService;
             LogReaderType logReaderType = Enum.Parse<LogReaderType>(Configuration["LogReaders:Type"]);
+            IsFilteringEnabled = bool.TryParse(Configuration["Filtering:IsEnabled"], out bool enabled) && enabled;
+            ExcludePatterns = Configuration.GetSection("Filtering:ExcludePatterns").Get<List<string>>() ?? [];
             LogReaderService = LogReaderFactory.Create(logReaderType);
         }
 
@@ -76,28 +80,23 @@ namespace SquadNET.MonitoringService
         }
         private async void OnLogLineReceived(string line)
         {
-            Logger.LogInformation(line);
             ParseLineQueryHandler.Response result = await Mediator.Send(new ParseLineQueryHandler.Request
             {
+                IsFilteringEnabled = IsFilteringEnabled,
+                ExcludePatterns = ExcludePatterns,
                 Line = line,
             });
             if (result != null)
             {
-                if (result.EventData is ChatMessageEventModel messageInfo)
-                {
-                    Logger.LogInformation(messageInfo.ToString());
-                }
-                else if(result.EventData is SquadCreatedEventModel squadCreated)
-                {
-                    Logger.LogInformation(squadCreated.ToString());
-                }
-                else
-                {
-                    Logger.LogWarning("Event Received with unknown EventData type | EventName: {EventName} | EventDataType: {EventDataType}",
-                        result.EventName, result.EventData?.GetType().Name ?? "null");
-                }
+                Logger.LogInformation("Event Received with: EventData: {EventData} | EventName: {EventName} | EventDataType: {EventDataType}",
+                       result.EventData, result.EventName, result.EventData?.GetType().Name ?? "null");
 
                 PluginManager.EmitEvent(result.EventName, result.EventData);
+            }
+            else
+            {
+                Logger.LogWarning("Event Received with unknown EventData type: {Line}",
+                    line);
             }
         }
     }
