@@ -35,8 +35,8 @@ namespace SquadNET.Application.Squad.ParseLine
 
                 Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>>
                 {
-                    { SquadEventType.CHAT_MESSAGE, (line, ct) => ParseChatMessage(line, ct) },
-                    { SquadEventType.SQUAD_CREATED, (line, ct) => ParseSquadCreated(line, ct) }
+                    { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
+                    { SquadEventType.SquadCreated, (line, ct) => ParseSquadCreated(line, ct) }
                 };
             }
 
