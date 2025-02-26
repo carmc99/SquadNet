@@ -29,7 +29,7 @@ namespace SquadNET.LogManagement.LogReaders
             FilePath = configuration["LogReaders:Tail:FilePath"];
         }
 
-        public async Task WatchAsync()
+        public async Task WatchAsync(CancellationToken cancellationToken = default)
         {
             try
             {

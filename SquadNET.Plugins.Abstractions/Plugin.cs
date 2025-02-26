@@ -13,8 +13,7 @@ namespace SquadNET.Plugins.Abstractions
         /// <inheritdoc />
         public virtual void OnEventRaised(string eventName, IEventData eventData)
         {
-            // Por defecto, no hace nada. 
-            // Evita lanzar excepción para que no obligue a su re-implementación inmediata.
+            // Por defecto, no hace nada.
         }
 
         /// <inheritdoc />

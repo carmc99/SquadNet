@@ -54,7 +54,7 @@ namespace SquadNET.MonitoringService
             LogReaderService.OnWatchStopped += () => Logger.LogInformation("Monitoring stopped.");
             LogReaderService.OnLogLine += OnLogLineReceived;
 
-            await LogReaderService.WatchAsync();
+            await LogReaderService.WatchAsync(stoppingToken);
 
             while (!stoppingToken.IsCancellationRequested)
             {

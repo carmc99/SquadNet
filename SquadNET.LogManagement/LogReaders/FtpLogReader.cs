@@ -31,7 +31,7 @@ namespace SquadNET.LogManagement.LogReaders
             FtpClient = new FtpClient(host, user, password); //TODO: Inject dependency
         }
 
-        public async Task WatchAsync()
+        public async Task WatchAsync(CancellationToken cancellationToken = default)
         {
             try
             {

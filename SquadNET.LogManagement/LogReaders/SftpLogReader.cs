@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Renci.SshNet;
@@ -9,9 +10,9 @@ namespace SquadNET.LogManagement.LogReaders
 {
     public class SftpLogReader : ILogReader
     {
-        private readonly SftpClient SftpClient;
-        private readonly string RemoteFilePath;
-        private long LastPosition = 0;
+        private readonly SftpClient sftpClient;
+        private readonly string remoteFilePath;
+        private long lastPosition = 0;
 
         public event Action<string> OnLogLine;
         public event Action<string> OnError;
@@ -26,81 +27,80 @@ namespace SquadNET.LogManagement.LogReaders
         public SftpLogReader(IConfiguration configuration)
         {
             string host = configuration["LogReaders:Sftp:Host"];
-            int port = 22;
-            configuration["LogReaders:Sftp:Port"].TryParse(out port);
+            int port = int.TryParse(configuration["LogReaders:Sftp:Port"], out int parsedPort) ? parsedPort : 22;
             string user = configuration["LogReaders:Sftp:User"];
             string password = configuration["LogReaders:Sftp:Password"];
-            RemoteFilePath = configuration["LogReaders:Sftp:RemoteFilePath"];
-            SftpClient = new SftpClient(host, port, user, password); //TODO: Inject dependency
+            remoteFilePath = configuration["LogReaders:Sftp:RemoteFilePath"];
+
+            var connectionInfo = new ConnectionInfo(host, port, user,
+                new PasswordAuthenticationMethod(user, password));
+
+            sftpClient = new SftpClient(connectionInfo);
         }
 
-        public async Task WatchAsync()
+        public async Task WatchAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                SftpClient.Connect();
+                sftpClient.Connect();
                 OnWatchStarted?.Invoke();
 
-                LastPosition = SftpClient.GetAttributes(RemoteFilePath).Size;
+                lastPosition = sftpClient.GetAttributes(remoteFilePath).Size;
 
-                await Task.Run(async () =>
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    while (true)
+                    if (!sftpClient.IsConnected)
                     {
-                        if (!SftpClient.IsConnected)
-                        {
-                            OnConnectionLost?.Invoke();
-                            SftpClient.Connect();
-                            OnConnectionRestored?.Invoke();
-                        }
-
-                        long fileSize = SftpClient.GetAttributes(RemoteFilePath).Size;
-                        if (fileSize < LastPosition)
-                        {
-                            // File was truncated or replaced, restart from the beginning
-                            LastPosition = 0;
-                        }
-
-                        using MemoryStream stream = new();
-                        try
-                        {
-                            SftpClient.DownloadFile(RemoteFilePath, stream);
-                        }
-                        catch (Exception ex)
-                        {
-                            OnError?.Invoke($"Failed to download log file: {ex.Message}");
-                            await Task.Delay(5000);
-                            continue;
-                        }
-
-                        stream.Position = LastPosition; // Move to last read position
-                        using StreamReader reader = new(stream);
-
-                        while (!reader.EndOfStream)
-                        {
-                            string line = await reader.ReadLineAsync();
-                            if (!string.IsNullOrWhiteSpace(line)) // Ignore empty lines
-                            {
-                                OnLogLine?.Invoke(line);
-                            }
-                        }
-
-                        // Update LastPosition to prevent re-reading old lines
-                        LastPosition = stream.Length;
-
-                        await Task.Delay(5000);
+                        OnConnectionLost?.Invoke();
+                        sftpClient.Connect();
+                        OnConnectionRestored?.Invoke();
                     }
-                });
+
+                    long fileSize = sftpClient.GetAttributes(remoteFilePath).Size;
+                    if (fileSize < lastPosition)
+                    {
+                        lastPosition = 0;
+                    }
+
+                    using var stream = new MemoryStream();
+                    try
+                    {
+                        sftpClient.DownloadFile(remoteFilePath, stream);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnError?.Invoke($"Error al descargar el archivo de log: {ex.Message}");
+                        await Task.Delay(5000, cancellationToken);
+                        continue;
+                    }
+
+                    stream.Position = lastPosition; // Mover a la última posición leída
+                    using var reader = new StreamReader(stream);
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = await reader.ReadLineAsync();
+                        if (!string.IsNullOrWhiteSpace(line)) // Ignorar líneas vacías
+                        {
+                            OnLogLine?.Invoke(line);
+                        }
+                    }
+
+                    // Actualizar lastPosition para evitar releer líneas antiguas
+                    lastPosition = stream.Length;
+
+                    await Task.Delay(5000, cancellationToken);
+                }
             }
             catch (Exception ex)
             {
-                OnError?.Invoke($"Error in WatchAsync: {ex.Message}");
+                OnError?.Invoke($"Error en WatchAsync: {ex.Message}");
             }
         }
 
         public Task UnwatchAsync()
         {
-            SftpClient.Disconnect();
+            sftpClient.Disconnect();
             OnWatchStopped?.Invoke();
             return Task.CompletedTask;
         }

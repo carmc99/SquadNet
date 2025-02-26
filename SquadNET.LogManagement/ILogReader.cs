@@ -63,7 +63,7 @@ namespace SquadNET.LogManagement
         /// Starts monitoring the log for changes.
         /// </summary>
         /// <returns>A task that represents the asynchronous watch operation.</returns>
-        Task WatchAsync();
+        Task WatchAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Stops monitoring the log.
