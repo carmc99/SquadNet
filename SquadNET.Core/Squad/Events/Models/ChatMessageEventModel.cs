@@ -1,7 +1,8 @@
 ﻿using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using System;
 
-namespace SquadNET.Core.Squad.Models
+namespace SquadNET.Core.Squad.Events.Models
 {
     /// <summary>
     /// Represents a chat message model, used for storage and serialization.
@@ -72,10 +73,10 @@ namespace SquadNET.Core.Squad.Models
         {
             return new ChatMessageInfo
             {
-                Channel = this.Channel,
+                Channel = Channel,
                 CreatorIds = new CreatorOnlineIds(EosId, SteamId),
-                PlayerName = this.PlayerName,
-                Message = this.Message
+                PlayerName = PlayerName,
+                Message = Message
             };
         }
     }

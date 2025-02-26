@@ -2,6 +2,7 @@
 using System.Reflection;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
+using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Plugins.Abstractions;
 

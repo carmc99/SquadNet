@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Core.Squad.Parsers
 {

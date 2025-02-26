@@ -1,6 +1,6 @@
-﻿
+﻿using SquadNET.Core.Squad.Models;
 
-namespace SquadNET.Core.Squad.Models
+namespace SquadNET.Core.Squad.Events.Models
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogGameState: Match State Changed from InProgress to WaitingPostMatch")]
     public class RoundEndedEventModel : IEventData

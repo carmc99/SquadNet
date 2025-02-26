@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SquadNET.Core.Squad.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Squad.Models
+namespace SquadNET.Core.Squad.Events.Models
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadGameEvents: Display: Team ([0-9]), (.*) \( ?(.*?) ?\) has (won|lost) the match with ([0-9]+) Tickets on layer (.*) \(level (.*)\)!")]
     public class RoundTicketsEventModel : IEventData

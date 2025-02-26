@@ -2,7 +2,7 @@
 using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Rcon;
 using System.Threading;
 using System.Threading.Tasks;

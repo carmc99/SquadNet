@@ -8,7 +8,7 @@ using SquadNET.Application.Squad.ParseLine;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using System.Text;
-using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Events.Models;
 
 
 namespace SquadNET.MonitoringService

@@ -1,11 +1,12 @@
 ﻿using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Squad.Models
+namespace SquadNET.Core.Squad.Events.Models
 {
     public class SquadCreatedEventModel : IEventData
     {
