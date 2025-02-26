@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.Chat.Commands
 {
-    public static class ChatMessageCommand
+    public static class ChatMessageQuery
     {
         public class Request : IRequest<ChatMessageEventModel>
         {

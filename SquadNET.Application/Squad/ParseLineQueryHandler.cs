@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using SquadNET.Application.Squad.Chat.Commands;
 using SquadNET.Application.Squad.Team.Commands;
+using SquadNET.Application.Squad.Server.Queries;
 
 namespace SquadNET.Application.Squad.ParseLine
 {
@@ -60,7 +60,7 @@ namespace SquadNET.Application.Squad.ParseLine
 
             private async Task<IEventData> ParseChatMessage(string line, CancellationToken cancellationToken)
             {
-                return await Mediator.Send(new ChatMessageCommand.Request { RawMessage = line }, cancellationToken);
+                return await Mediator.Send(new ChatMessageQuery.Request { RawMessage = line }, cancellationToken);
             }
 
             private async Task<IEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
