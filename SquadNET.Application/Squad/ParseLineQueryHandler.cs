@@ -12,6 +12,7 @@ using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Application.Squad.Round.Queries;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace SquadNET.Application.Squad.ParseLine
 {
@@ -34,9 +35,11 @@ namespace SquadNET.Application.Squad.ParseLine
         {
             private readonly IMediator Mediator;
             private readonly Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>> Parsers;
+            private readonly ILogger Logger;
 
-            public Handler(IMediator mediator)
+            public Handler(IMediator mediator, ILogger<Handler> logger)
             {
+                Logger = logger;
                 Mediator = mediator;
 
                 Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>>
@@ -62,6 +65,8 @@ namespace SquadNET.Application.Squad.ParseLine
                 {
                     return null;
                 }
+
+                Logger.LogInformation("{Line}", request.Line);
 
                 foreach (KeyValuePair<SquadEventType, Func<string, CancellationToken, Task<IEventData>>> entry in Parsers)
                 {

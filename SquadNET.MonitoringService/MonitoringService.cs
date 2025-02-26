@@ -93,11 +93,6 @@ namespace SquadNET.MonitoringService
 
                 PluginManager.EmitEvent(result.EventName, result.EventData);
             }
-            else
-            {
-                Logger.LogWarning("Event Received with unknown EventData type: {Line}",
-                    line);
-            }
         }
     }
 }
