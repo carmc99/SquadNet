@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SquadNET.Core.Squad.Models
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQPlayerController::)?OnPossess\(\): PC=(.+) \(Online IDs:([^)]+)\) Pawn=([A-z0-9_]+)_C")]
-    public class PlayerPossessModel : IEventData
+    public class PlayerPossessEventModel : IEventData
     {
         public string Time { get; set; }
         public string ChainID { get; set; }

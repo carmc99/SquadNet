@@ -83,11 +83,11 @@ namespace SquadNET.MonitoringService
             });
             if (result != null)
             {
-                if (result.EventData is ChatMessageModel messageInfo)
+                if (result.EventData is ChatMessageEventModel messageInfo)
                 {
                     Logger.LogInformation(messageInfo.ToString());
                 }
-                else if(result.EventData is SquadCreatedModel squadCreated)
+                else if(result.EventData is SquadCreatedEventModel squadCreated)
                 {
                     Logger.LogInformation(squadCreated.ToString());
                 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SquadNET.Core.Squad.Models
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadGameEvents: Display: Team ([0-9]), (.*) \( ?(.*?) ?\) has (won|lost) the match with ([0-9]+) Tickets on layer (.*) \(level (.*)\)!")]
-    public class RoundTicketsModel : IEventData
+    public class RoundTicketsEventModel : IEventData
     {
         public string Time { get; set; }
         public string ChainID { get; set; }

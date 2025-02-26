@@ -11,7 +11,7 @@ namespace SquadNET.Application.Squad.Chat.Commands
 {
     public static class ChatMessageCommand
     {
-        public class Request : IRequest<ChatMessageModel>
+        public class Request : IRequest<ChatMessageEventModel>
         {
             public string RawMessage { get; set; }
         }
@@ -24,7 +24,7 @@ namespace SquadNET.Application.Squad.Chat.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Request, ChatMessageModel>
+        public class Handler : IRequestHandler<Request, ChatMessageEventModel>
         {
             private readonly IParser<ChatMessageInfo> Parser;
 
@@ -33,13 +33,13 @@ namespace SquadNET.Application.Squad.Chat.Commands
                 Parser = parser;
             }
 
-            public Task<ChatMessageModel> Handle(Request request, CancellationToken cancellationToken)
+            public Task<ChatMessageEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                ChatMessageModel model = null;
+                ChatMessageEventModel model = null;
                 ChatMessageInfo chatMessage = Parser.Parse(request.RawMessage);
                 if (chatMessage != null)
                 {
-                    model = ChatMessageModel.FromEntity(chatMessage);
+                    model = ChatMessageEventModel.FromEntity(chatMessage);
                 }
                 return Task.FromResult(model);
             }

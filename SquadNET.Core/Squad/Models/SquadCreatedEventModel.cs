@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Models
 {
-    public class SquadCreatedModel : IEventData
+    public class SquadCreatedEventModel : IEventData
     {
         /// <summary>
         /// The EOS (Epic Online Services) ID of the player who created the squad.
@@ -57,9 +57,9 @@ namespace SquadNET.Core.Squad.Models
         /// </summary>
         /// <param name="entity">The `SquadCreatedModel` entity to convert.</param>
         /// <returns>A new instance of `SquadInfoModel`.</returns>
-        public static SquadCreatedModel FromEntity(SquadCreatedInfo entity)
+        public static SquadCreatedEventModel FromEntity(SquadCreatedInfo entity)
         {
-            return new SquadCreatedModel
+            return new SquadCreatedEventModel
             {
                 EosId = entity.CreatorIds.EosId,
                 SteamId = entity.CreatorIds.SteamId,

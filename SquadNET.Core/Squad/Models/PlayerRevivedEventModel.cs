@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SquadNET.Core.Squad.Models
 {
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: (.+) \(Online IDs:([^)]+)\) has revived (.+) \(Online IDs:([^)]+)\)\.")]
-    public class PlayerRevivedModel : IEventData
+    public class PlayerRevivedEventModel : IEventData
     {
         public string Time { get; set; }
         public string ChainID { get; set; }

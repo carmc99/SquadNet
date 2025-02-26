@@ -25,12 +25,12 @@ namespace SquadNET.Core.Squad.Parsers
             CreatorOnlineIds creatorIds = new(eosId, steamId);
 
             Dictionary<string, string> parsedValues = new()
-        {
-            { "PlayerName", match.Groups[1].Value },
-            { "SquadId", match.Groups[4].Value },
-            { "SquadName", match.Groups[5].Value },
-            { "TeamName", match.Groups[6].Value }
-        };
+            {
+                { "PlayerName", match.Groups[1].Value },
+                { "SquadId", match.Groups[4].Value },
+                { "SquadName", match.Groups[5].Value },
+                { "TeamName", match.Groups[6].Value }
+            };
 
             SquadCreatedInfo squadCreated = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedInfo>(parsedValues);
             squadCreated.CreatorIds = creatorIds;

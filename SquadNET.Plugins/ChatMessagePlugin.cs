@@ -18,7 +18,7 @@ namespace SquadNET.Plugins
         {
             if (eventName == SquadEventType.ChatMessage.ToString())
             {
-                if (eventData is ChatMessageModel chat)
+                if (eventData is ChatMessageEventModel chat)
                 {
                     string message = chat.ToString();
                     WriteToLogFile(message);

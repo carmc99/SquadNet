@@ -11,7 +11,7 @@ namespace SquadNET.Application.Squad.Team.Commands
 {
     public static class SquadCreatedMessageCommand
     {
-        public class Request : IRequest<SquadCreatedModel>
+        public class Request : IRequest<SquadCreatedEventModel>
         {
             public string RawMessage { get; set; }
         }
@@ -22,7 +22,7 @@ namespace SquadNET.Application.Squad.Team.Commands
                 RuleFor(x => x.RawMessage).NotEmpty();
             }
         }
-        public class Handler : IRequestHandler<Request, SquadCreatedModel>
+        public class Handler : IRequestHandler<Request, SquadCreatedEventModel>
         {
             private readonly IParser<SquadCreatedInfo> Parser;
 
@@ -31,13 +31,13 @@ namespace SquadNET.Application.Squad.Team.Commands
                 Parser = parser;
             }
 
-            public Task<SquadCreatedModel> Handle(Request request, CancellationToken cancellationToken)
+            public Task<SquadCreatedEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                SquadCreatedModel model = null;
+                SquadCreatedEventModel model = null;
                 SquadCreatedInfo squadCreated = Parser.Parse(request.RawMessage);
                 if (squadCreated != null)
                 {
-                    model = SquadCreatedModel.FromEntity(squadCreated);
+                    model = SquadCreatedEventModel.FromEntity(squadCreated);
                 }
                 return Task.FromResult(model);
             }
