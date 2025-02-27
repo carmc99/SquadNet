@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquadNET.Test", "SquadNET.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquadNET.Plugins", "SquadNET.Plugins\SquadNET.Plugins.csproj", "{725C767B-B55C-44D6-8349-3C972C1F1F28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquadNET.MonitoringService", "SquadNET.MonitoringService\SquadNET.MonitoringService.csproj", "{586DD2B4-29F4-4DC6-91E3-D54EE78B4CE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquadNET.SquadMonitoringService", "SquadNET.SquadMonitoringService\SquadNET.SquadMonitoringService.csproj", "{93B4D63B-40CD-42FB-9E82-755E14811342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,10 +71,10 @@ Global
 		{725C767B-B55C-44D6-8349-3C972C1F1F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{725C767B-B55C-44D6-8349-3C972C1F1F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{725C767B-B55C-44D6-8349-3C972C1F1F28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{586DD2B4-29F4-4DC6-91E3-D54EE78B4CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{586DD2B4-29F4-4DC6-91E3-D54EE78B4CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{586DD2B4-29F4-4DC6-91E3-D54EE78B4CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{586DD2B4-29F4-4DC6-91E3-D54EE78B4CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B4D63B-40CD-42FB-9E82-755E14811342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B4D63B-40CD-42FB-9E82-755E14811342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B4D63B-40CD-42FB-9E82-755E14811342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B4D63B-40CD-42FB-9E82-755E14811342}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

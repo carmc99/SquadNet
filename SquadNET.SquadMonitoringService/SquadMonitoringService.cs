@@ -13,9 +13,9 @@ using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.MonitoringService
 {
-    public class MonitoringService : BackgroundService
+    public class SquadMonitoringService : BackgroundService
     {
-        private readonly ILogger<MonitoringService> Logger;
+        private readonly ILogger<SquadMonitoringService> Logger;
         private readonly ILogReaderFactory LogReaderFactory;
         private readonly IConfiguration Configuration;
         private readonly PluginManager PluginManager;
@@ -25,8 +25,8 @@ namespace SquadNET.MonitoringService
         private readonly bool IsFilteringEnabled;
         private readonly List<string> ExcludePatterns;
 
-        public MonitoringService(
-            ILogger<MonitoringService> logger,
+        public SquadMonitoringService(
+            ILogger<SquadMonitoringService> logger,
             ILogReaderFactory logReaderFactory,
             IConfiguration configuration,
             PluginManager pluginManager,

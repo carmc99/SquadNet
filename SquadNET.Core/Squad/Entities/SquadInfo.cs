@@ -18,7 +18,7 @@ namespace SquadNET.Core.Squad.Entities
         public CreatorOnlineIds CreatorIds { get; set; }
         public bool IsLocked { get; set; }
 
-        public bool Equals(SquadInfo? other)
+        public bool Equals(SquadInfo other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

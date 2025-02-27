@@ -13,7 +13,7 @@ namespace SquadNET.Core.Squad.Entities
         public string Role { get; set; }
         public int? SquadId { get; set; }
 
-        public bool Equals(PlayerConnectedInfo? other)
+        public bool Equals(PlayerConnectedInfo other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -21,7 +21,7 @@ namespace SquadNET.Core.Squad.Entities
                    Team == other.Team && IsLeader == other.IsLeader && Role == other.Role && SquadId == other.SquadId;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj) || obj is PlayerConnectedInfo other && Equals(other);
         }
