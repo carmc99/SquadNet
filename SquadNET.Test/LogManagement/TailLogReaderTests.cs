@@ -24,14 +24,14 @@ public class TailLogReaderTests
 
         // Act
         await logReader.WatchAsync();
-        await Task.Delay(1000); // Give time for watcher to start
+        await Task.Delay(1000);
 
         // Create and write to the test log file
         await File.WriteAllTextAsync(TestFilePath, "Test Log Line\n");
 
         // Act
         await logReader.WatchAsync();
-        await Task.Delay(500); // Allow time for the watcher to detect the change
+        await Task.Delay(500); 
         await logReader.UnwatchAsync();
 
         // Assert
