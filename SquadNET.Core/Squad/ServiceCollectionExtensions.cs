@@ -4,6 +4,8 @@ using SquadNET.Core.Squad.Parsers;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Commands;
+using SquadNET.Rcon;
 
 public static class ServiceCollectionExtensions
 {
@@ -36,6 +38,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSquad(this IServiceCollection services)
     {
         services.AddSquadParsers();
+        services.AddSingleton<Command<SquadCommand>, SquadCommandTemplate>();
         return services;
     }
 }

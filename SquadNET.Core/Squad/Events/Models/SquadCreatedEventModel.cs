@@ -1,5 +1,4 @@
 ﻿using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    public class SquadCreatedEventModel : IEventData
+    public class SquadCreatedEventModel : ISquadEventData
     {
         /// <summary>
         /// The EOS (Epic Online Services) ID of the player who created the squad.

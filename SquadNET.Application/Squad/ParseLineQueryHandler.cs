@@ -1,10 +1,5 @@
 ﻿using MediatR;
-using SquadNET.Core.Squad.Models;
 using SquadNET.Core.Squad.Events;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using SquadNET.Application.Squad.Server.Queries;
 using SquadNET.Application.Squad.Team.Queries;
 using SquadNET.Application.Squad.Chat.Commands;
@@ -28,13 +23,13 @@ namespace SquadNET.Application.Squad.ParseLine
         public class Response
         {
             public string EventName { get; set; }
-            public IEventData EventData { get; set; }
+            public ISquadEventData EventData { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
             private readonly IMediator Mediator;
-            private readonly Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>> Parsers;
+            private readonly Dictionary<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>> Parsers;
             private readonly ILogger Logger;
 
             public Handler(IMediator mediator, ILogger<Handler> logger)
@@ -42,7 +37,7 @@ namespace SquadNET.Application.Squad.ParseLine
                 Logger = logger;
                 Mediator = mediator;
 
-                Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<IEventData>>>
+                Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>>
                 {
                     { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
                     { SquadEventType.SquadCreated, (line, ct) => ParseSquadCreated(line, ct) },
@@ -68,9 +63,9 @@ namespace SquadNET.Application.Squad.ParseLine
 
                 Logger.LogInformation("{Line}", request.Line);
 
-                foreach (KeyValuePair<SquadEventType, Func<string, CancellationToken, Task<IEventData>>> entry in Parsers)
+                foreach (KeyValuePair<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>> entry in Parsers)
                 {
-                    IEventData result = await entry.Value(request.Line, cancellationToken);
+                    ISquadEventData result = await entry.Value(request.Line, cancellationToken);
                     if (result != null)
                     {
                         return new Response
@@ -95,57 +90,57 @@ namespace SquadNET.Application.Squad.ParseLine
                 }
                 return false;
             }
-            private async Task<IEventData> ParseChatMessage(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseChatMessage(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new ChatMessageQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new SquadCreatedQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseRoundEnded(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseRoundEnded(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new RoundEndedQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseRoundTickets(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseRoundTickets(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new RoundTicketsQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseRoundWinner(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseRoundWinner(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new RoundWinnerQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseServerTickRate(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseServerTickRate(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new ServerTickRateQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParsePlayerDamaged(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParsePlayerDamaged(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new PlayerDamagedQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParsePlayerJoinSucceeded(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParsePlayerJoinSucceeded(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new PlayerJoinSucceededQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParsePlayerPossess(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParsePlayerPossess(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new PlayerPossessQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParsePlayerRevived(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParsePlayerRevived(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new PlayerRevivedQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<IEventData> ParseAdminBroadcast(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseAdminBroadcast(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new AdminBroadcastQuery.Request { RawMessage = line }, cancellationToken);
             }

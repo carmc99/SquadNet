@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Squad.Models
+namespace SquadNET.Core.Squad.Events
 {
-    public interface IEventData { }
+    public interface ISquadEventData { }
 }

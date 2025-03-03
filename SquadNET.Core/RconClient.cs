@@ -1,5 +1,4 @@
 ﻿using SquadNET.Core;
-using SquadNET.Core.Squad;
 using SquadNET.Core.Squad.Entities;
 using System;
 using System.Net;
@@ -115,7 +114,7 @@ namespace SquadNET.Rcon
         /// <exception cref="Exception">Thrown if authentication fails (invalid password).</exception>
         private void Authenticate()
         {
-            PacketInfo authPacket = new PacketInfo(GetNextPacketId(), PacketType.ServerDataAuth, Password);
+            PacketInfo authPacket = new PacketInfo(GetNextPacketId(), RconPacketType.ServerDataAuth, Password);
             SendPacket(authPacket);
 
             PacketInfo response = ReceivePacket();
@@ -136,7 +135,7 @@ namespace SquadNET.Rcon
         public async Task<byte[]> WriteCommandAsync(string command, CancellationToken cancellationToken)
         {
             int packetId = GetNextPacketId();
-            PacketInfo commandPacket = new PacketInfo(packetId, PacketType.ServerDataExecCommand, command);
+            PacketInfo commandPacket = new PacketInfo(packetId, RconPacketType.ServerDataExecCommand, command);
             SendPacket(commandPacket);
 
             PacketInfo response = await Task.Run(() => ReceivePacket(), cancellationToken);

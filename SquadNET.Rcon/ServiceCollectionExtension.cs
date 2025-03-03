@@ -10,7 +10,6 @@ namespace SquadNET.Rcon
         {
             services.AddCore();
             services.AddScoped<IRconService, SquadRcon>();
-            services.AddSingleton<Command<SquadCommand>, SquadCommandTemplate>();
             return services;
         }
     }

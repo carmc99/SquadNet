@@ -1,5 +1,4 @@
 ﻿using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Models;
 using System;
 
 namespace SquadNET.Core.Squad.Events.Models
@@ -7,7 +6,7 @@ namespace SquadNET.Core.Squad.Events.Models
     /// <summary>
     /// Represents a chat message model, used for storage and serialization.
     /// </summary>
-    public class ChatMessageEventModel : IEventData
+    public class ChatMessageEventModel : ISquadEventData
     {
         /// <summary>
         /// The chat channel where the message was sent.

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Squad
+namespace SquadNET.Core
 {
-    public static class PacketType
+    public static class RconPacketType
     {
         public const int ServerDataAuth = 0x03;
         public const int ServerDataAuthResponse = 0x02;

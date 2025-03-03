@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SquadNET.Core;
-using SquadNET.Core.Squad;
 using SquadNET.Core.Squad.Commands;
 using SquadNET.Core.Squad.Entities;
 using System;
@@ -165,13 +164,13 @@ namespace SquadNET.Rcon
             // The Squad server sometimes sends an invalid empty exec command packet.
             // These packets have Id: 4, Type: 2 (ServerDataExecCommand), and an empty body.
             // These packets should be ignored as they have no useful data.
-            if (packet.Id == 4 && packet.Type == PacketType.ServerDataExecCommand && packet.Body.Length == 0)
+            if (packet.Id == 4 && packet.Type == RconPacketType.ServerDataExecCommand && packet.Body.Length == 0)
             {
                 return;
             }
 
             // Filter out unnecessary empty response packets
-            if (packet is { Id: 3, Type: PacketType.ServerDataResponseValue })
+            if (packet is { Id: 3, Type: RconPacketType.ServerDataResponseValue })
             {
                 return;
             }
@@ -185,7 +184,7 @@ namespace SquadNET.Rcon
                 OnExceptionThrown?.Invoke(e);
             }
 
-            if (packet.Type == PacketType.ServerDataChatMessage)
+            if (packet.Type == RconPacketType.ServerDataChatMessage)
             {
                 string rawMessage = Encoding.UTF8.GetString(packet.Body);
 
