@@ -5,53 +5,52 @@ using FluentValidation;
 using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
 
-namespace SquadNET.Application.Squad.Player.Queries
+namespace SquadNET.Application.Squad.Map.Queries
 {
     /// <summary>
-    /// Query to retrieve a player by their Name.
+    /// Query to retrieve a layer by their Name.
     /// </summary>
-    public static class GetPlayerByNameQuery
+    public static class GetLayerByNameQuery
     {
-        public class Handler : IRequestHandler<Request, PlayerConnectedInfo>
+        public class Handler : IRequestHandler<Request, LayerInfo>
         {
             private readonly Command<SquadCommand> Command;
-            private readonly IParser<ListPlayerModel> Parser;
+            private readonly IParser<List<LayerInfo>> Parser;
             private readonly IRconService RconService;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                IParser<ListPlayerModel> parser)
+                IParser<List<LayerInfo>> parser)
             {
                 RconService = rconService;
                 Command = command;
                 Parser = parser;
             }
 
-            public async Task<PlayerConnectedInfo> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<LayerInfo> Handle(Request request, CancellationToken cancellationToken)
             {
-                PlayerConnectedInfo player = new();
-                string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListPlayers, cancellationToken);
+                LayerInfo layer = new();
+                string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListLayers, cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(result))
                 {
-                    ListPlayerModel players = Parser.Parse(result);
-                    if (players != null && players.ActivePlayers.Count != 0)
+                    List<LayerInfo> layers = Parser.Parse(result);
+                    if (layers != null && layers.Count != 0)
                     {
-                        player = players.ActivePlayers.FirstOrDefault(p => p.Name == request.Name);
+                        layer = layers.FirstOrDefault(l => l.Name == request.Name);
                     }
                 }
 
-                return player;
+                return layer;
             }
         }
 
         /// <summary>
-        /// Request containing the player Name.
+        /// Request containing the layer Name.
         /// </summary>
-        public class Request : IRequest<PlayerConnectedInfo>
+        public class Request : IRequest<LayerInfo>
         {
             public string Name { get; set; }
         }

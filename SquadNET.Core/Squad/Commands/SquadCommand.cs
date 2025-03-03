@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 namespace SquadNET.Rcon
 {
     /// <summary>
@@ -186,5 +183,12 @@ namespace SquadNET.Rcon
         /// <summary>Adds a player as a cameraman, allowing them to use free camera mode.</summary>
         /// <example>AddCameraman "PlayerName"</example>
         AddCameraman,
+
+        /// <summary>
+        /// Retrieves detailed information about the current state of the server,
+        /// including player counts, queues, map information, and game version.
+        /// </summary>
+        /// <example>ShowServerInfo</example>
+        ShowServerInfo,
     }
 }

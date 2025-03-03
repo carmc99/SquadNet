@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using Microsoft.Extensions.DependencyInjection;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Commands;
 
 namespace SquadNET.Rcon
 {

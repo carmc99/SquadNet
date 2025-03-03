@@ -1,52 +1,28 @@
-﻿using SquadNET.Core;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
-using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace SquadNET.Rcon
 {
-    /// <summary>
-    /// Represents an RCON (Remote Console) client capable of connecting,
-    /// authenticating, and sending commands to a remote server over TCP.
-    /// </summary>
     public class RconClient : IDisposable
     {
+        private readonly CancellationTokenSource CancellationTokenSource;
         private readonly IPEndPoint EndPoint;
+        private readonly HashSet<ushort> FinalizedResponses = new();
+        private readonly List<byte> IncomingBuffer = [];
         private readonly string Password;
-
-        private Socket Socket;
-        private NetworkStream Stream;
+        private readonly Dictionary<ushort, List<string>> PendingPartialResponses = [];
+        private readonly Dictionary<ushort, TaskCompletionSource<string>> PendingResponses = [];
         private bool IsConnected;
         private int PacketIdCounter = 3;
-        private readonly CancellationTokenSource CancellationTokenSource;
+        private Socket Socket;
+        private NetworkStream Stream;
 
-        /// <summary>
-        /// Occurs when the connection is successfully established.
-        /// </summary>
-        public event Action OnConnected;
-
-        /// <summary>
-        /// Occurs when a valid <see cref="Packet"/> is received from the server.
-        /// </summary>
-        public event Action<PacketInfo> OnPacketReceived;
-
-        /// <summary>
-        /// Occurs when an unhandled exception is thrown during communication.
-        /// </summary>
-        public event Action<Exception> OnExceptionThrown;
-
-        /// <summary>
-        /// Occurs when raw bytes are received from the server.
-        /// </summary>
-        public event Action<byte[]> OnBytesReceived;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RconClient"/> class.
-        /// </summary>
-        /// <param name="endPoint">The server endpoint (IP + port) for the RCON connection.</param>
-        /// <param name="password">The password used for RCON authentication.</param>
-        /// <exception cref="ArgumentNullException">Thrown if endPoint or password is null.</exception>
         public RconClient(IPEndPoint endPoint, string password)
         {
             EndPoint = endPoint ?? throw new ArgumentNullException(nameof(endPoint));
@@ -54,26 +30,28 @@ namespace SquadNET.Rcon
             CancellationTokenSource = new CancellationTokenSource();
         }
 
-        /// <summary>
-        /// Establishes a connection to the RCON server and performs authentication.
-        /// If already connected, no action is taken.
-        /// </summary>
-        /// <exception cref="Exception">Thrown if the connection or authentication fails.</exception>
+        public event Action<byte[]> OnBytesReceived;
+
+        public event Action OnConnected;
+
+        public event Action<Exception> OnExceptionThrown;
+
+        public event Action<PacketInfo> OnPacketReceived;
+
         public void Connect()
         {
-            if (IsConnected) return;
-
+            if (IsConnected)
+            {
+                return;
+            }
             try
             {
                 Socket = new Socket(EndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 Socket.Connect(EndPoint);
-
                 Stream = new NetworkStream(Socket);
                 Authenticate();
-
                 IsConnected = true;
                 OnConnected?.Invoke();
-
                 Task.Run(() => ListenForResponses(CancellationTokenSource.Token));
             }
             catch (Exception ex)
@@ -82,79 +60,183 @@ namespace SquadNET.Rcon
             }
         }
 
-        /// <summary>
-        /// Closes the RCON connection and releases the underlying resources.
-        /// If already disconnected, no action is taken.
-        /// </summary>
         public void Disconnect()
         {
-            if (!IsConnected) return;
-
+            if (!IsConnected)
+            {
+                return;
+            }
             CancellationTokenSource.Cancel();
-
-            if (Stream != null)
-            {
-                Stream.Dispose();
-                Stream = null;
-            }
-
-            if (Socket != null)
-            {
-                Socket.Close();
-                Socket = null;
-            }
-
+            Stream?.Dispose();
+            Stream = null;
+            Socket?.Close();
+            Socket = null;
             IsConnected = false;
+            lock (PendingResponses)
+            {
+                foreach (KeyValuePair<ushort, TaskCompletionSource<string>> kvp in PendingResponses)
+                {
+                    kvp.Value.TrySetException(new Exception("Disconnected before receiving the response."));
+                }
+
+                PendingResponses.Clear();
+                PendingPartialResponses.Clear();
+            }
         }
 
-        /// <summary>
-        /// Authenticates the client using the configured password.
-        /// If authentication fails, an exception is thrown.
-        /// </summary>
-        /// <exception cref="Exception">Thrown if authentication fails (invalid password).</exception>
+        public void Dispose()
+        {
+            Disconnect();
+            CancellationTokenSource.Dispose();
+        }
+
+        public async Task<string> WriteCommandAsync(string command, CancellationToken cancellationToken)
+        {
+            ushort count = (ushort)(GetNextPacketId() & 0xFFFF);
+            var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            lock (PendingResponses)
+            {
+                PendingResponses[count] = tcs;
+                PendingPartialResponses[count] = new List<string>();
+            }
+
+            // 1) Enviar el comando real
+            byte[] cmdPacket = EncodePacket(RconPacketType.MidPacketId, count, RconPacketType.ServerDataExecCommand, command);
+            Stream.Write(cmdPacket, 0, cmdPacket.Length);
+
+            // 2) Enviar un paquete vacío para forzar que el servidor envíe un paquete vacío de cierre
+            byte[] emptyPacket = EncodePacket(RconPacketType.MidPacketId, count, RconPacketType.ServerDataResponseValue, "");
+            Stream.Write(emptyPacket, 0, emptyPacket.Length);
+
+            // Esperar respuesta completa
+            using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+            {
+                return await tcs.Task.ConfigureAwait(false);
+            }
+        }
+
+        private static DecodedPacket DecodePacket(byte[] data)
+        {
+            if (data.Length < 14) // Tamaño mínimo esperado de un paquete
+            {
+                throw new Exception($"[ERROR] Paquete demasiado pequeño para ser válido. Tamaño: {data.Length}");
+            }
+
+            int size = BitConverter.ToInt32(data, 0);
+
+            if (size <= 0 || size > 4096)
+            {
+                throw new Exception($"[ERROR] Tamaño inválido del paquete: {size}");
+            }
+
+            byte id = data[4];  // ID del paquete
+            byte unused = data[5]; // Debe ser 0
+            ushort count = BitConverter.ToUInt16(data, 6); // "Count"
+            int type = BitConverter.ToInt32(data, 8); // "Type"
+
+            // Asegurar alineación de `type`
+            if (type < 0 || type > 10)
+            {
+                throw new Exception($"[ERROR] Type inválido: {type}");
+            }
+
+            int bodyLen = (size - 10); // Resta 10 bytes de encabezado (id=1, unused=1, count=2, type=4)
+            if (bodyLen < 0) bodyLen = 0; // Seguridad para evitar valores negativos
+
+            string body = Encoding.UTF8.GetString(data, 12, bodyLen);
+
+            Console.WriteLine($"[DEBUG] Decoded Packet - Size: {size}, Id: {id}, Count: {count}, Type: {type}, Body: {body}");
+
+            return new DecodedPacket { Size = size, Id = id, Count = count, Type = type, Body = body };
+        }
+
+        private static byte[] EncodePacket(byte id, ushort count, int type, string body)
+        {
+            int bodyLen = Encoding.UTF8.GetByteCount(body);
+            int size = 14 + bodyLen;
+            byte[] buf = new byte[size];
+            BitConverter.TryWriteBytes(buf.AsSpan(0, 4), size - 4);
+            buf[4] = id;
+            buf[5] = 0;
+            BitConverter.TryWriteBytes(buf.AsSpan(6, 2), count);
+            BitConverter.TryWriteBytes(buf.AsSpan(8, 4), type);
+            Encoding.UTF8.GetBytes(body, 0, body.Length, buf, 12);
+            return buf;
+        }
+
         private void Authenticate()
         {
-            PacketInfo authPacket = new PacketInfo(GetNextPacketId(), RconPacketType.ServerDataAuth, Password);
-            SendPacket(authPacket);
-
-            PacketInfo response = ReceivePacket();
-            if (response.Id == -1)
+            int authId = GetNextPacketId();
+            byte[] pkt = EncodePacket(RconPacketType.MidPacketId, (ushort)authId, RconPacketType.ServerDataAuth, Password);
+            Stream.Write(pkt, 0, pkt.Length);
+            PacketInfo resp = ReadSinglePacketBlocking();
+            if (resp.Id == -1)
             {
                 throw new Exception("Authentication failed: invalid RCON password.");
             }
         }
 
-        /// <summary>
-        /// Sends an RCON command to the server and returns the raw byte response.
-        /// Execution is performed synchronously within a Task.Run block.
-        /// </summary>
-        /// <param name="command">The command string to send (e.g., "ListPlayers").</param>
-        /// <param name="cancellationToken">Cancellation token for this command request.</param>
-        /// <returns>The server's response as a byte array.</returns>
-        /// <exception cref="Exception">Thrown if reading the response fails or the connection is closed prematurely.</exception>
-        public async Task<byte[]> WriteCommandAsync(string command, CancellationToken cancellationToken)
+        private byte[] ExtractRawPacket()
         {
-            int packetId = GetNextPacketId();
-            PacketInfo commandPacket = new PacketInfo(packetId, RconPacketType.ServerDataExecCommand, command);
-            SendPacket(commandPacket);
+            lock (IncomingBuffer)
+            {
+                if (IncomingBuffer.Count < 4) return null;
 
-            PacketInfo response = await Task.Run(() => ReceivePacket(), cancellationToken);
-            return response.Body;
+                int size = BitConverter.ToInt32(IncomingBuffer.ToArray(), 0);
+
+                if (size < 10 || size > 4096)
+                {
+                    Console.WriteLine($"[ERROR] Tamaño de paquete inválido en el buffer: {size}");
+                    IncomingBuffer.Clear();  // 🚀 Limpieza total si encontramos un paquete inválido
+                    return null;
+                }
+
+                int totalSize = size + 4;
+                if (IncomingBuffer.Count < totalSize) return null; // Esperar más datos si aún no tenemos el paquete completo
+
+                // 🚀 Extraer paquete completo
+                byte[] packet = IncomingBuffer.GetRange(0, totalSize).ToArray();
+
+                // 🛑 Aquí eliminamos los bytes ya leídos para que no interfieran en la siguiente petición
+                IncomingBuffer.RemoveRange(0, totalSize);
+
+                return packet;
+            }
         }
 
-        /// <summary>
-        /// Listens for packets from the server in a continuous loop, invoking
-        /// events as packets are received. Exits when cancellation is requested.
-        /// </summary>
-        /// <param name="cancellationToken">Token that signals when the loop should stop.</param>
-        private void ListenForResponses(CancellationToken cancellationToken)
+        private int GetNextPacketId()
+        {
+            int nextId = Interlocked.Increment(ref PacketIdCounter);
+            Console.WriteLine($"[DEBUG] Generando nuevo PacketId: {nextId}");
+            return nextId;
+        }
+
+        private async Task ListenForResponses(CancellationToken cancellationToken)
         {
             try
             {
+                byte[] buffer = new byte[4096];
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    PacketInfo packet = ReceivePacket();
-                    OnPacketReceived?.Invoke(packet);
+                    if (Stream == null || !Stream.CanRead)
+                    {
+                        throw new Exception("Stream is closed or not readable.");
+                    }
+
+                    int bytesRead = await Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
+                    if (bytesRead <= 0)
+                    {
+                        throw new Exception("Connection closed or unable to read from Stream.");
+                    }
+
+                    lock (IncomingBuffer)
+                    {
+                        IncomingBuffer.AddRange(buffer.AsSpan(0, bytesRead).ToArray());
+                    }
+
+                    OnBytesReceived?.Invoke(buffer.AsSpan(0, bytesRead).ToArray());
+                    ParseIncomingBuffer();
                 }
             }
             catch (Exception ex)
@@ -166,81 +248,98 @@ namespace SquadNET.Rcon
             }
         }
 
-        /// <summary>
-        /// Reads a single <see cref="Packet"/> from the <see cref="Stream"/>.
-        /// The method ensures it reads exactly the required number of bytes
-        /// both for the packet size header and the actual packet content.
-        /// </summary>
-        /// <returns>The decoded <see cref="Packet"/>.</returns>
-        /// <exception cref="Exception">Thrown if the connection closes or the
-        /// required bytes cannot be read fully.</exception>
-        private PacketInfo ReceivePacket()
+        private void ParseIncomingBuffer()
         {
-            // 1) Read the 4-byte size header.
-            byte[] sizeBuffer = new byte[4];
-            ReadExact(sizeBuffer, 0, sizeBuffer.Length);
-            int packetSize = BitConverter.ToInt32(sizeBuffer, 0);
-
-            // 2) Read the packet content of length 'packetSize'.
-            byte[] packetBuffer = new byte[packetSize];
-            ReadExact(packetBuffer, 0, packetSize);
-
-            PacketInfo packet = PacketInfo.Parse(packetBuffer);
-            OnBytesReceived?.Invoke(packetBuffer);
-
-            return packet;
-        }
-
-        /// <summary>
-        /// Sends the specified <see cref="Packet"/> to the server via the <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="packet">The packet to send.</param>
-        private void SendPacket(PacketInfo packet)
-        {
-            byte[] packetBytes = packet.ToArray();
-            Stream.Write(packetBytes, 0, packetBytes.Length);
-        }
-
-        /// <summary>
-        /// Reads the exact number of bytes from the underlying <see cref="Stream"/>
-        /// into the provided buffer, blocking until all bytes have been received
-        /// or the connection is closed.
-        /// </summary>
-        /// <param name="buffer">Destination buffer.</param>
-        /// <param name="offset">Offset in the buffer to begin writing data.</param>
-        /// <param name="count">Number of bytes to read.</param>
-        /// <exception cref="Exception">Thrown if the required number of bytes
-        /// cannot be read (indicating a closed or unreliable connection).</exception>
-        private void ReadExact(byte[] buffer, int offset, int count)
-        {
-            int totalRead = 0;
-            while (totalRead < count)
+            while (true)
             {
-                int bytesRead = Stream.Read(buffer, offset + totalRead, count - totalRead);
-                if (bytesRead <= 0)
+                byte[] raw = ExtractRawPacket();
+                if (raw == null) break;
+
+                DecodedPacket dp = DecodePacket(raw);
+                Console.WriteLine($"[DEBUG] dp.Id={dp.Id}, dp.Count={dp.Count}, dp.Type={dp.Type}, dp.Body='{dp.Body}'");
+
+                lock (PendingResponses)
                 {
-                    throw new Exception("Connection closed or unable to read the requested number of bytes.");
+                    // 🚨 Si no hay TCS activa para este Count, ignoramos paquetes vacíos adicionales
+                    if (!PendingResponses.ContainsKey(dp.Count))
+                    {
+                        if (dp.Id == RconPacketType.MidPacketId && string.IsNullOrEmpty(dp.Body))
+                        {
+                            Console.WriteLine($"[DEBUG] Ignorando paquete vacío adicional para Count={dp.Count}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"[DEBUG] Paquete inesperado con Count={dp.Count} sin una TCS activa. Se descarta.");
+                        }
+                        continue;
+                    }
+
+                    // Acumular respuesta
+                    PendingPartialResponses[dp.Count].Add(dp.Body);
+
+                    // Detectar si la respuesta ha finalizado
+                    if (string.IsNullOrEmpty(dp.Body) && dp.Type == RconPacketType.ServerDataResponseValue)
+                    {
+                        Console.WriteLine($"[DEBUG] Detectado paquete vacío final para Count={dp.Count}, cerrando respuesta.");
+
+                        string fullResponse = string.Concat(PendingPartialResponses[dp.Count]);
+                        PendingResponses[dp.Count].TrySetResult(fullResponse);
+
+                        PendingResponses.Remove(dp.Count);
+                        PendingPartialResponses.Remove(dp.Count);
+
+                        // 🔥 Marcar este `Count` como finalizado para ignorar paquetes rezagados
+                        FinalizedResponses.Add(dp.Count);
+
+                        // 🔥 Limpiar buffer después de procesar la respuesta
+                        lock (IncomingBuffer)
+                        {
+                            Console.WriteLine("[DEBUG] Limpiando buffer después de una respuesta completa.");
+                            IncomingBuffer.Clear();
+                        }
+                    }
                 }
-                totalRead += bytesRead;
             }
         }
 
-        /// <summary>
-        /// Obtains the next available packet ID in a thread-safe manner
-        /// by incrementing <see cref="PacketIdCounter"/>.
-        /// </summary>
-        private int GetNextPacketId()
+        private void ReadExact(byte[] buffer, int offset, int count)
         {
-            return Interlocked.Increment(ref PacketIdCounter);
+            int total = 0;
+            while (total < count)
+            {
+                int r = Stream.Read(buffer, offset + total, count - total);
+                if (r <= 0)
+                {
+                    throw new Exception("Connection closed or unable to read requested bytes.");
+                }
+                total += r;
+            }
         }
 
-        /// <summary>
-        /// Disconnects from the server and disposes underlying resources.
-        /// </summary>
-        public void Dispose()
+        private PacketInfo ReadSinglePacketBlocking()
         {
-            Disconnect();
-            CancellationTokenSource.Dispose();
+            byte[] sizeBuffer = new byte[4];
+            int read = Stream.Read(sizeBuffer, 0, 4);
+            if (read < 4)
+            {
+                throw new Exception("Unable to read packet size for auth.");
+            }
+            int packetSize = BitConverter.ToInt32(sizeBuffer, 0);
+            if (packetSize < 10)
+            {
+                return PacketInfo.Empty;
+            }
+            byte[] packetBuffer = new byte[packetSize];
+            ReadExact(packetBuffer, 0, packetSize);
+            return PacketInfo.Parse(packetBuffer);
+        }
+    }
+
+    internal static class RconClientExtensions
+    {
+        public static byte[] ToArrayBytes(this string s)
+        {
+            return Encoding.UTF8.GetBytes(s);
         }
     }
 }

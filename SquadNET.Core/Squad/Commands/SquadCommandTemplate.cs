@@ -1,9 +1,7 @@
-﻿using SquadNET.Rcon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Rcon;
 
 namespace SquadNET.Core.Squad.Commands
 {
@@ -11,6 +9,7 @@ namespace SquadNET.Core.Squad.Commands
     {
         public SquadCommandTemplate()
         {
+            CommandTemplates.Add(SquadCommand.ShowServerInfo, "ShowServerInfo");
             CommandTemplates.Add(SquadCommand.ShowCurrentMap, "ShowCurrentMap");
             CommandTemplates.Add(SquadCommand.ShowNextMap, "ShowNextMap");
             CommandTemplates.Add(SquadCommand.ListCommands, "ListCommands true");
