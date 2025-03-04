@@ -1,4 +1,4 @@
-﻿using SquadNET.Core.Squad.Models;
+﻿using SquadNET.Core.Squad.Events;
 using System;
 
 namespace SquadNET.Plugins.Abstractions
@@ -11,7 +11,7 @@ namespace SquadNET.Plugins.Abstractions
         public virtual void Initialize() { }
 
         /// <inheritdoc />
-        public virtual void OnEventRaised(string eventName, IEventData eventData)
+        public virtual void OnEventRaised(string eventName, ISquadEventData eventData)
         {
             // Por defecto, no hace nada.
         }

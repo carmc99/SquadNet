@@ -1,14 +1,15 @@
-﻿using SquadNET.Rcon;
-using Microsoft.Extensions.Logging;
-using SquadNET.Core;
-using SquadNET.Core.Squad.Commands;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using MediatR;
-using SquadNET.Application.Squad.Map.Queries;
+using SquadNET.Application.Squad.Server.Queries;
+using SquadNET.Core;
 
 public class CommandHandler
 {
-    private readonly IRconService RconService;
     private readonly IMediator Mediator;
+    private readonly IRconService RconService;
+
     public CommandHandler(IRconService rconService, IMediator mediator)
     {
         RconService = rconService;
@@ -36,14 +37,12 @@ public class CommandHandler
                 break;
             }
 
-            var response = await Mediator.Send(new MapInfoQuery.Request());
+            var response = await Mediator.Send(new ServerInformationQuery.Request());
 
             //BroadcastMessageCommand.Request request = new() { Message = input };
             //string response = await Mediator.Send(request);
 
-            Console.WriteLine(response);    
+            //Console.WriteLine(response);
         }
-
-        RconService.Disconnect();
     }
 }

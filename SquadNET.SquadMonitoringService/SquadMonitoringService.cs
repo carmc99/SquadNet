@@ -1,29 +1,30 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using SquadNET.LogManagement;
-using Microsoft.Extensions.Hosting;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SquadNET.Application.Services;
 using SquadNET.Application.Squad.ParseLine;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.LogManagement;
 using System.Text;
-using SquadNET.Core.Squad.Events.Models;
-
 
 namespace SquadNET.MonitoringService
 {
     public class SquadMonitoringService : BackgroundService
     {
+        private readonly IConfiguration Configuration;
+        private readonly List<string> ExcludePatterns;
+        private readonly bool IsFilteringEnabled;
         private readonly ILogger<SquadMonitoringService> Logger;
         private readonly ILogReaderFactory LogReaderFactory;
-        private readonly IConfiguration Configuration;
-        private readonly PluginManager PluginManager;
-        private readonly IMediator Mediator;
-        private readonly IRconService RconService;
         private readonly ILogReader LogReaderService;
-        private readonly bool IsFilteringEnabled;
-        private readonly List<string> ExcludePatterns;
+        private readonly IMediator Mediator;
+        private readonly PluginManager PluginManager;
+        private readonly IRconService RconService;
 
         public SquadMonitoringService(
             ILogger<SquadMonitoringService> logger,
@@ -43,6 +44,12 @@ namespace SquadNET.MonitoringService
             IsFilteringEnabled = bool.TryParse(Configuration["Filtering:IsEnabled"], out bool enabled) && enabled;
             ExcludePatterns = Configuration.GetSection("Filtering:ExcludePatterns").Get<List<string>>() ?? [];
             LogReaderService = LogReaderFactory.Create(logReaderType);
+        }
+
+        public override async Task StopAsync(CancellationToken stoppingToken)
+        {
+            await LogReaderService.UnwatchAsync();
+            await base.StopAsync(stoppingToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -66,18 +73,6 @@ namespace SquadNET.MonitoringService
             }
         }
 
-        public override async Task StopAsync(CancellationToken stoppingToken)
-        {
-            await LogReaderService.UnwatchAsync();
-            RconService.Disconnect();
-            await base.StopAsync(stoppingToken);
-        }
-
-        private void OnPacketReceived(PacketInfo message)
-        {
-            string text = Encoding.UTF8.GetString(message.Body);
-            OnLogLineReceived(text);
-        }
         private async void OnLogLineReceived(string line)
         {
             ParseLineQueryHandler.Response result = await Mediator.Send(new ParseLineQueryHandler.Request
@@ -93,6 +88,12 @@ namespace SquadNET.MonitoringService
 
                 PluginManager.EmitEvent(result.EventName, result.EventData);
             }
+        }
+
+        private void OnPacketReceived(PacketInfo message)
+        {
+            string text = Encoding.UTF8.GetString(message.Body);
+            OnLogLineReceived(text);
         }
     }
 }

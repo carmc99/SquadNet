@@ -1,5 +1,7 @@
-﻿using SquadNET.Core.Squad.Entities;
-using System.Net.Sockets;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core
 {
@@ -9,14 +11,9 @@ namespace SquadNET.Core
     public interface IRconService
     {
         /// <summary>
-        /// Event triggered when a successful connection to the RCON server is established.
+        /// Event triggered when raw byte data is received from the RCON server.
         /// </summary>
-        public event Action OnConnected;
-
-        /// <summary>
-        /// Event triggered when an RCON packet is received.
-        /// </summary>
-        public event Action<PacketInfo> OnPacketReceived;
+        public event Action<byte[]> OnBytesReceived;
 
         /// <summary>
         /// Event triggered when a chat message is received through the RCON server.
@@ -24,24 +21,24 @@ namespace SquadNET.Core
         public event Action<ChatMessageInfo> OnChatMessageReceived;
 
         /// <summary>
+        /// Event triggered when a successful connection to the RCON server is established.
+        /// </summary>
+        public event Action OnConnected;
+
+        /// <summary>
         /// Event triggered when an exception occurs in the RCON communication.
         /// </summary>
         public event Action<Exception> OnExceptionThrown;
 
         /// <summary>
-        /// Event triggered when raw byte data is received from the RCON server.
+        /// Event triggered when an RCON packet is received.
         /// </summary>
-        public event Action<byte[]> OnBytesReceived;
+        public event Action<PacketInfo> OnPacketReceived;
 
         /// <summary>
         /// Establishes a connection to the RCON server.
         /// </summary>
-        void Connect();
-
-        /// <summary>
-        /// Disconnects from the RCON server.
-        /// </summary>
-        void Disconnect();
+        public void Connect();
 
         /// <summary>
         /// Executes an RCON command asynchronously.

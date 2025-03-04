@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Events;
 using SquadNET.Plugins.Abstractions;
 
 namespace SquadNET.Application.Services
@@ -72,7 +72,7 @@ namespace SquadNET.Application.Services
         /// <summary>
         /// Triggers an event to be consumed by supported plugins.
         /// </summary>
-        public void EmitEvent(string eventName, IEventData eventData)
+        public void EmitEvent(string eventName, ISquadEventData eventData)
         {
             foreach (IPlugin plugin in Plugins)
             {

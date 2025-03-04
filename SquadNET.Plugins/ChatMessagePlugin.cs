@@ -3,7 +3,6 @@ using System.Reflection;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events;
 using SquadNET.Core.Squad.Events.Models;
-using SquadNET.Core.Squad.Models;
 using SquadNET.Plugins.Abstractions;
 
 namespace SquadNET.Plugins
@@ -15,7 +14,7 @@ namespace SquadNET.Plugins
         /// <summary>
         /// Sobrescribimos OnEventRaised para procesar CHAT_MESSAGE.
         /// </summary>
-        public override void OnEventRaised(string eventName, IEventData eventData)
+        public override void OnEventRaised(string eventName, ISquadEventData eventData)
         {
             if (eventName == SquadEventType.ChatMessage.ToString())
             {
