@@ -1,4 +1,7 @@
-﻿using Serilog.Events;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using Serilog.Events;
 using Serilog.Formatting;
 using System;
 using System.IO;

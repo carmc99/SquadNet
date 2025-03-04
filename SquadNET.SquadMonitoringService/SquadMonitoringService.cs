@@ -1,4 +1,4 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
@@ -57,7 +57,7 @@ namespace SquadNET.MonitoringService
             RconService.Connect();
 
             RconService.OnPacketReceived += OnPacketReceived;
-            LogReaderService.OnError += error => Logger.LogError($"Log Reader Error: {error}");
+            LogReaderService.OnError += error => Logger.LogError("Log Reader Error: {Error}", error);
             LogReaderService.OnFileDeleted += () => Logger.LogWarning("Log file was deleted.");
             LogReaderService.OnFileCreated += () => Logger.LogInformation("Log file was created.");
             LogReaderService.OnFileRenamed += () => Logger.LogInformation("Log file was renamed.");

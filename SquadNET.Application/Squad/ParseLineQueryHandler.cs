@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using MediatR;
 using SquadNET.Core.Squad.Events;
 using SquadNET.Application.Squad.Server.Queries;
 using SquadNET.Application.Squad.Team.Queries;
@@ -13,24 +16,11 @@ namespace SquadNET.Application.Squad.ParseLine
 {
     public static class ParseLineQueryHandler
     {
-        public class Request : IRequest<Response>
-        {
-            public string Line { get; set; }
-            public bool IsFilteringEnabled { get; set; } = false;
-            public List<string> ExcludePatterns { get; set; } = [];
-        }
-
-        public class Response
-        {
-            public string EventName { get; set; }
-            public ISquadEventData EventData { get; set; }
-        }
-
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly ILogger Logger;
             private readonly IMediator Mediator;
             private readonly Dictionary<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>> Parsers;
-            private readonly ILogger Logger;
 
             public Handler(IMediator mediator, ILogger<Handler> logger)
             {
@@ -79,45 +69,14 @@ namespace SquadNET.Application.Squad.ParseLine
                 return null;
             }
 
-            private bool ShouldExclude(string line, List<string> excludePatterns)
+            private async Task<ISquadEventData> ParseAdminBroadcast(string line, CancellationToken cancellationToken)
             {
-                foreach (string pattern in excludePatterns)
-                {
-                    if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return await Mediator.Send(new AdminBroadcastQuery.Request { RawMessage = line }, cancellationToken);
             }
+
             private async Task<ISquadEventData> ParseChatMessage(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new ChatMessageQuery.Request { RawMessage = line }, cancellationToken);
-            }
-
-            private async Task<ISquadEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new SquadCreatedQuery.Request { RawMessage = line }, cancellationToken);
-            }
-
-            private async Task<ISquadEventData> ParseRoundEnded(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new RoundEndedQuery.Request { RawMessage = line }, cancellationToken);
-            }
-
-            private async Task<ISquadEventData> ParseRoundTickets(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new RoundTicketsQuery.Request { RawMessage = line }, cancellationToken);
-            }
-
-            private async Task<ISquadEventData> ParseRoundWinner(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new RoundWinnerQuery.Request { RawMessage = line }, cancellationToken);
-            }
-
-            private async Task<ISquadEventData> ParseServerTickRate(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new ServerTickRateQuery.Request { RawMessage = line }, cancellationToken);
             }
 
             private async Task<ISquadEventData> ParsePlayerDamaged(string line, CancellationToken cancellationToken)
@@ -140,10 +99,55 @@ namespace SquadNET.Application.Squad.ParseLine
                 return await Mediator.Send(new PlayerRevivedQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<ISquadEventData> ParseAdminBroadcast(string line, CancellationToken cancellationToken)
+            private async Task<ISquadEventData> ParseRoundEnded(string line, CancellationToken cancellationToken)
             {
-                return await Mediator.Send(new AdminBroadcastQuery.Request { RawMessage = line }, cancellationToken);
+                return await Mediator.Send(new RoundEndedQuery.Request { RawMessage = line }, cancellationToken);
             }
+
+            private async Task<ISquadEventData> ParseRoundTickets(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new RoundTicketsQuery.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private async Task<ISquadEventData> ParseRoundWinner(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new RoundWinnerQuery.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private async Task<ISquadEventData> ParseServerTickRate(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new ServerTickRateQuery.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private async Task<ISquadEventData> ParseSquadCreated(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new SquadCreatedQuery.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private bool ShouldExclude(string line, List<string> excludePatterns)
+            {
+                foreach (string pattern in excludePatterns)
+                {
+                    if (Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public class Request : IRequest<Response>
+        {
+            public List<string> ExcludePatterns { get; set; } = [];
+            public bool IsFilteringEnabled { get; set; } = false;
+            public string Line { get; set; }
+        }
+
+        public class Response
+        {
+            public ISquadEventData EventData { get; set; }
+            public string EventName { get; set; }
         }
     }
 }

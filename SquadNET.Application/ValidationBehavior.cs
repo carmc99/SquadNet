@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using FluentValidation;
 using MediatR;
 
 namespace SquadNET.Application
@@ -15,8 +18,8 @@ namespace SquadNET.Application
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             ValidationContext<TRequest> context = new(request);
-            List<FluentValidation.Results.ValidationFailure> failures = 
-                Validators.Select(v => 
+            List<FluentValidation.Results.ValidationFailure> failures =
+                Validators.Select(v =>
                     v.Validate(context))
                     .SelectMany(result => result.Errors)
                     .Where(f => f != null)

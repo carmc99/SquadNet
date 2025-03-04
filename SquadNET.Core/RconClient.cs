@@ -18,8 +18,8 @@ namespace SquadNET.Rcon
         private readonly string Password;
         private readonly ConcurrentDictionary<int, RconClientCommandResult> PendingCommandResults = new();
         private int PacketInfoIdCounter = 3;
-        private CancellationTokenSource? ThreadCancellationTokenSource;
-        private Thread? WorkerThread;
+        private CancellationTokenSource ThreadCancellationTokenSource;
+        private Thread WorkerThread;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RconClient"/> class.
@@ -76,7 +76,7 @@ namespace SquadNET.Rcon
         /// </summary>
         public void Stop()
         {
-            foreach (var result in PendingCommandResults)
+            foreach (KeyValuePair<int, RconClientCommandResult> result in PendingCommandResults)
             {
                 result.Value.Cancel();
             }
