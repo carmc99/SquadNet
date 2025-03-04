@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using FluentFTP;
 using Microsoft.Extensions.Configuration;
 
@@ -12,16 +12,6 @@ namespace SquadNET.LogManagement.LogReaders
         private readonly string RemoteFilePath;
         private long LastPosition = 0; // Tracks the last read position
 
-        public event Action<string> OnLogLine;
-        public event Action<string> OnError;
-        public event Action OnFileDeleted;
-        public event Action OnFileCreated;
-        public event Action OnFileRenamed;
-        public event Action OnConnectionLost;
-        public event Action OnConnectionRestored;
-        public event Action OnWatchStarted;
-        public event Action OnWatchStopped;
-
         public FtpLogReader(IConfiguration configuration)
         {
             string host = configuration["LogReaders:Ftp:Host"];
@@ -29,6 +19,31 @@ namespace SquadNET.LogManagement.LogReaders
             string password = configuration["LogReaders:Ftp:Password"];
             RemoteFilePath = configuration["LogReaders:Ftp:RemoteFilePath"];
             FtpClient = new FtpClient(host, user, password); //TODO: Inject dependency
+        }
+
+        public event Action OnConnectionLost;
+
+        public event Action OnConnectionRestored;
+
+        public event Action<string> OnError;
+
+        public event Action OnFileCreated;
+
+        public event Action OnFileDeleted;
+
+        public event Action OnFileRenamed;
+
+        public event Action<string> OnLogLine;
+
+        public event Action OnWatchStarted;
+
+        public event Action OnWatchStopped;
+
+        public Task UnwatchAsync()
+        {
+            FtpClient.Disconnect();
+            OnWatchStopped?.Invoke();
+            return Task.CompletedTask;
         }
 
         public async Task WatchAsync(CancellationToken cancellationToken = default)
@@ -92,13 +107,6 @@ namespace SquadNET.LogManagement.LogReaders
             {
                 OnError?.Invoke($"Error in WatchAsync: {ex.Message}");
             }
-        }
-
-        public Task UnwatchAsync()
-        {
-            FtpClient.Disconnect();
-            OnWatchStopped?.Invoke();
-            return Task.CompletedTask;
         }
     }
 }

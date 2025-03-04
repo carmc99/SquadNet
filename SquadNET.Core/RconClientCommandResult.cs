@@ -1,4 +1,4 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core.Squad.Entities;
@@ -30,7 +30,10 @@ namespace SquadNET.Core
 
         public void Cancel()
         {
-            TaskCompletionSource.SetCanceled();
+            if (!TaskCompletionSource.Task.IsCompleted)
+            {
+                TaskCompletionSource.SetCanceled();
+            }
         }
 
         public void ClearPacketInfos()
@@ -40,13 +43,16 @@ namespace SquadNET.Core
 
         public void Complete()
         {
-            try
+            if (!TaskCompletionSource.Task.IsCompleted)
             {
-                TaskCompletionSource.SetResult(PacketInfosValue);
-            }
-            catch
-            {
-                Console.WriteLine("some error occurred");
+                try
+                {
+                    TaskCompletionSource.SetResult(PacketInfosValue);
+                }
+                catch
+                {
+                    Console.WriteLine("Some error occurred while completing the task.");
+                }
             }
         }
     }

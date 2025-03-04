@@ -24,11 +24,4 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="LogManagement\SquadGame.log">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

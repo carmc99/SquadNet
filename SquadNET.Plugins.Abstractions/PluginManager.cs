@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,9 +12,9 @@ namespace SquadNET.Application.Services
 {
     public class PluginManager
     {
-        private readonly IServiceProvider ServiceProvider;
         private readonly ILogger<PluginManager> Logger;
         private readonly List<IPlugin> Plugins = [];
+        private readonly IServiceProvider ServiceProvider;
 
         public PluginManager(IServiceProvider serviceProvider, ILogger<PluginManager> logger)
         {
@@ -22,25 +25,20 @@ namespace SquadNET.Application.Services
         }
 
         /// <summary>
-        /// Loads the plugins registered in the dependency injection container.
+        /// Triggers an event to be consumed by supported plugins.
         /// </summary>
-        private void LoadPlugins()
+        public void EmitEvent(string eventName, ISquadEventData eventData)
         {
-            Logger.LogInformation("[PluginManager] Loading plugins...");
-
-            IEnumerable<IPlugin> registeredPlugins = ServiceProvider.GetServices<IPlugin>();
-            foreach (IPlugin plugin in registeredPlugins)
+            foreach (IPlugin plugin in Plugins)
             {
                 try
                 {
-                    plugin.Initialize();
-                    Plugins.Add(plugin);
-                    Logger.LogInformation("[PluginManager] Plugin loaded: {PluginName}", plugin.Name);
+                    plugin.OnEventRaised(eventName, eventData);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("[PluginManager] Error loading plugin {PluginName}: {Message}",
-                        plugin.Name, ex.Message);
+                    Logger.LogError(ex, "[PluginManager] Error emitting event {EventName} to plugin {PluginName}",
+                        eventName, plugin.Name);
                 }
             }
         }
@@ -70,20 +68,25 @@ namespace SquadNET.Application.Services
         }
 
         /// <summary>
-        /// Triggers an event to be consumed by supported plugins.
+        /// Loads the plugins registered in the dependency injection container.
         /// </summary>
-        public void EmitEvent(string eventName, ISquadEventData eventData)
+        private void LoadPlugins()
         {
-            foreach (IPlugin plugin in Plugins)
+            Logger.LogInformation("[PluginManager] Loading plugins...");
+
+            IEnumerable<IPlugin> registeredPlugins = ServiceProvider.GetServices<IPlugin>();
+            foreach (IPlugin plugin in registeredPlugins)
             {
                 try
                 {
-                    plugin.OnEventRaised(eventName, eventData);
+                    plugin.Initialize();
+                    Plugins.Add(plugin);
+                    Logger.LogInformation("[PluginManager] Plugin loaded: {PluginName}", plugin.Name);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "[PluginManager] Error emitting event {EventName} to plugin {PluginName}",
-                        eventName, plugin.Name);
+                    Logger.LogError("[PluginManager] Error loading plugin {PluginName}: {Message}",
+                        plugin.Name, ex.Message);
                 }
             }
         }

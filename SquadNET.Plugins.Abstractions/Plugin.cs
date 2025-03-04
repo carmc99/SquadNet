@@ -1,5 +1,7 @@
-﻿using SquadNET.Core.Squad.Events;
-using System;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Events;
 
 namespace SquadNET.Plugins.Abstractions
 {
@@ -8,7 +10,8 @@ namespace SquadNET.Plugins.Abstractions
         public abstract string Name { get; }
 
         /// <inheritdoc />
-        public virtual void Initialize() { }
+        public virtual void Initialize()
+        { }
 
         /// <inheritdoc />
         public virtual void OnEventRaised(string eventName, ISquadEventData eventData)
@@ -17,6 +20,7 @@ namespace SquadNET.Plugins.Abstractions
         }
 
         /// <inheritdoc />
-        public virtual void Shutdown() { }
+        public virtual void Shutdown()
+        { }
     }
 }

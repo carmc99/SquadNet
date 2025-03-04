@@ -1,21 +1,18 @@
-﻿using SquadNET.Extensions.Exceptions.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using SquadNET.Extensions.Exceptions.Exceptions;
+using System.Net;
+using System.Text.Json;
 
 namespace SquadNET.Extensions.Exceptions
 {
     public class ExceptionMiddleware
     {
-        private readonly RequestDelegate Next;
         private readonly ILogger<ExceptionMiddleware> Logger;
+        private readonly RequestDelegate Next;
 
         public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
