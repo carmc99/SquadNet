@@ -3,6 +3,7 @@
 // </copyright>
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,335 +12,441 @@ namespace SquadNET.Rcon
 {
     public class RconClient : IDisposable
     {
-        private readonly CancellationTokenSource CancellationTokenSource;
+        private static readonly TimeSpan ReconnectTimeout = TimeSpan.FromSeconds(2);
         private readonly IPEndPoint EndPoint;
-        private readonly HashSet<ushort> FinalizedResponses = new();
-        private readonly List<byte> IncomingBuffer = [];
+        private readonly ConcurrentQueue<PacketInfo[]> PackageWriteQueue = new();
         private readonly string Password;
-        private readonly Dictionary<ushort, List<string>> PendingPartialResponses = [];
-        private readonly Dictionary<ushort, TaskCompletionSource<string>> PendingResponses = [];
-        private bool IsConnected;
-        private int PacketIdCounter = 3;
-        private Socket Socket;
-        private NetworkStream Stream;
+        private readonly ConcurrentDictionary<int, RconClientCommandResult> PendingCommandResults = new();
+        private int PacketInfoIdCounter = 3;
+        private CancellationTokenSource? ThreadCancellationTokenSource;
+        private Thread? WorkerThread;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RconClient"/> class.
+        /// </summary>
+        /// <param name="endPoint">The endpoint to connect to.</param>
+        /// <param name="password">The RCON password.</param>
         public RconClient(IPEndPoint endPoint, string password)
         {
             EndPoint = endPoint ?? throw new ArgumentNullException(nameof(endPoint));
             Password = password ?? throw new ArgumentNullException(nameof(password));
-            CancellationTokenSource = new CancellationTokenSource();
         }
 
-        public event Action<byte[]> OnBytesReceived;
+        public event Action<byte[]>? BytesReceived;
 
-        public event Action OnConnected;
+        public event Action? Connected;
 
-        public event Action<Exception> OnExceptionThrown;
+        public event Action<Exception>? ExceptionThrown;
 
-        public event Action<PacketInfo> OnPacketReceived;
+        public event Action<PacketInfo>? PacketReceived;
 
-        public void Connect()
-        {
-            if (IsConnected)
-            {
-                return;
-            }
-            try
-            {
-                Socket = new Socket(EndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                Socket.Connect(EndPoint);
-                Stream = new NetworkStream(Socket);
-                Authenticate();
-                IsConnected = true;
-                OnConnected?.Invoke();
-                Task.Run(() => ListenForResponses(CancellationTokenSource.Token));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to connect to RCON server: {ex.Message}", ex);
-            }
-        }
+        /// <summary>
+        /// Gets a value indicating whether the client is started.
+        /// </summary>
+        public bool IsStarted => WorkerThread != null;
 
-        public void Disconnect()
-        {
-            if (!IsConnected)
-            {
-                return;
-            }
-            CancellationTokenSource.Cancel();
-            Stream?.Dispose();
-            Stream = null;
-            Socket?.Close();
-            Socket = null;
-            IsConnected = false;
-            lock (PendingResponses)
-            {
-                foreach (KeyValuePair<ushort, TaskCompletionSource<string>> kvp in PendingResponses)
-                {
-                    kvp.Value.TrySetException(new Exception("Disconnected before receiving the response."));
-                }
-
-                PendingResponses.Clear();
-                PendingPartialResponses.Clear();
-            }
-        }
-
+        /// <summary>
+        /// Disposes the client and stops the connection.
+        /// </summary>
         public void Dispose()
         {
-            Disconnect();
-            CancellationTokenSource.Dispose();
+            Stop();
         }
 
+        /// <summary>
+        /// Starts the RCON client and establishes a connection.
+        /// </summary>
+        public void Start()
+        {
+            if (IsStarted)
+            {
+                return;
+            }
+
+            ThreadCancellationTokenSource = new CancellationTokenSource();
+            WorkerThread = new Thread(ThreadHandler)
+            {
+                IsBackground = true
+            };
+            WorkerThread.Start();
+        }
+
+        /// <summary>
+        /// Stops the RCON client and disconnects.
+        /// </summary>
+        public void Stop()
+        {
+            foreach (var result in PendingCommandResults)
+            {
+                result.Value.Cancel();
+            }
+
+            PendingCommandResults.Clear();
+            PackageWriteQueue.Clear();
+            PacketInfoIdCounter = 3;
+
+            ThreadCancellationTokenSource?.Cancel();
+            WorkerThread?.Join();
+            ThreadCancellationTokenSource?.Dispose();
+
+            ThreadCancellationTokenSource = null;
+            WorkerThread = null;
+        }
+
+        /// <summary>
+        /// Writes a command to the RCON server and waits for the response.
+        /// </summary>
+        /// <param name="command">The command to execute.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The response from the server.</returns>
         public async Task<string> WriteCommandAsync(string command, CancellationToken cancellationToken)
         {
-            ushort count = (ushort)(GetNextPacketId() & 0xFFFF);
-            var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
+            int packetInfoId = GetNextPacketInfoId();
+            PacketInfo commandPacketInfo = new(
+                packetInfoId,
+                RconPacketType.ServerDataExecCommand,
+                command,
+                false,
+                Encoding.UTF8
+            );
 
-            lock (PendingResponses)
-            {
-                PendingResponses[count] = tcs;
-                PendingPartialResponses[count] = new List<string>();
-            }
+            PacketInfo emptyPacketInfo = new(
+                packetInfoId,
+                RconPacketType.ServerDataExecCommand,
+                []
+            );
 
-            // 1) Enviar el comando real
-            byte[] cmdPacket = EncodePacket(RconPacketType.MidPacketId, count, RconPacketType.ServerDataExecCommand, command);
-            Stream.Write(cmdPacket, 0, cmdPacket.Length);
+            RconClientCommandResult commandResult = new([commandPacketInfo, emptyPacketInfo]);
 
-            // 2) Enviar un paquete vacío para forzar que el servidor envíe un paquete vacío de cierre
-            byte[] emptyPacket = EncodePacket(RconPacketType.MidPacketId, count, RconPacketType.ServerDataResponseValue, "");
-            Stream.Write(emptyPacket, 0, emptyPacket.Length);
+            PendingCommandResults[packetInfoId] = commandResult;
+            WritePacketInfos(commandPacketInfo, emptyPacketInfo);
 
-            // Esperar respuesta completa
-            using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-            {
-                return await tcs.Task.ConfigureAwait(false);
-            }
+            IReadOnlyList<PacketInfo> packetInfos = await commandResult.Result;
+            PacketInfo[] packetInfosWithoutEnd = packetInfos.ToArray()[..^1];
+
+            return Encoding.UTF8.GetString(packetInfosWithoutEnd.SelectMany(x => x.Body).ToArray());
         }
 
-        private static DecodedPacket DecodePacket(byte[] data)
+        /// <summary>
+        /// Generates the next packet ID in a thread-safe manner.
+        /// </summary>
+        /// <returns>The next packet ID.</returns>
+        protected int GetNextPacketInfoId()
         {
-            if (data.Length < 14) // Tamaño mínimo esperado de un paquete
-            {
-                throw new Exception($"[ERROR] Paquete demasiado pequeño para ser válido. Tamaño: {data.Length}");
-            }
-
-            int size = BitConverter.ToInt32(data, 0);
-
-            if (size <= 0 || size > 4096)
-            {
-                throw new Exception($"[ERROR] Tamaño inválido del paquete: {size}");
-            }
-
-            byte id = data[4];  // ID del paquete
-            byte unused = data[5]; // Debe ser 0
-            ushort count = BitConverter.ToUInt16(data, 6); // "Count"
-            int type = BitConverter.ToInt32(data, 8); // "Type"
-
-            // Asegurar alineación de `type`
-            if (type < 0 || type > 10)
-            {
-                throw new Exception($"[ERROR] Type inválido: {type}");
-            }
-
-            int bodyLen = (size - 10); // Resta 10 bytes de encabezado (id=1, unused=1, count=2, type=4)
-            if (bodyLen < 0) bodyLen = 0; // Seguridad para evitar valores negativos
-
-            string body = Encoding.UTF8.GetString(data, 12, bodyLen);
-
-            Console.WriteLine($"[DEBUG] Decoded Packet - Size: {size}, Id: {id}, Count: {count}, Type: {type}, Body: {body}");
-
-            return new DecodedPacket { Size = size, Id = id, Count = count, Type = type, Body = body };
+            return Interlocked.Increment(ref PacketInfoIdCounter);
         }
 
-        private static byte[] EncodePacket(byte id, ushort count, int type, string body)
+        /// <summary>
+        /// Invokes the BytesReceived event with the received bytes.
+        /// </summary>
+        /// <param name="bytes">The bytes received from the server.</param>
+        protected virtual void OnBytesReceived(byte[] bytes)
         {
-            int bodyLen = Encoding.UTF8.GetByteCount(body);
-            int size = 14 + bodyLen;
-            byte[] buf = new byte[size];
-            BitConverter.TryWriteBytes(buf.AsSpan(0, 4), size - 4);
-            buf[4] = id;
-            buf[5] = 0;
-            BitConverter.TryWriteBytes(buf.AsSpan(6, 2), count);
-            BitConverter.TryWriteBytes(buf.AsSpan(8, 4), type);
-            Encoding.UTF8.GetBytes(body, 0, body.Length, buf, 12);
-            return buf;
+            BytesReceived?.Invoke(bytes);
         }
 
-        private void Authenticate()
+        /// <summary>
+        /// Invokes the Connected event when a connection is established.
+        /// </summary>
+        protected virtual void OnConnected()
         {
-            int authId = GetNextPacketId();
-            byte[] pkt = EncodePacket(RconPacketType.MidPacketId, (ushort)authId, RconPacketType.ServerDataAuth, Password);
-            Stream.Write(pkt, 0, pkt.Length);
-            PacketInfo resp = ReadSinglePacketBlocking();
-            if (resp.Id == -1)
+            Connected?.Invoke();
+        }
+
+        /// <summary>
+        /// Invokes the ExceptionThrown event when an exception occurs.
+        /// </summary>
+        /// <param name="exception">The exception that was thrown.</param>
+        protected virtual void OnExceptionThrown(Exception exception)
+        {
+            ExceptionThrown?.Invoke(exception);
+        }
+
+        /// <summary>
+        /// Invokes the PacketReceived event when a packet is received.
+        /// </summary>
+        /// <param name="packetInfo">The packet received from the server.</param>
+        protected virtual void OnPacketReceived(PacketInfo packetInfo)
+        {
+            PacketReceived?.Invoke(packetInfo);
+        }
+
+        /// <summary>
+        /// Processes a received packet and handles it accordingly.
+        /// </summary>
+        /// <param name="packetInfo">The packet to process.</param>
+        protected virtual void ProcessPacketInfo(PacketInfo packetInfo)
+        {
+            if (packetInfo is { Id: 3, Type: RconPacketType.ServerDataResponseValue })
             {
-                throw new Exception("Authentication failed: invalid RCON password.");
+                return;
             }
-        }
 
-        private byte[] ExtractRawPacket()
-        {
-            lock (IncomingBuffer)
-            {
-                if (IncomingBuffer.Count < 4) return null;
-
-                int size = BitConverter.ToInt32(IncomingBuffer.ToArray(), 0);
-
-                if (size < 10 || size > 4096)
-                {
-                    Console.WriteLine($"[ERROR] Tamaño de paquete inválido en el buffer: {size}");
-                    IncomingBuffer.Clear();  // 🚀 Limpieza total si encontramos un paquete inválido
-                    return null;
-                }
-
-                int totalSize = size + 4;
-                if (IncomingBuffer.Count < totalSize) return null; // Esperar más datos si aún no tenemos el paquete completo
-
-                // 🚀 Extraer paquete completo
-                byte[] packet = IncomingBuffer.GetRange(0, totalSize).ToArray();
-
-                // 🛑 Aquí eliminamos los bytes ya leídos para que no interfieran en la siguiente petición
-                IncomingBuffer.RemoveRange(0, totalSize);
-
-                return packet;
-            }
-        }
-
-        private int GetNextPacketId()
-        {
-            int nextId = Interlocked.Increment(ref PacketIdCounter);
-            Console.WriteLine($"[DEBUG] Generando nuevo PacketId: {nextId}");
-            return nextId;
-        }
-
-        private async Task ListenForResponses(CancellationToken cancellationToken)
-        {
             try
             {
-                byte[] buffer = new byte[4096];
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    if (Stream == null || !Stream.CanRead)
-                    {
-                        throw new Exception("Stream is closed or not readable.");
-                    }
-
-                    int bytesRead = await Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
-                    if (bytesRead <= 0)
-                    {
-                        throw new Exception("Connection closed or unable to read from Stream.");
-                    }
-
-                    lock (IncomingBuffer)
-                    {
-                        IncomingBuffer.AddRange(buffer.AsSpan(0, bytesRead).ToArray());
-                    }
-
-                    OnBytesReceived?.Invoke(buffer.AsSpan(0, bytesRead).ToArray());
-                    ParseIncomingBuffer();
-                }
+                OnPacketReceived(packetInfo);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    OnExceptionThrown?.Invoke(ex);
-                }
+                OnExceptionThrown(e);
             }
+
+            if (!PendingCommandResults.TryGetValue(packetInfo.Id, out RconClientCommandResult command))
+            {
+                return;
+            }
+
+            command.AddPacketInfo(packetInfo);
+
+            if (packetInfo is not
+                {
+                    Type: RconPacketType.ServerDataResponseValue,
+                    Body: { Length: 0 }
+                })
+            {
+                return;
+            }
+
+            command.Complete();
+            PendingCommandResults.TryRemove(packetInfo.Id, out _);
         }
 
-        private void ParseIncomingBuffer()
+        /// <summary>
+        /// Enqueues packets to be sent to the server.
+        /// </summary>
+        /// <param name="packetInfos">The packets to send.</param>
+        protected void WritePacketInfos(params PacketInfo[] packetInfos)
         {
-            while (true)
-            {
-                byte[] raw = ExtractRawPacket();
-                if (raw == null) break;
-
-                DecodedPacket dp = DecodePacket(raw);
-                Console.WriteLine($"[DEBUG] dp.Id={dp.Id}, dp.Count={dp.Count}, dp.Type={dp.Type}, dp.Body='{dp.Body}'");
-
-                lock (PendingResponses)
-                {
-                    // 🚨 Si no hay TCS activa para este Count, ignoramos paquetes vacíos adicionales
-                    if (!PendingResponses.ContainsKey(dp.Count))
-                    {
-                        if (dp.Id == RconPacketType.MidPacketId && string.IsNullOrEmpty(dp.Body))
-                        {
-                            Console.WriteLine($"[DEBUG] Ignorando paquete vacío adicional para Count={dp.Count}.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"[DEBUG] Paquete inesperado con Count={dp.Count} sin una TCS activa. Se descarta.");
-                        }
-                        continue;
-                    }
-
-                    // Acumular respuesta
-                    PendingPartialResponses[dp.Count].Add(dp.Body);
-
-                    // Detectar si la respuesta ha finalizado
-                    if (string.IsNullOrEmpty(dp.Body) && dp.Type == RconPacketType.ServerDataResponseValue)
-                    {
-                        Console.WriteLine($"[DEBUG] Detectado paquete vacío final para Count={dp.Count}, cerrando respuesta.");
-
-                        string fullResponse = string.Concat(PendingPartialResponses[dp.Count]);
-                        PendingResponses[dp.Count].TrySetResult(fullResponse);
-
-                        PendingResponses.Remove(dp.Count);
-                        PendingPartialResponses.Remove(dp.Count);
-
-                        // 🔥 Marcar este `Count` como finalizado para ignorar paquetes rezagados
-                        FinalizedResponses.Add(dp.Count);
-
-                        // 🔥 Limpiar buffer después de procesar la respuesta
-                        lock (IncomingBuffer)
-                        {
-                            Console.WriteLine("[DEBUG] Limpiando buffer después de una respuesta completa.");
-                            IncomingBuffer.Clear();
-                        }
-                    }
-                }
-            }
+            PackageWriteQueue.Enqueue(packetInfos);
         }
 
-        private void ReadExact(byte[] buffer, int offset, int count)
-        {
-            int total = 0;
-            while (total < count)
-            {
-                int r = Stream.Read(buffer, offset + total, count - total);
-                if (r <= 0)
-                {
-                    throw new Exception("Connection closed or unable to read requested bytes.");
-                }
-                total += r;
-            }
-        }
-
-        private PacketInfo ReadSinglePacketBlocking()
+        /// <summary>
+        /// Receives a packet from the server.
+        /// </summary>
+        /// <param name="socket">The socket to receive data from.</param>
+        /// <returns>The received packet.</returns>
+        private static PacketInfo ReceivePacketInfo(Socket socket)
         {
             byte[] sizeBuffer = new byte[4];
-            int read = Stream.Read(sizeBuffer, 0, 4);
-            if (read < 4)
+            int bytesRead = socket.Receive(sizeBuffer);
+            if (bytesRead != 4)
             {
-                throw new Exception("Unable to read packet size for auth.");
+                throw new Exception("Invalid bytes read for packet size.");
             }
-            int packetSize = BitConverter.ToInt32(sizeBuffer, 0);
-            if (packetSize < 10)
-            {
-                return PacketInfo.Empty;
-            }
-            byte[] packetBuffer = new byte[packetSize];
-            ReadExact(packetBuffer, 0, packetSize);
-            return PacketInfo.Parse(packetBuffer);
-        }
-    }
 
-    internal static class RconClientExtensions
-    {
-        public static byte[] ToArrayBytes(this string s)
+            int packetInfoSize = PacketInfo.ParseSize(sizeBuffer);
+            byte[] packetInfoBuffer = new byte[packetInfoSize];
+            bytesRead = socket.Receive(packetInfoBuffer);
+            if (bytesRead != packetInfoSize)
+            {
+                throw new Exception("Invalid bytes read for packet content.");
+            }
+
+            return PacketInfo.Parse(packetInfoBuffer);
+        }
+
+        /// <summary>
+        /// Sends a single packet to the server.
+        /// </summary>
+        /// <param name="socket">The socket to send data to.</param>
+        /// <param name="packetInfo">The packet to send.</param>
+        private static void Send(Socket socket, PacketInfo packetInfo)
         {
-            return Encoding.UTF8.GetBytes(s);
+            byte[] packetInfoBytes = packetInfo.ToArray();
+
+            int bytesSent = socket.Send(packetInfoBytes);
+            if (bytesSent != packetInfoBytes.Length)
+            {
+                throw new Exception("Failed to send the entire packet.");
+            }
+        }
+
+        /// <summary>
+        /// Sends multiple packets to the server in a single operation.
+        /// </summary>
+        /// <param name="socket">The socket to send data to.</param>
+        /// <param name="packetInfos">The packets to send.</param>
+        private static void Send(Socket socket, params PacketInfo[] packetInfos)
+        {
+            byte[] packetInfoBytes = packetInfos
+                .SelectMany(x => x.ToArray())
+                .ToArray();
+
+            int bytesSent = socket.Send(packetInfoBytes);
+            if (bytesSent != packetInfoBytes.Length)
+            {
+                throw new Exception("Failed to send all packets.");
+            }
+        }
+
+        /// <summary>
+        /// Shifts bytes left in a buffer to remove processed data.
+        /// </summary>
+        /// <param name="bytes">The buffer to shift.</param>
+        /// <param name="shiftLength">The number of bytes to shift.</param>
+        private static void ShiftBytesLeft(byte[] bytes, int shiftLength)
+        {
+            if (shiftLength >= bytes.Length)
+            {
+                throw new Exception("Invalid shift length.");
+            }
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = i + shiftLength >= bytes.Length ? (byte)0 : bytes[i + shiftLength];
+            }
+        }
+
+        /// <summary>
+        /// Authenticates the client with the server using the provided password.
+        /// </summary>
+        /// <param name="socket">The socket to authenticate with.</param>
+        private void Authenticate(Socket socket)
+        {
+            int authPacketInfoId = GetNextPacketInfoId();
+            PacketInfo requestPacketInfo = new PacketInfo(
+                authPacketInfoId,
+                RconPacketType.ServerDataAuth,
+                Password
+            );
+            Send(socket, requestPacketInfo);
+
+            // Receive the first packet, which is an acknowledgment but not needed.
+            ReceivePacketInfo(socket);
+            PacketInfo packetInfo = ReceivePacketInfo(socket);
+
+            if (packetInfo.Id == -1)
+            {
+                throw new Exception("Authentication failed: Invalid password.");
+            }
+        }
+
+        /// <summary>
+        /// Handles the connection to the server, including reading and writing packets.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to stop the connection.</param>
+        private void HandleConnection(CancellationToken cancellationToken)
+        {
+            using Socket socket = new(EndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, false);
+            socket.LingerState = new LingerOption(false, 0);
+
+            try
+            {
+                socket.Connect(EndPoint);
+                Authenticate(socket);
+                OnConnected();
+
+                byte[] buffer = new byte[4096 + 7]; // Maximum packet size + 7 bytes for broken packets
+                int actualBufferLength = 0;
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    int dataAvailable = socket.Available;
+                    if (dataAvailable > 0)
+                    {
+                        int dataToRead = Math.Min(buffer.Length - actualBufferLength, dataAvailable);
+
+                        int bytesRead = socket.Receive(buffer, actualBufferLength, dataToRead, SocketFlags.None);
+                        if (bytesRead != dataToRead)
+                        {
+                            throw new Exception("Failed to read the expected number of bytes.");
+                        }
+
+                        OnBytesReceived(buffer[actualBufferLength..(actualBufferLength + dataToRead)]);
+
+                        actualBufferLength += bytesRead;
+                    }
+
+                    if (actualBufferLength > 0)
+                    {
+                        int packetInfoSize = PacketInfo.ParseSize(buffer[..4]);
+
+                        if (packetInfoSize <= actualBufferLength)
+                        {
+                            ShiftBytesLeft(buffer, 4);
+                            actualBufferLength -= 4;
+
+                            PacketInfo packetInfo;
+
+                            // Check for broken packets:
+                            // The Squad server sends an invalid packet when appending an empty exec command packet.
+                            // This packet is filtered out as it is not needed and does not conform to the Source RCON protocol.
+                            if (packetInfoSize == 10)
+                            {
+                                byte[] maybeBrokenBuffer = buffer[..17];
+                                packetInfo = PacketInfo.Parse(maybeBrokenBuffer);
+                                if (packetInfo.IsBroken)
+                                {
+                                    ShiftBytesLeft(buffer, 17);
+                                    actualBufferLength -= 17;
+                                }
+                                else
+                                {
+                                    packetInfo = PacketInfo.Parse(buffer[..10]);
+                                    ShiftBytesLeft(buffer, 10);
+                                    actualBufferLength -= 10;
+
+                                    ProcessPacketInfo(packetInfo);
+                                }
+                            }
+                            else
+                            {
+                                packetInfo = PacketInfo.Parse(buffer[..packetInfoSize]);
+                                ShiftBytesLeft(buffer, packetInfoSize);
+                                actualBufferLength -= packetInfoSize;
+
+                                ProcessPacketInfo(packetInfo);
+                            }
+                        }
+                    }
+
+                    while (PackageWriteQueue.TryDequeue(out var packetInfoGroup))
+                    {
+                        Send(socket, packetInfoGroup);
+                    }
+
+                    Thread.Sleep(50);
+                }
+            }
+            catch (Exception e)
+            {
+                OnExceptionThrown(e);
+            }
+            finally
+            {
+                // Requeue all pending command results for retry on reconnection.
+                PackageWriteQueue.Clear();
+                PacketInfoIdCounter = 3;
+
+                foreach ((int _, RconClientCommandResult result) in PendingCommandResults)
+                {
+                    result.ClearPacketInfos();
+                    PackageWriteQueue.Enqueue(result.RequestPacketInfos);
+                }
+
+                socket.Disconnect(false);
+                socket.Close();
+                Thread.Sleep(ReconnectTimeout);
+            }
+        }
+
+        /// <summary>
+        /// Handles the worker thread that manages the connection to the server.
+        /// </summary>
+        /// <param name="_">Unused parameter.</param>
+        private void ThreadHandler(object _)
+        {
+            CancellationTokenSource cancellationTokenSource = ThreadCancellationTokenSource;
+            if (cancellationTokenSource == null)
+            {
+                throw new Exception("No cancellation token source provided for the thread.");
+            }
+
+            while (!cancellationTokenSource.IsCancellationRequested)
+            {
+                HandleConnection(cancellationTokenSource.Token);
+            }
         }
     }
 }

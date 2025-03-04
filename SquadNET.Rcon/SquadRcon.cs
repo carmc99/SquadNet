@@ -40,10 +40,10 @@ public class SquadRcon : IRconService, IDisposable
 
         RconClient = new RconClient(new IPEndPoint(IPAddress.Parse(Host), Port), Password);
 
-        RconClient.OnConnected += () => { OnConnected?.Invoke(); };
-        RconClient.OnPacketReceived += packet => { ProcessPacket(packet); };
-        RconClient.OnExceptionThrown += exception => { OnExceptionThrown?.Invoke(exception); };
-        RconClient.OnBytesReceived += bytes => { OnBytesReceived?.Invoke(bytes); };
+        RconClient.Connected += () => { OnConnected?.Invoke(); };
+        RconClient.PacketReceived += packet => { ProcessPacket(packet); };
+        RconClient.ExceptionThrown += exception => { OnExceptionThrown?.Invoke(exception); };
+        RconClient.BytesReceived += bytes => { OnBytesReceived?.Invoke(bytes); };
 
         Connect();
     }
@@ -64,7 +64,7 @@ public class SquadRcon : IRconService, IDisposable
         {
             if (IsConnected) return;
 
-            RconClient.Connect();
+            RconClient.Start();
             IsConnected = true;
             Logger.LogInformation("Successfully connected to the RCON server.");
         }
@@ -79,7 +79,7 @@ public class SquadRcon : IRconService, IDisposable
     {
         if (IsConnected)
         {
-            RconClient.Disconnect();
+            RconClient.Stop();
             IsConnected = false;
             Logger.LogInformation("Disconnected from the RCON server.");
         }
