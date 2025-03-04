@@ -1,28 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using Microsoft.Extensions.Configuration;
 using Renci.SshNet;
-using SquadNET.Core;
 
 namespace SquadNET.LogManagement.LogReaders
 {
     public class SftpLogReader : ILogReader
     {
-        private readonly SftpClient sftpClient;
         private readonly string remoteFilePath;
+        private readonly SftpClient sftpClient;
         private long lastPosition = 0;
-
-        public event Action<string> OnLogLine;
-        public event Action<string> OnError;
-        public event Action OnFileDeleted;
-        public event Action OnFileCreated;
-        public event Action OnFileRenamed;
-        public event Action OnConnectionLost;
-        public event Action OnConnectionRestored;
-        public event Action OnWatchStarted;
-        public event Action OnWatchStopped;
 
         public SftpLogReader(IConfiguration configuration)
         {
@@ -36,6 +24,31 @@ namespace SquadNET.LogManagement.LogReaders
                 new PasswordAuthenticationMethod(user, password));
 
             sftpClient = new SftpClient(connectionInfo);
+        }
+
+        public event Action OnConnectionLost;
+
+        public event Action OnConnectionRestored;
+
+        public event Action<string> OnError;
+
+        public event Action OnFileCreated;
+
+        public event Action OnFileDeleted;
+
+        public event Action OnFileRenamed;
+
+        public event Action<string> OnLogLine;
+
+        public event Action OnWatchStarted;
+
+        public event Action OnWatchStopped;
+
+        public Task UnwatchAsync()
+        {
+            sftpClient.Disconnect();
+            OnWatchStopped?.Invoke();
+            return Task.CompletedTask;
         }
 
         public async Task WatchAsync(CancellationToken cancellationToken = default)
@@ -96,13 +109,6 @@ namespace SquadNET.LogManagement.LogReaders
             {
                 OnError?.Invoke($"Error en WatchAsync: {ex.Message}");
             }
-        }
-
-        public Task UnwatchAsync()
-        {
-            sftpClient.Disconnect();
-            OnWatchStopped?.Invoke();
-            return Task.CompletedTask;
         }
     }
 }

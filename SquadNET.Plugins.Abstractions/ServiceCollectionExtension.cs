@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using Microsoft.Extensions.DependencyInjection;
 using SquadNET.Application.Services;
 using System.Reflection;
 
@@ -8,12 +11,12 @@ namespace SquadNET.Plugins.Abstractions
     {
         public static IServiceCollection AddPlugins(this IServiceCollection services, string pluginsPath)
         {
-            if(string.IsNullOrWhiteSpace(pluginsPath))
+            if (string.IsNullOrWhiteSpace(pluginsPath))
             {
                 throw new ArgumentException("Plugins path cannot be null or empty", nameof(pluginsPath));
             }
-            
-            if(!Directory.Exists(pluginsPath))
+
+            if (!Directory.Exists(pluginsPath))
             {
                 Directory.CreateDirectory(pluginsPath);
             }

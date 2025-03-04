@@ -1,9 +1,7 @@
-﻿using SquadNET.Core.Squad.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Events;
 
 namespace SquadNET.Plugins.Abstractions
 {
@@ -20,15 +18,15 @@ namespace SquadNET.Plugins.Abstractions
         void Initialize();
 
         /// <summary>
-        /// Shuts down the plugin.
-        /// </summary>
-        void Shutdown();
-
-        /// <summary>
         /// Handles an event triggered by the application.
         /// </summary>
         /// <param name="eventName">Name of the event (e.g., "CHAT_MESSAGE").</param>
         /// <param name="eventData">Object containing relevant event information.</param>
         void OnEventRaised(string eventName, ISquadEventData eventData);
+
+        /// <summary>
+        /// Shuts down the plugin.
+        /// </summary>
+        void Shutdown();
     }
 }
