@@ -1,13 +1,16 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using Microsoft.Extensions.DependencyInjection;
-using SquadNET.Core.Squad.Models;
-using SquadNET.Core.Squad.Parsers;
 using SquadNET.Core;
+using SquadNET.Core.Squad.Commands;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
-using SquadNET.Core.Squad.Commands;
+using SquadNET.Core.Squad.Models;
+using SquadNET.Core.Squad.Parsers;
 using SquadNET.Rcon;
 
 public static class ServiceCollectionExtensions
@@ -42,6 +45,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<PlayerRevivedEventModel>, PlayerRevivedParser>();
         services.AddSingleton<IParser<AdminBroadcastEventModel>, AdminBroadcastParser>();
         services.AddSingleton<IParser<ServerInformationInfo>, ServerInformationParser>();
+        services.AddSingleton<IParser<PlayerUnPossessEventModel>, PlayerUnPossessParser>();
 
         return services;
     }

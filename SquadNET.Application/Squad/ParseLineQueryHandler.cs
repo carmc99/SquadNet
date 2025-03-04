@@ -2,15 +2,15 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
-using SquadNET.Core.Squad.Events;
-using SquadNET.Application.Squad.Server.Queries;
-using SquadNET.Application.Squad.Team.Queries;
-using SquadNET.Application.Squad.Chat.Commands;
+using Microsoft.Extensions.Logging;
 using SquadNET.Application.Squad.Admin.Queries;
+using SquadNET.Application.Squad.Chat.Commands;
 using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Application.Squad.Round.Queries;
+using SquadNET.Application.Squad.Server.Queries;
+using SquadNET.Application.Squad.Team.Queries;
+using SquadNET.Core.Squad.Events;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 
 namespace SquadNET.Application.Squad.ParseLine
 {
@@ -31,16 +31,22 @@ namespace SquadNET.Application.Squad.ParseLine
                 {
                     { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
                     { SquadEventType.SquadCreated, (line, ct) => ParseSquadCreated(line, ct) },
-                    // TODO: Revisar
-                    //{ SquadEventType.RoundEnded, (line, ct) => ParseRoundEnded(line, ct) },
-                    //{ SquadEventType.RoundTickets, (line, ct) => ParseRoundTickets(line, ct) },
-                    //{ SquadEventType.RoundWinner, (line, ct) => ParseRoundWinner(line, ct) },
+                    { SquadEventType.GameEnded, (line, ct) => ParseRoundEnded(line, ct) },
+                    { SquadEventType.RoundTickets, (line, ct) => ParseRoundTickets(line, ct) },
+                    { SquadEventType.RoundWinner, (line, ct) => ParseRoundWinner(line, ct) },
                     { SquadEventType.ServerTickRateUpdated, (line, ct) => ParseServerTickRate(line, ct) },
                     { SquadEventType.PlayerDamaged, (line, ct) => ParsePlayerDamaged(line, ct) },
                     { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerJoinSucceeded(line, ct) },
                     { SquadEventType.PlayerPossessed, (line, ct) => ParsePlayerPossess(line, ct) },
+                    { SquadEventType.PlayerUnpossessed, (line, ct) => ParsePlayerUnposess(line, ct)},
                     { SquadEventType.PlayerRevived, (line, ct) => ParsePlayerRevived(line, ct) },
                     { SquadEventType.AdminBroadcast, (line, ct) => ParseAdminBroadcast(line, ct) }
+                    //TODO:
+                    // deployable-damaged
+                    // player-died
+                    // player-disconnected
+                    // player-join-succeeded
+                    // player-wounded
                 };
             }
 
@@ -97,6 +103,11 @@ namespace SquadNET.Application.Squad.ParseLine
             private async Task<ISquadEventData> ParsePlayerRevived(string line, CancellationToken cancellationToken)
             {
                 return await Mediator.Send(new PlayerRevivedQuery.Request { RawMessage = line }, cancellationToken);
+            }
+
+            private async Task<ISquadEventData> ParsePlayerUnposess(string line, CancellationToken cancellationToken)
+            {
+                return await Mediator.Send(new PlayerUnPossessQuery.Request { RawMessage = line }, cancellationToken);
             }
 
             private async Task<ISquadEventData> ParseRoundEnded(string line, CancellationToken cancellationToken)
