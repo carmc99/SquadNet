@@ -9,9 +9,9 @@ namespace SquadNET.Core.Squad.Events.Models
     [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: Player:(.+) ActualDamage=([0-9.]+) from (.+) \(Online IDs:([^|]+)\| Player Controller ID: ([^ ]+)\)caused by ([A-z_0-9-]+)_C")]
     public class PlayerDamagedEventModel : ISquadEventData
     {
-        public string AttackerController { get; set; }
         public CreatorOnlineModel AttackerIds { get; set; }
         public string AttackerName { get; set; }
+        public string AttackerPlayerController { get; set; }
         public string ChainID { get; set; }
         public float Damage { get; set; }
         public string Time { get; set; }
@@ -23,7 +23,7 @@ namespace SquadNET.Core.Squad.Events.Models
         /// </summary>
         public static PlayerDamagedEventModel FromParsedData(
             string time, string chainID, string victimName, float damage,
-            string attackerName, string onlineIds, string attackerController, string weapon)
+            string attackerName, string onlineIds, string attackerPlayerController, string weapon)
         {
             return new PlayerDamagedEventModel
             {
@@ -32,7 +32,7 @@ namespace SquadNET.Core.Squad.Events.Models
                 VictimName = victimName,
                 Damage = damage,
                 AttackerName = attackerName,
-                AttackerController = attackerController,
+                AttackerPlayerController = attackerPlayerController,
                 Weapon = weapon,
                 AttackerIds = CreatorOnlineModel.FromString(onlineIds)
             };
