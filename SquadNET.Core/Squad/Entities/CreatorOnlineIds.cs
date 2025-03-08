@@ -48,14 +48,14 @@ namespace SquadNET.Core.Squad.Entities
             return new CreatorOnlineIds(eosId, steamId);
         }
 
-        public bool Equals(CreatorOnlineIds? other)
+        public bool Equals(CreatorOnlineIds other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return EosId == other.EosId && SteamId == other.SteamId;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj) || obj is CreatorOnlineIds other && Equals(other);
         }

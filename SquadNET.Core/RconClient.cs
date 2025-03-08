@@ -1,4 +1,7 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core;
@@ -32,13 +35,13 @@ namespace SquadNET.Rcon
             Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        public event Action<byte[]>? BytesReceived;
+        public event Action<byte[]> BytesReceived;
 
-        public event Action? Connected;
+        public event Action Connected;
 
-        public event Action<Exception>? ExceptionThrown;
+        public event Action<Exception> ExceptionThrown;
 
-        public event Action<PacketInfo>? PacketReceived;
+        public event Action<PacketInfo> PacketReceived;
 
         /// <summary>
         /// Gets a value indicating whether the client is started.
