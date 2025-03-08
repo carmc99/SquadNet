@@ -1,6 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
+
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
 using System.Text.RegularExpressions;
