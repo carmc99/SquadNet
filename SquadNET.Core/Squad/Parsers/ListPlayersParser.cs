@@ -67,7 +67,7 @@ namespace SquadNET.Core.Squad.Parsers
             // Extraer los identificadores EOS y Steam
             string eosId = match.Groups[2].Value;
             ulong steamId = ulong.Parse(match.Groups[3].Value);
-            CreatorOnlineIds creatorIds = new(eosId, steamId);
+            CreatorOnlineModel creatorIds = new(eosId, steamId);
 
             PlayerConnectedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedEventModel>(parsedValues);
             result.CreatorIds = creatorIds;

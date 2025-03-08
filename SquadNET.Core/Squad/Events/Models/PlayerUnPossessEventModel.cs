@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
@@ -10,7 +10,7 @@ namespace SquadNET.Core.Squad.Events.Models
     public class PlayerUnPossessEventModel : ISquadEventData
     {
         public string ChainID { get; set; }
-        public CreatorOnlineIds PlayerIds { get; set; }
+        public CreatorOnlineModel PlayerIds { get; set; }
 
         public string PlayerSuffix { get; set; }
 
@@ -27,7 +27,7 @@ namespace SquadNET.Core.Squad.Events.Models
                 Time = time,
                 ChainID = chainID,
                 PlayerSuffix = playerSuffix,
-                PlayerIds = CreatorOnlineIds.FromString(onlineIds),
+                PlayerIds = CreatorOnlineModel.FromString(onlineIds),
                 SwitchPossess = switchPossess
             };
         }

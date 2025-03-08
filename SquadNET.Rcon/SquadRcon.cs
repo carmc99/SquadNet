@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 // <copyright company="Carmc99 - SquadNet">
@@ -7,7 +10,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Rcon;
 using System.Net;

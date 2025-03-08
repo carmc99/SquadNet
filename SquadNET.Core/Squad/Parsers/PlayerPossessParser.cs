@@ -2,8 +2,8 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Models;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -31,7 +31,7 @@ namespace SquadNET.Core.Squad.Parsers
             };
 
             PlayerPossessEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerPossessEventModel>(parsedValues);
-            model.CreatorIds = CreatorOnlineIds.FromString(match.Groups[4].Value);
+            model.CreatorIds = CreatorOnlineModel.FromString(match.Groups[4].Value);
 
             return model;
         }

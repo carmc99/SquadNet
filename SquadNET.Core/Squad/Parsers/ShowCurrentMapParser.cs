@@ -1,14 +1,16 @@
-﻿using System.Text.RegularExpressions;
-using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Models;
+using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ShowCurrentMapParser : IParser<CurrentMapInfo>
+    public class ShowCurrentMapParser : IParser<CurrentMapModel>
     {
-        private static readonly Regex CurrentMapRegex = RegexPatternHelper.GetRegex<CurrentMapInfo>();
+        private static readonly Regex CurrentMapRegex = RegexPatternHelper.GetRegex<CurrentMapModel>();
 
-        public CurrentMapInfo Parse(string input)
+        public CurrentMapModel Parse(string input)
         {
             input = input.SanitizeInput();
 
@@ -24,7 +26,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Name", match.Groups[2].Value }
             };
 
-            return DictionaryModelConverter.ConvertDictionaryToModel<CurrentMapInfo>(parsedValues);
+            return DictionaryModelConverter.ConvertDictionaryToModel<CurrentMapModel>(parsedValues);
         }
     }
 }

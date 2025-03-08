@@ -1,9 +1,12 @@
-﻿using System;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -23,7 +26,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             string eosId = match.Groups[2].Value;
             ulong steamId = ulong.Parse(match.Groups[3].Value);
-            CreatorOnlineIds creatorIds = new(eosId, steamId);
+            CreatorOnlineModel creatorIds = new(eosId, steamId);
 
             Dictionary<string, string> parsedValues = new()
             {
@@ -39,5 +42,4 @@ namespace SquadNET.Core.Squad.Parsers
             return squadCreated;
         }
     }
-
 }

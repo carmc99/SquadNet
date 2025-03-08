@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 // <copyright company="Carmc99 - SquadNet">
@@ -28,15 +31,15 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSquadParsers(this IServiceCollection services)
     {
         services.AddSingleton<IParser<ListPlayerModel>, ListPlayersParser>();
-        services.AddSingleton<IParser<List<CommandInfo>>, ListCommandsParser>();
-        services.AddSingleton<IParser<List<SquadInfo>>, ListSquadsParser>();
-        services.AddSingleton<IParser<List<TeamInfo>>, ListTeamsParser>();
-        services.AddSingleton<IParser<CurrentMapInfo>, ShowCurrentMapParser>();
-        services.AddSingleton<IParser<NextMapInfo>, ShowNextMapParser>();
+        services.AddSingleton<IParser<List<CommandModel>>, ListCommandsParser>();
+        services.AddSingleton<IParser<List<SquadModel>>, ListSquadsParser>();
+        services.AddSingleton<IParser<List<TeamModel>>, ListTeamsParser>();
+        services.AddSingleton<IParser<CurrentMapModel>, ShowCurrentMapParser>();
+        services.AddSingleton<IParser<NextMapModel>, ShowNextMapParser>();
         services.AddSingleton<IParser<ChatMessageEventModel>, ChatMessageParser>();
         services.AddSingleton<IParser<SquadCreatedEventModel>, SquadCreatedMessageParser>();
-        services.AddSingleton<IParser<List<LayerInfo>>, ListLayersParser>();
-        services.AddSingleton<IParser<List<LevelInfo>>, ListLevelsParser>();
+        services.AddSingleton<IParser<List<LayerModel>>, ListLayersParser>();
+        services.AddSingleton<IParser<List<LevelModel>>, ListLevelsParser>();
 
         services.AddSingleton<IParser<RoundEndedEventModel>, RoundEndedParser>();
         services.AddSingleton<IParser<RoundTicketsEventModel>, RoundTicketsParser>();
@@ -47,7 +50,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<PlayerPossessEventModel>, PlayerPossessParser>();
         services.AddSingleton<IParser<PlayerRevivedEventModel>, PlayerRevivedParser>();
         services.AddSingleton<IParser<AdminBroadcastEventModel>, AdminBroadcastParser>();
-        services.AddSingleton<IParser<ServerInformationInfo>, ServerInformationParser>();
+        services.AddSingleton<IParser<ServerInformationModel>, ServerInformationParser>();
         services.AddSingleton<IParser<PlayerUnPossessEventModel>, PlayerUnPossessParser>();
 
         return services;

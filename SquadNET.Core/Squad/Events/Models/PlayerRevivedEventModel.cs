@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
@@ -10,10 +10,10 @@ namespace SquadNET.Core.Squad.Events.Models
     public class PlayerRevivedEventModel : ISquadEventData
     {
         public string ChainID { get; set; }
-        public CreatorOnlineIds ReviverIds { get; set; }
+        public CreatorOnlineModel ReviverIds { get; set; }
         public string ReviverName { get; set; }
         public string Time { get; set; }
-        public CreatorOnlineIds VictimIds { get; set; }
+        public CreatorOnlineModel VictimIds { get; set; }
         public string VictimName { get; set; }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace SquadNET.Core.Squad.Events.Models
                 Time = time,
                 ChainID = chainID,
                 ReviverName = reviverName,
-                ReviverIds = CreatorOnlineIds.FromString(reviverOnlineIds),
+                ReviverIds = CreatorOnlineModel.FromString(reviverOnlineIds),
                 VictimName = victimName,
-                VictimIds = CreatorOnlineIds.FromString(victimOnlineIds)
+                VictimIds = CreatorOnlineModel.FromString(victimOnlineIds)
             };
         }
     }

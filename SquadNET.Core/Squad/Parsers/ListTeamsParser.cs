@@ -5,22 +5,22 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListTeamsParser : IParser<List<TeamInfo>>
+    internal class ListTeamsParser : IParser<List<TeamModel>>
     {
         private const string Header = "----- Active Squads -----";
 
-        public List<TeamInfo> Parse(string input)
+        public List<TeamModel> Parse(string input)
         {
             input = input
                 .SanitizeInput()
                 .Replace(Header, "");
 
             string[] lines = input.Split('\n');
-            List<TeamInfo> teams = [];
+            List<TeamModel> teams = [];
 
             foreach (string line in lines)
             {
-                Match match = RegexPatternHelper.GetRegex<TeamInfo>().Match(line);
+                Match match = RegexPatternHelper.GetRegex<TeamModel>().Match(line);
                 if (!match.Success)
                 {
                     continue;
@@ -32,7 +32,7 @@ namespace SquadNET.Core.Squad.Parsers
                     { "Name", match.Groups[2].Value }
                 };
 
-                TeamInfo team = DictionaryModelConverter.ConvertDictionaryToModel<TeamInfo>(parsedValues);
+                TeamModel team = DictionaryModelConverter.ConvertDictionaryToModel<TeamModel>(parsedValues);
                 teams.Add(team);
             }
 

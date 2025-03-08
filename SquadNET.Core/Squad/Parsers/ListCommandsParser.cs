@@ -1,18 +1,14 @@
-﻿using SquadNET.Core.Squad.Entities;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Models;
-using SquadNET.Rcon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListCommandsParser : IParser<List<CommandInfo>>
+    internal class ListCommandsParser : IParser<List<CommandModel>>
     {
-        public List<CommandInfo> Parse(string input)
+        public List<CommandModel> Parse(string input)
         {
             input = input.SanitizeInput();
             string[] lines = input.Split('\n');
@@ -22,11 +18,11 @@ namespace SquadNET.Core.Squad.Parsers
                 return [];
             }
 
-            List<CommandInfo> commands = [];
+            List<CommandModel> commands = [];
 
             foreach (string line in lines[1..])
             {
-                Match match = RegexPatternHelper.GetRegex<CommandInfo>().Match(line);
+                Match match = RegexPatternHelper.GetRegex<CommandModel>().Match(line);
                 if (!match.Success)
                 {
                     continue;
@@ -39,8 +35,8 @@ namespace SquadNET.Core.Squad.Parsers
                     { "Description", match.Groups[3].Value.Trim('(', ')') }
                 };
 
-                CommandInfo command = DictionaryModelConverter.ConvertDictionaryToModel<CommandInfo>(parsedValues);
-                commands.Add(command); 
+                CommandModel command = DictionaryModelConverter.ConvertDictionaryToModel<CommandModel>(parsedValues);
+                commands.Add(command);
             }
 
             return commands;

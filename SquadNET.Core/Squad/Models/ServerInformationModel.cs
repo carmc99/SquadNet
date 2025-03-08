@@ -1,10 +1,13 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-namespace SquadNET.Core.Squad.Entities
+// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+namespace SquadNET.Core.Squad.Models
 {
     [RegexPattern(@"{.*}")]
-    public class ServerInformationInfo
+    public class ServerInformationModel
     {
         /// <summary>
         /// The number of players reported by the A2S (Application to Server) query.

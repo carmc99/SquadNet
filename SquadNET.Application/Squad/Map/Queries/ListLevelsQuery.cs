@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Rcon;
@@ -15,29 +18,30 @@ namespace SquadNET.Application.Squad.Map.Queries
     /// </summary>
     public static class ListLevelsQuery
     {
-        public class Request : IRequest<List<LevelInfo>> { }
-
-        public class Handler : IRequestHandler<Request, List<LevelInfo>>
+        public class Handler : IRequestHandler<Request, List<LevelModel>>
         {
-            private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly IParser<List<LevelInfo>> Parser;
+            private readonly IParser<List<LevelModel>> Parser;
+            private readonly IRconService RconService;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                IParser<List<LevelInfo>> parser)
+                IParser<List<LevelModel>> parser)
             {
                 RconService = rconService;
                 Command = command;
                 Parser = parser;
             }
 
-            public async Task<List<LevelInfo>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<List<LevelModel>> Handle(Request request, CancellationToken cancellationToken)
             {
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListLevels, cancellationToken);
-                List<LevelInfo> levels = Parser.Parse(result);
+                List<LevelModel> levels = Parser.Parse(result);
                 return levels;
             }
         }
+
+        public class Request : IRequest<List<LevelModel>>
+        { }
     }
 }

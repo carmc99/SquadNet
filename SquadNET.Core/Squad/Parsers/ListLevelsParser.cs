@@ -6,16 +6,16 @@ using SquadNET.Core.Squad.Entities;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListLevelsParser : IParser<List<LevelInfo>>
+    internal class ListLevelsParser : IParser<List<LevelModel>>
     {
         private const string Header = "List of available levels :";
 
-        public List<LevelInfo> Parse(string input)
+        public List<LevelModel> Parse(string input)
         {
             input = input.SanitizeInput().Replace(Header, "");
 
             return input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(level => new LevelInfo { Name = level.Trim() })
+                        .Select(level => new LevelModel { Name = level.Trim() })
                         .ToList();
         }
     }

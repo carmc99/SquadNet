@@ -8,8 +8,8 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Models;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -43,7 +43,7 @@ namespace SquadNET.Core.Squad.Parsers
                 return null;
             }
 
-            model.PlayerIds = CreatorOnlineIds.FromString(idsRaw);
+            model.PlayerIds = CreatorOnlineModel.FromString(idsRaw);
 
             return model;
         }

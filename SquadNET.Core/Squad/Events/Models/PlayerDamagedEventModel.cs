@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
@@ -10,7 +10,7 @@ namespace SquadNET.Core.Squad.Events.Models
     public class PlayerDamagedEventModel : ISquadEventData
     {
         public string AttackerController { get; set; }
-        public CreatorOnlineIds AttackerIds { get; set; }
+        public CreatorOnlineModel AttackerIds { get; set; }
         public string AttackerName { get; set; }
         public string ChainID { get; set; }
         public float Damage { get; set; }
@@ -34,7 +34,7 @@ namespace SquadNET.Core.Squad.Events.Models
                 AttackerName = attackerName,
                 AttackerController = attackerController,
                 Weapon = weapon,
-                AttackerIds = CreatorOnlineIds.FromString(onlineIds)
+                AttackerIds = CreatorOnlineModel.FromString(onlineIds)
             };
         }
     }

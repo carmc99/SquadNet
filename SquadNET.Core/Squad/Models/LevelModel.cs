@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using System;
@@ -9,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Entities
 {
-    public class LayerInfo
+    public class LevelModel
     {
         public string Name { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is LayerInfo other && Name == other.Name;
+            return obj is LevelModel other && Name == other.Name;
         }
 
         public override int GetHashCode()

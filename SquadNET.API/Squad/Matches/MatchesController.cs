@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using SquadNET.Application.Squad.Admin.Commands;
 using SquadNET.Application.Squad.Map.Queries;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 /// <summary>
 /// Controller for match-related operations in the Squad server.
@@ -70,7 +70,7 @@ public class MatchesController : ControllerBase
     [HttpGet("map-info")]
     public async Task<IActionResult> MapInfo(CancellationToken cancellationToken)
     {
-        MapInfo result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
+        MapModel result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
         return Ok(result);
     }
 }

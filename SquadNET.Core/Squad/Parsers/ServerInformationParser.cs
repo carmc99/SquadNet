@@ -3,12 +3,12 @@
 // </copyright>
 
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using System.Text.Json;
 
-internal class ServerInformationParser : IParser<ServerInformationInfo>
+internal class ServerInformationParser : IParser<ServerInformationModel>
 {
-    public ServerInformationInfo Parse(string input)
+    public ServerInformationModel Parse(string input)
     {
         input = input.SanitizeInput();
 
@@ -52,8 +52,8 @@ internal class ServerInformationParser : IParser<ServerInformationInfo>
         DateTime matchStart = GetMatchStartTimeByPlaytime(playtime);
         parsedValues["MatchStartTime"] = matchStart.ToString("o");
 
-        ServerInformationInfo info =
-            DictionaryModelConverter.ConvertDictionaryToModel<ServerInformationInfo>(parsedValues);
+        ServerInformationModel info =
+            DictionaryModelConverter.ConvertDictionaryToModel<ServerInformationModel>(parsedValues);
 
         return info;
     }
