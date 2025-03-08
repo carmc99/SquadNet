@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SquadNET.Application.Squad.Admin.Commands;
-using System.Threading.Tasks;
-using System.Threading;
 using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Map.Queries;
 using SquadNET.Application.Squad.Player.Queries;
@@ -28,16 +29,6 @@ public class AdminController : ControllerBase
     }
 
     /// <summary>
-    /// Executes a raw RCON command on the server.
-    /// </summary>
-    [HttpPost("execute-command")]
-    public async Task<IActionResult> ExecuteRawCommand([FromBody] ExecuteRawCommand.Request request, CancellationToken cancellationToken)
-    {
-        string result = await Mediator.Send(request, cancellationToken);
-        return Ok(new { message = "Command executed", result });
-    }
-
-    /// <summary>
     /// Adds a player as a cameraman in the server.
     /// </summary>
     [HttpPost("add-cameraman")]
@@ -55,6 +46,16 @@ public class AdminController : ControllerBase
     {
         string result = await Mediator.Send(request, cancellationToken);
         return Ok(new { message = "Message broadcasted", result });
+    }
+
+    /// <summary>
+    /// Executes a raw RCON command on the server.
+    /// </summary>
+    [HttpPost("execute-command")]
+    public async Task<IActionResult> ExecuteRawCommand([FromBody] ExecuteRawCommand.Request request, CancellationToken cancellationToken)
+    {
+        string result = await Mediator.Send(request, cancellationToken);
+        return Ok(new { message = "Command executed", result });
     }
 
     /// <summary>
@@ -88,22 +89,22 @@ public class AdminController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the current and next map in the rotation.
-    /// </summary>
-    [HttpGet("map-info")]
-    public async Task<IActionResult> MapInfo(CancellationToken cancellationToken)
-    {
-        MapInfo result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
-        return Ok(result);
-    }
-
-    /// <summary>
     /// Retrieves the list of players currently on the server.
     /// </summary>
     [HttpGet("list-players")]
     public async Task<IActionResult> ListPlayers(CancellationToken cancellationToken)
     {
         ListPlayerModel result = await Mediator.Send(new ListPlayersQuery.Request(), cancellationToken);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Retrieves the current and next map in the rotation.
+    /// </summary>
+    [HttpGet("map-info")]
+    public async Task<IActionResult> MapInfo(CancellationToken cancellationToken)
+    {
+        MapInfo result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
         return Ok(result);
     }
 }

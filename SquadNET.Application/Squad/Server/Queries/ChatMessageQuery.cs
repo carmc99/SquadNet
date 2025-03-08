@@ -1,16 +1,31 @@
-﻿using FluentValidation;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using FluentValidation;
 using MediatR;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
-using SquadNET.Rcon;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.Chat.Commands
 {
     public static class ChatMessageQuery
     {
+        public class Handler : IRequestHandler<Request, ChatMessageEventModel>
+        {
+            private readonly IParser<ChatMessageEventModel> Parser;
+
+            public Handler(IParser<ChatMessageEventModel> parser)
+            {
+                Parser = parser;
+            }
+
+            public Task<ChatMessageEventModel> Handle(Request request, CancellationToken cancellationToken)
+            {
+                ChatMessageEventModel chatMessage = Parser.Parse(request.RawMessage);
+                return Task.FromResult(chatMessage);
+            }
+        }
+
         public class Request : IRequest<ChatMessageEventModel>
         {
             public string RawMessage { get; set; }
@@ -21,27 +36,6 @@ namespace SquadNET.Application.Squad.Chat.Commands
             public Validator()
             {
                 RuleFor(x => x.RawMessage).NotEmpty();
-            }
-        }
-
-        public class Handler : IRequestHandler<Request, ChatMessageEventModel>
-        {
-            private readonly IParser<ChatMessageInfo> Parser;
-
-            public Handler(IParser<ChatMessageInfo> parser)
-            {
-                Parser = parser;
-            }
-
-            public Task<ChatMessageEventModel> Handle(Request request, CancellationToken cancellationToken)
-            {
-                ChatMessageEventModel model = null;
-                ChatMessageInfo chatMessage = Parser.Parse(request.RawMessage);
-                if (chatMessage != null)
-                {
-                    model = ChatMessageEventModel.FromEntity(chatMessage);
-                }
-                return Task.FromResult(model);
             }
         }
     }

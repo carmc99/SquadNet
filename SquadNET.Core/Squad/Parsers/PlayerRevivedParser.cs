@@ -1,10 +1,9 @@
-﻿using SquadNET.Core.Squad.Events.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -31,24 +30,8 @@ namespace SquadNET.Core.Squad.Parsers
             };
 
             PlayerRevivedEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerRevivedEventModel>(parsedValues);
-
-            foreach (string id in match.Groups[4].Value.Split('|'))
-            {
-                string[] parts = id.Split(':');
-                if (parts.Length == 2)
-                {
-                    model.ReviverIDs[parts[0]] = parts[1];
-                }
-            }
-
-            foreach (string id in match.Groups[6].Value.Split('|'))
-            {
-                string[] parts = id.Split(':');
-                if (parts.Length == 2)
-                {
-                    model.VictimIDs[parts[0]] = parts[1];
-                }
-            }
+            model.ReviverIds = CreatorOnlineIds.FromString(match.Groups[4].Value);
+            model.VictimIds = CreatorOnlineIds.FromString(match.Groups[6].Value);
 
             return model;
         }

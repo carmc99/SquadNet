@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquadNET.Core.Squad.Entities
+namespace SquadNET.Application.Squad.Player.Queries
 {
-    public class RawDataInfo
+    internal class PlayerDiedQuery
     {
-        public string Value { get; init; }
     }
-
 }

@@ -1,4 +1,7 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
@@ -45,7 +48,7 @@ namespace SquadNET.Application.Squad.ParseLine
                     // deployable-damaged
                     // player-died
                     // player-disconnected
-                    // player-join-succeeded
+                    // player-connected
                     // player-wounded
                 };
             }

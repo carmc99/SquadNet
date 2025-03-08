@@ -15,7 +15,7 @@ namespace SquadNET.Application.Squad.Player.Queries
     /// </summary>
     public static class GetPlayerByNameQuery
     {
-        public class Handler : IRequestHandler<Request, PlayerConnectedInfo>
+        public class Handler : IRequestHandler<Request, PlayerConnectedEventModel>
         {
             private readonly Command<SquadCommand> Command;
             private readonly IParser<ListPlayerModel> Parser;
@@ -30,9 +30,9 @@ namespace SquadNET.Application.Squad.Player.Queries
                 Parser = parser;
             }
 
-            public async Task<PlayerConnectedInfo> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<PlayerConnectedEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                PlayerConnectedInfo player = new();
+                PlayerConnectedEventModel player = new();
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListPlayers, cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(result))
@@ -51,7 +51,7 @@ namespace SquadNET.Application.Squad.Player.Queries
         /// <summary>
         /// Request containing the player Name.
         /// </summary>
-        public class Request : IRequest<PlayerConnectedInfo>
+        public class Request : IRequest<PlayerConnectedEventModel>
         {
             public string Name { get; set; }
         }

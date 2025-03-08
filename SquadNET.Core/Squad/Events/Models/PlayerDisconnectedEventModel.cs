@@ -1,15 +1,18 @@
-﻿namespace SquadNET.Core.Squad.Entities
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+namespace SquadNET.Core.Squad.Events.Models
 {
     [RegexPattern(@"^ID: ([0-9]+) \| SteamID: ([0-9]+) \| Since Disconnect: ([0-9]+)m\.([0-9]+)s \| Name: (.*)$")]
-    public class PlayerDisconnectedInfo
+    public class PlayerDisconnectedEventModel
     {
-        public int Id { get; set; }
-        public ulong SteamId { get; set; }
         public TimeSpan DisconnectedSince { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
+        public ulong SteamId { get; set; }
 
         public bool Equals(
-            PlayerDisconnectedInfo? other
+            PlayerDisconnectedEventModel other
         )
         {
             if (ReferenceEquals(null, other)) return false;
@@ -18,10 +21,10 @@
         }
 
         public override bool Equals(
-            object? obj
+            object obj
         )
         {
-            return ReferenceEquals(this, obj) || obj is PlayerDisconnectedInfo other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is PlayerDisconnectedEventModel other && Equals(other);
         }
 
         public override int GetHashCode()

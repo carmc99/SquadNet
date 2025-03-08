@@ -1,6 +1,11 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
+// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+
+using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
 using System.Text.RegularExpressions;
 
@@ -35,14 +40,7 @@ namespace SquadNET.Core.Squad.Parsers
                 return null;
             }
 
-            foreach (string id in idsRaw.Split('|'))
-            {
-                string[] parts = id.Split(':');
-                if (parts.Length == 2)
-                {
-                    model.PlayerIDs[parts[0]] = parts[1];
-                }
-            }
+            model.PlayerIds = CreatorOnlineIds.FromString(idsRaw);
 
             return model;
         }

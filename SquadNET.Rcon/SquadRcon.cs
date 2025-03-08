@@ -1,10 +1,14 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Rcon;
 using System.Net;
 using System.Text;
@@ -14,13 +18,13 @@ public class SquadRcon : IRconService, IDisposable
     private readonly IConfiguration Configuration;
     private readonly string Host;
     private readonly ILogger<SquadRcon> Logger;
-    private readonly IParser<ChatMessageInfo> Parser;
+    private readonly IParser<ChatMessageEventModel> Parser;
     private readonly string Password;
     private readonly int Port;
     private readonly RconClient RconClient;
     private bool IsConnected;
 
-    public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger, IParser<ChatMessageInfo> parser)
+    public SquadRcon(IConfiguration configuration, ILogger<SquadRcon> logger, IParser<ChatMessageEventModel> parser)
     {
         Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -50,7 +54,7 @@ public class SquadRcon : IRconService, IDisposable
 
     public event Action<byte[]> OnBytesReceived;
 
-    public event Action<ChatMessageInfo> OnChatMessageReceived;
+    public event Action<ChatMessageEventModel> OnChatMessageReceived;
 
     public event Action OnConnected;
 
@@ -132,7 +136,7 @@ public class SquadRcon : IRconService, IDisposable
         if (packet.Type == RconPacketType.ServerDataChatMessage)
         {
             string rawMessage = Encoding.UTF8.GetString(packet.Body);
-            ChatMessageInfo chatMessage = Parser.Parse(rawMessage);
+            ChatMessageEventModel chatMessage = Parser.Parse(rawMessage);
 
             if (chatMessage != null)
             {

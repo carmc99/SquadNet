@@ -1,4 +1,7 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 // <copyright company="SquadNet">
@@ -30,8 +33,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<List<TeamInfo>>, ListTeamsParser>();
         services.AddSingleton<IParser<CurrentMapInfo>, ShowCurrentMapParser>();
         services.AddSingleton<IParser<NextMapInfo>, ShowNextMapParser>();
-        services.AddSingleton<IParser<ChatMessageInfo>, ChatMessageParser>();
-        services.AddSingleton<IParser<SquadCreatedInfo>, SquadCreatedMessageParser>();
+        services.AddSingleton<IParser<ChatMessageEventModel>, ChatMessageParser>();
+        services.AddSingleton<IParser<SquadCreatedEventModel>, SquadCreatedMessageParser>();
         services.AddSingleton<IParser<List<LayerInfo>>, ListLayersParser>();
         services.AddSingleton<IParser<List<LevelInfo>>, ListLevelsParser>();
 

@@ -1,7 +1,11 @@
-﻿// <copyright company="Carmc99 - SquadNet">
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Core
 {
@@ -18,7 +22,7 @@ namespace SquadNET.Core
         /// <summary>
         /// Event triggered when a chat message is received through the RCON server.
         /// </summary>
-        public event Action<ChatMessageInfo> OnChatMessageReceived;
+        public event Action<ChatMessageEventModel> OnChatMessageReceived;
 
         /// <summary>
         /// Event triggered when a successful connection to the RCON server is established.

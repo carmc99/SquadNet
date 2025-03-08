@@ -1,19 +1,22 @@
-﻿using System;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using System;
 
 namespace SquadNET.Core.Squad.Entities
 {
     [RegexPattern(@"^ID: (\d+) \| Online IDs: EOS: ([0-9a-f]+) steam: (\d+) \| Name: (.+?) \| Team ID: (\d+) \| Squad ID: (N/A|\d+) \| Is Leader: (False|True) \| Role: ([A-Za-z0-9_-]+)$")]
-    public class PlayerConnectedInfo
+    public class PlayerConnectedEventModel
     {
-        public int Id { get; set; }
         public CreatorOnlineIds CreatorIds { get; set; }
-        public string Name { get; set; }
-        public TeamId Team { get; set; }
+        public int Id { get; set; }
         public bool IsLeader { get; set; }
+        public string Name { get; set; }
         public string Role { get; set; }
         public int? SquadId { get; set; }
+        public TeamId Team { get; set; }
 
-        public bool Equals(PlayerConnectedInfo other)
+        public bool Equals(PlayerConnectedEventModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -23,7 +26,7 @@ namespace SquadNET.Core.Squad.Entities
 
         public override bool Equals(object obj)
         {
-            return ReferenceEquals(this, obj) || obj is PlayerConnectedInfo other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is PlayerConnectedEventModel other && Equals(other);
         }
 
         public override int GetHashCode()

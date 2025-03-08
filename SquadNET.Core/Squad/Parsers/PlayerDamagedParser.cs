@@ -1,10 +1,9 @@
-﻿using SquadNET.Core.Squad.Events.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -29,20 +28,12 @@ namespace SquadNET.Core.Squad.Parsers
                 { "VictimName", match.Groups[3].Value },
                 { "Damage", match.Groups[4].Value },
                 { "AttackerName", match.Groups[5].Value },
-                { "AttackerController", match.Groups[7].Value },
+                { "AttackerPlayerController", match.Groups[7].Value },
                 { "Weapon", match.Groups[8].Value }
             };
 
             PlayerDamagedEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDamagedEventModel>(parsedValues);
-
-            foreach (var id in match.Groups[6].Value.Split('|'))
-            {
-                string[] parts = id.Split(':');
-                if (parts.Length == 2)
-                {
-                    model.AttackerIDs[parts[0]] = parts[1];
-                }
-            }
+            model.AttackerIds = CreatorOnlineIds.FromString(match.Groups[6].Value);
 
             return model;
         }
