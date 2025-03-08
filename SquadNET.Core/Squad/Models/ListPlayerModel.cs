@@ -1,25 +1,23 @@
-﻿using SquadNET.Core.Squad.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Core.Squad.Models
 {
     public sealed class ListPlayerModel
     {
         public ListPlayerModel(
-            List<PlayerConnectedInfo> activePlayers,
-            List<PlayerDisconnectedInfo> disconnectedPlayers
+            List<PlayerConnectedEventModel> activePlayers,
+            List<PlayerDisconnectedEventModel> disconnectedPlayers
         )
         {
             ActivePlayers = activePlayers;
             DisconnectedPlayers = disconnectedPlayers;
         }
 
-        public List<PlayerConnectedInfo> ActivePlayers { get; }
-        public List<PlayerDisconnectedInfo> DisconnectedPlayers { get; }
+        public List<PlayerConnectedEventModel> ActivePlayers { get; }
+        public List<PlayerDisconnectedEventModel> DisconnectedPlayers { get; }
     }
 }

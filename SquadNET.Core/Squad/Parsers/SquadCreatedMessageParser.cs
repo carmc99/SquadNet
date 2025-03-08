@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class SquadCreatedMessageParser : IParser<SquadCreatedInfo>
+    internal class SquadCreatedMessageParser : IParser<SquadCreatedEventModel>
     {
-        private static readonly Regex SquadCreatedRegex = RegexPatternHelper.GetRegex<SquadCreatedInfo>();
+        private static readonly Regex SquadCreatedRegex = RegexPatternHelper.GetRegex<SquadCreatedEventModel>();
 
-        public SquadCreatedInfo Parse(string input)
+        public SquadCreatedEventModel Parse(string input)
         {
             input = input.SanitizeInput();
 
@@ -32,7 +33,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "TeamName", match.Groups[6].Value }
             };
 
-            SquadCreatedInfo squadCreated = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedInfo>(parsedValues);
+            SquadCreatedEventModel squadCreated = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedEventModel>(parsedValues);
             squadCreated.CreatorIds = creatorIds;
 
             return squadCreated;

@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using FluentValidation;
 using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
@@ -16,29 +19,11 @@ namespace SquadNET.Application.Squad.Player.Queries
     /// </summary>
     public static class GetPlayerByIdQuery
     {
-        /// <summary>
-        /// Request object containing the player ID.
-        /// </summary>
-        public class Request : IRequest<PlayerConnectedInfo>
+        public class Handler : IRequestHandler<Request, PlayerConnectedEventModel>
         {
-            public CreatorOnlineIds PlayerId { get; set; }
-        }
-
-        public class Validator : AbstractValidator<Request>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.PlayerId.SteamId)
-                    .NotEmpty();
-            }
-        }
-
-        public class Handler : IRequestHandler<Request, PlayerConnectedInfo>
-        {
-            private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
             private readonly IParser<ListPlayerModel> Parser;
-
+            private readonly IRconService RconService;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
@@ -49,9 +34,9 @@ namespace SquadNET.Application.Squad.Player.Queries
                 Parser = parser;
             }
 
-            public async Task<PlayerConnectedInfo> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<PlayerConnectedEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                PlayerConnectedInfo player = new();
+                PlayerConnectedEventModel player = new();
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListPlayers, cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(result))
@@ -64,6 +49,23 @@ namespace SquadNET.Application.Squad.Player.Queries
                 }
 
                 return player;
+            }
+        }
+
+        /// <summary>
+        /// Request object containing the player ID.
+        /// </summary>
+        public class Request : IRequest<PlayerConnectedEventModel>
+        {
+            public CreatorOnlineIds PlayerId { get; set; }
+        }
+
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.PlayerId.SteamId)
+                    .NotEmpty();
             }
         }
     }

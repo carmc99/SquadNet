@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using SquadNET.Core;
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
+using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ChatMessageParser : IParser<ChatMessageInfo>
+    internal class ChatMessageParser : IParser<ChatMessageEventModel>
     {
-        private static readonly Regex ChatMessageRegex = RegexPatternHelper.GetRegex<ChatMessageInfo>();
+        private static readonly Regex ChatMessageRegex = RegexPatternHelper.GetRegex<ChatMessageEventModel>();
 
-        public ChatMessageInfo Parse(string input)
+        public ChatMessageEventModel Parse(string input)
         {
             input = input.SanitizeInput();
 
@@ -31,7 +32,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Message", match.Groups[5].Value }
             };
 
-            ChatMessageInfo chatMessage = DictionaryModelConverter.ConvertDictionaryToModel<ChatMessageInfo>(parsedValues);
+            ChatMessageEventModel chatMessage = DictionaryModelConverter.ConvertDictionaryToModel<ChatMessageEventModel>(parsedValues);
             chatMessage.CreatorIds = creatorIds;
 
             return chatMessage;

@@ -1,5 +1,6 @@
 ﻿using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -28,8 +29,8 @@ namespace SquadNET.Core.Squad.Parsers
                     continue;
                 }
 
-                PlayerConnectedInfo playerConnectedInfo = ParsePlayerConnected(line);
-                PlayerDisconnectedInfo playerDisconnectedInfo = ParsePlayerDisconnected(line);
+                PlayerConnectedEventModel playerConnectedInfo = ParsePlayerConnected(line);
+                PlayerDisconnectedEventModel playerDisconnectedInfo = ParsePlayerDisconnected(line);
 
                 if (playerConnectedInfo != null)
                 {
@@ -45,9 +46,9 @@ namespace SquadNET.Core.Squad.Parsers
             return result;
         }
 
-        private PlayerConnectedInfo ParsePlayerConnected(string line)
+        private PlayerConnectedEventModel ParsePlayerConnected(string line)
         {
-            Match match = RegexPatternHelper.GetRegex<PlayerConnectedInfo>().Match(line);
+            Match match = RegexPatternHelper.GetRegex<PlayerConnectedEventModel>().Match(line);
             if (!match.Success || match.Groups.Count < 9)
             {
                 return null;
@@ -68,15 +69,15 @@ namespace SquadNET.Core.Squad.Parsers
             ulong steamId = ulong.Parse(match.Groups[3].Value);
             CreatorOnlineIds creatorIds = new(eosId, steamId);
 
-            PlayerConnectedInfo result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedInfo>(parsedValues);
+            PlayerConnectedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedEventModel>(parsedValues);
             result.CreatorIds = creatorIds;
 
             return result;
         }
 
-        private PlayerDisconnectedInfo ParsePlayerDisconnected(string line)
+        private PlayerDisconnectedEventModel ParsePlayerDisconnected(string line)
         {
-            Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedInfo>().Match(line);
+            Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedEventModel>().Match(line);
             if (!match.Success || match.Groups.Count < 6)
             {
                 return null;
@@ -91,7 +92,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Name", match.Groups[5].Value }
             };
 
-            PlayerDisconnectedInfo result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedInfo>(parsedValues);
+            PlayerDisconnectedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedEventModel>(parsedValues);
 
             return result;
         }

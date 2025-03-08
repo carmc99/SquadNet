@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 namespace SquadNET.Core.Squad.Entities
 {
     [RegexPattern(@"^ID: ([0-9]+) \| Name: (.+?) \| Size: (\d+) \| Locked: (True|False) \| Creator Name: (.+?) \| Creator Online IDs: EOS: ([0-9a-f]+) steam: (\d+)$")]
     public class SquadInfo
     {
+        public CreatorOnlineIds CreatorIds { get; set; }
+        public string CreatorName { get; set; }
         public int Id { get; set; }
-        public TeamId TeamId { get; set; }
-        public string TeamName { get; set; }
+        public bool IsLocked { get; set; }
         public string Name { get; set; }
         public int Size { get; set; }
-        public string CreatorName { get; set; }
-        public CreatorOnlineIds CreatorIds { get; set; }
-        public bool IsLocked { get; set; }
+        public TeamId TeamId { get; set; }
+        public string TeamName { get; set; }
 
         public bool Equals(SquadInfo other)
         {
@@ -27,7 +24,7 @@ namespace SquadNET.Core.Squad.Entities
                    CreatorIds.Equals(other.CreatorIds) && IsLocked == other.IsLocked;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj) || obj is SquadInfo other && Equals(other);
         }

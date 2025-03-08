@@ -1,4 +1,7 @@
-﻿namespace SquadNET.Core.Squad.Events
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+namespace SquadNET.Core.Squad.Events
 {
     /// <summary>
     /// Enumeración de eventos que pueden ser emitidos por el sistema.
@@ -11,7 +14,10 @@
         RconError,
         AdminBroadcast,
         DeployableDamaged,
-        NewGameStarted,
+        GameStarted,
+        GameEnded,
+        RoundTickets,
+        RoundWinner,
         PlayerConnected,
         PlayerDisconnected,
         PlayerDamaged,
