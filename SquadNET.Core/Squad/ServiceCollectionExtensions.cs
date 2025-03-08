@@ -1,15 +1,7 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
-// <copyright company="Carmc99 - SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
+
 using Microsoft.Extensions.DependencyInjection;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
@@ -23,8 +15,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSquad(this IServiceCollection services)
     {
-        services.AddSquadParsers();
         services.AddSingleton<Command<SquadCommand>, SquadCommandTemplate>();
+        services.AddSquadParsers();
         return services;
     }
 
