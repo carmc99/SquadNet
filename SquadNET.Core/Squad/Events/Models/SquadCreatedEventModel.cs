@@ -2,14 +2,14 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
     [RegexPattern(@"^(.+) \(Online IDs: EOS: ([0-9a-f]+) steam: (\d+)\) has created Squad (\d+) \(Squad Name: (.+)\) on (.+)$")]
     public class SquadCreatedEventModel : ISquadEventData
     {
-        public CreatorOnlineIds CreatorIds { get; set; }
+        public CreatorOnlineModel CreatorIds { get; set; }
         public string PlayerName { get; set; }
         public int SquadId { get; set; }
         public string SquadName { get; set; }

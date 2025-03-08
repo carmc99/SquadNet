@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using SquadNET.Application.Services;
 using SquadNET.Application.Squad.ParseLine;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad;
 using SquadNET.LogManagement;
 using System.Text;
 

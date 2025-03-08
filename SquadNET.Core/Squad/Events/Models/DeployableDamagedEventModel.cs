@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
@@ -12,7 +12,7 @@ namespace SquadNET.Core.Squad.Events.Models
         /// <summary>
         /// The online identifiers (EOS, Steam) of the player who caused the damage.
         /// </summary>
-        public CreatorOnlineIds AttackerIds { get; set; }
+        public CreatorOnlineModel AttackerIds { get; set; }
 
         /// <summary>
         /// The unique event chain ID.
@@ -63,7 +63,7 @@ namespace SquadNET.Core.Squad.Events.Models
                 Deployable = deployable,
                 Damage = damage,
                 Weapon = weapon,
-                AttackerIds = CreatorOnlineIds.FromString(attackerIds),
+                AttackerIds = CreatorOnlineModel.FromString(attackerIds),
                 DamageType = damageType,
                 HealthRemaining = healthRemaining
             };

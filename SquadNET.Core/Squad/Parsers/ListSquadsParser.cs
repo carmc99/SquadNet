@@ -1,25 +1,26 @@
 ﻿using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    internal class ListSquadsParser : IParser<List<SquadInfo>>
+    internal class ListSquadsParser : IParser<List<SquadModel>>
     {
         private const string Header = "----- Active Squads -----";
 
-        public List<SquadInfo> Parse(string input)
+        public List<SquadModel> Parse(string input)
         {
             input = input
                 .SanitizeInput()
                 .Replace(Header, "");
 
             string[] lines = input.Split('\n');
-            TeamId team = TeamId.Team1;
+            TeamType team = TeamType.Team1;
             string teamName = string.Empty;
 
-            List<SquadInfo> squads = [];
+            List<SquadModel> squads = [];
 
             foreach (string line in lines)
             {
@@ -28,15 +29,15 @@ namespace SquadNET.Core.Squad.Parsers
                     continue;
                 }
 
-                Match teamMatch = RegexPatternHelper.GetRegex<TeamInfo>().Match(line);
+                Match teamMatch = RegexPatternHelper.GetRegex<TeamModel>().Match(line);
                 if (teamMatch.Success)
                 {
-                    team = (TeamId)int.Parse(teamMatch.Groups[1].Value);
+                    team = (TeamType)int.Parse(teamMatch.Groups[1].Value);
                     teamName = teamMatch.Groups[2].Value;
                     continue;
                 }
 
-                Match squadMatch = RegexPatternHelper.GetRegex<SquadInfo>().Match(line);
+                Match squadMatch = RegexPatternHelper.GetRegex<SquadModel>().Match(line);
                 if (!squadMatch.Success)
                 {
                     continue;
@@ -55,9 +56,9 @@ namespace SquadNET.Core.Squad.Parsers
 
                 string eosId = squadMatch.Groups[6].Value;
                 ulong steamId = ulong.Parse(squadMatch.Groups[7].Value);
-                CreatorOnlineIds creatorIds = new(eosId, steamId);
+                CreatorOnlineModel creatorIds = new(eosId, steamId);
 
-                SquadInfo squad = DictionaryModelConverter.ConvertDictionaryToModel<SquadInfo>(parsedValues);
+                SquadModel squad = DictionaryModelConverter.ConvertDictionaryToModel<SquadModel>(parsedValues);
                 squad.CreatorIds = creatorIds;
                 squads.Add(squad);
             }

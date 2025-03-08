@@ -1,32 +1,19 @@
-﻿
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using System.Buffers.Binary;
 using System.Text;
 
-namespace SquadNET.Core.Squad.Entities
+namespace SquadNET.Core.Squad
 {
     public readonly struct PacketInfo
     {
-        public static readonly PacketInfo Empty = new(0, 0, []);
-
-        public const int SizeFieldLength = 4;
-
-        public const int IdFieldLength = 4;
-
-        public const int TypeFieldLength = 4;
-
         public const int EmptyStringLength = 1;
-
         public const byte EmptyStringTerminator = 0;
-
-        public bool IsBroken { get; }
-
-        public int Size { get; }
-
-        public int Id { get; }
-
-        public int Type { get; }
-
-        public byte[] Body { get; }
+        public const int IdFieldLength = 4;
+        public const int SizeFieldLength = 4;
+        public const int TypeFieldLength = 4;
+        public static readonly PacketInfo Empty = new(0, 0, []);
 
         public PacketInfo(int id, int type, string body, bool isBroken = false, Encoding encoding = null)
             : this(id, type, (encoding ?? Encoding.UTF8).GetBytes(body), isBroken)
@@ -40,6 +27,31 @@ namespace SquadNET.Core.Squad.Entities
             Id = id;
             Body = body;
             IsBroken = isBroken;
+        }
+
+        public byte[] Body { get; }
+        public int Id { get; }
+        public bool IsBroken { get; }
+
+        public int Size { get; }
+        public int Type { get; }
+
+        public static PacketInfo Parse(byte[] bytes)
+        {
+            int id = BinaryPrimitives.ReadInt32LittleEndian(bytes[0..4]);
+            int type = BinaryPrimitives.ReadInt32LittleEndian(bytes[4..8]);
+            byte[] subArray = bytes[8..(bytes.Length - 2)];
+            return new PacketInfo(id, type, subArray, subArray.SequenceEqual(new byte[7] { 0, 0, 0, 1, 0, 0, 0 }));
+        }
+
+        public static int ParseSize(byte[] bytes)
+        {
+            if (bytes.Length != 4)
+            {
+                throw new Exception("invalid packet size bytes received");
+            }
+
+            return BinaryPrimitives.ReadInt32LittleEndian(bytes);
         }
 
         public static PacketInfo Read(Stream stream)
@@ -61,24 +73,6 @@ namespace SquadNET.Core.Squad.Entities
             int type = BinaryPrimitives.ReadInt32LittleEndian(array[4..8]);
             byte[] subArray = array[8..(array.Length - 2)];
             return new PacketInfo(id, type, subArray);
-        }
-
-        public static int ParseSize(byte[] bytes)
-        {
-            if (bytes.Length != 4)
-            {
-                throw new Exception("invalid packet size bytes received");
-            }
-
-            return BinaryPrimitives.ReadInt32LittleEndian(bytes);
-        }
-
-        public static PacketInfo Parse(byte[] bytes)
-        {
-            int id = BinaryPrimitives.ReadInt32LittleEndian(bytes[0..4]);
-            int type = BinaryPrimitives.ReadInt32LittleEndian(bytes[4..8]);
-            byte[] subArray = bytes[8..(bytes.Length - 2)];
-            return new PacketInfo(id, type, subArray, subArray.SequenceEqual(new byte[7] { 0, 0, 0, 1, 0, 0, 0 }));
         }
 
         public byte[] ToArray()

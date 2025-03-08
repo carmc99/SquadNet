@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using FluentValidation;
@@ -57,7 +60,7 @@ namespace SquadNET.Application.Squad.Player.Queries
         /// </summary>
         public class Request : IRequest<PlayerConnectedEventModel>
         {
-            public CreatorOnlineIds PlayerId { get; set; }
+            public CreatorOnlineModel PlayerId { get; set; }
         }
 
         public class Validator : AbstractValidator<Request>

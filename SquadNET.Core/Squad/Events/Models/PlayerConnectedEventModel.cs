@@ -2,18 +2,20 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
+using SquadNET.Core.Squad.Models;
+
 namespace SquadNET.Core.Squad.Entities
 {
     [RegexPattern(@"^ID: (\d+) \| Online IDs: EOS: ([0-9a-f]+) steam: (\d+) \| Name: (.+?) \| Team ID: (\d+) \| Squad ID: (N/A|\d+) \| Is Leader: (False|True) \| Role: ([A-Za-z0-9_-]+)$")]
     public class PlayerConnectedEventModel
     {
-        public CreatorOnlineIds CreatorIds { get; set; }
+        public CreatorOnlineModel CreatorIds { get; set; }
         public int Id { get; set; }
         public bool IsLeader { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
         public int? SquadId { get; set; }
-        public TeamId Team { get; set; }
+        public TeamType Team { get; set; }
 
         public bool Equals(PlayerConnectedEventModel other)
         {

@@ -2,8 +2,8 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Models;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -31,8 +31,8 @@ namespace SquadNET.Core.Squad.Parsers
             };
 
             PlayerRevivedEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerRevivedEventModel>(parsedValues);
-            model.ReviverIds = CreatorOnlineIds.FromString(match.Groups[4].Value);
-            model.VictimIds = CreatorOnlineIds.FromString(match.Groups[6].Value);
+            model.ReviverIds = CreatorOnlineModel.FromString(match.Groups[4].Value);
+            model.VictimIds = CreatorOnlineModel.FromString(match.Groups[6].Value);
 
             return model;
         }

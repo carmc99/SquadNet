@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
@@ -64,7 +67,7 @@ public class AdminController : ControllerBase
     [HttpGet("commands")]
     public async Task<IActionResult> ListCommands(CancellationToken cancellationToken)
     {
-        List<CommandInfo> result = await Mediator.Send(new ListCommandsQuery.Request(), cancellationToken);
+        List<CommandModel> result = await Mediator.Send(new ListCommandsQuery.Request(), cancellationToken);
         return Ok(result);
     }
 
@@ -74,7 +77,7 @@ public class AdminController : ControllerBase
     [HttpGet("list-layers")]
     public async Task<IActionResult> ListLayers(CancellationToken cancellationToken)
     {
-        List<LayerInfo> result = await Mediator.Send(new ListLayersQuery.Request(), cancellationToken);
+        List<LayerModel> result = await Mediator.Send(new ListLayersQuery.Request(), cancellationToken);
         return Ok(result);
     }
 
@@ -84,7 +87,7 @@ public class AdminController : ControllerBase
     [HttpGet("list-levels")]
     public async Task<IActionResult> ListLevels(CancellationToken cancellationToken)
     {
-        List<LevelInfo> result = await Mediator.Send(new ListLevelsQuery.Request(), cancellationToken);
+        List<LevelModel> result = await Mediator.Send(new ListLevelsQuery.Request(), cancellationToken);
         return Ok(result);
     }
 
@@ -104,7 +107,7 @@ public class AdminController : ControllerBase
     [HttpGet("map-info")]
     public async Task<IActionResult> MapInfo(CancellationToken cancellationToken)
     {
-        MapInfo result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
+        MapModel result = await Mediator.Send(new MapInfoQuery.Request(), cancellationToken);
         return Ok(result);
     }
 }

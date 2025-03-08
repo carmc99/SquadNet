@@ -1,7 +1,11 @@
-﻿using MediatR;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using MediatR;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Rcon;
+
 namespace SquadNET.Application.Squad.Team.Queries
 {
     /// <summary>
@@ -9,29 +13,30 @@ namespace SquadNET.Application.Squad.Team.Queries
     /// </summary>
     public static class ListTeamsQuery
     {
-        public class Request : IRequest<List<TeamInfo>> { }
-
-        public class Handler : IRequestHandler<Request, List<TeamInfo>>
+        public class Handler : IRequestHandler<Request, List<TeamModel>>
         {
-            private readonly IRconService RconService;
             private readonly Command<SquadCommand> Command;
-            private readonly IParser<List<TeamInfo>> Parser;
+            private readonly IParser<List<TeamModel>> Parser;
+            private readonly IRconService RconService;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                IParser<List<TeamInfo>> parser)
+                IParser<List<TeamModel>> parser)
             {
                 RconService = rconService;
                 Command = command;
                 Parser = parser;
             }
 
-            public async Task<List<TeamInfo>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<List<TeamModel>> Handle(Request request, CancellationToken cancellationToken)
             {
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListSquads, cancellationToken);
-                List<TeamInfo> squads = Parser.Parse(result);
+                List<TeamModel> squads = Parser.Parse(result);
                 return squads;
             }
         }
+
+        public class Request : IRequest<List<TeamModel>>
+        { }
     }
 }

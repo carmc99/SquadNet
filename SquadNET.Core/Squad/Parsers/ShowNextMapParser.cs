@@ -1,14 +1,18 @@
-﻿using System.Text.RegularExpressions;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using System.Text.RegularExpressions;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Parsers
 {
-    public class ShowNextMapParser : IParser<NextMapInfo>
+    public class ShowNextMapParser : IParser<NextMapModel>
     {
-        private static readonly Regex NextMapRegex = RegexPatternHelper.GetRegex<NextMapInfo>();
+        private static readonly Regex NextMapRegex = RegexPatternHelper.GetRegex<NextMapModel>();
 
-        public NextMapInfo Parse(string input)
+        public NextMapModel Parse(string input)
         {
             input = input.SanitizeInput();
 
@@ -24,7 +28,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Name", match.Groups[2].Value }
             };
 
-            return DictionaryModelConverter.ConvertDictionaryToModel<NextMapInfo>(parsedValues);
+            return DictionaryModelConverter.ConvertDictionaryToModel<NextMapModel>(parsedValues);
         }
     }
 }

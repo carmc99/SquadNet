@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +11,13 @@ using System.Threading.Tasks;
 namespace SquadNET.Core.Squad.Entities
 {
     [RegexPattern(@"^Team ID: ([0-9]+) \((.+)\)$")]
-    public class TeamInfo
+    public class TeamModel
     {
-        public TeamId Id { get; set; }
+        public TeamType Id { get; set; }
         public string Name { get; set; }
 
         public bool Equals(
-            TeamInfo other
+            TeamModel other
         )
         {
             if (ReferenceEquals(null, other)) return false;
@@ -25,7 +29,7 @@ namespace SquadNET.Core.Squad.Entities
             object obj
         )
         {
-            return ReferenceEquals(this, obj) || obj is TeamInfo other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is TeamModel other && Equals(other);
         }
 
         public override int GetHashCode()

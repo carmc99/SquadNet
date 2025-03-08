@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
@@ -12,12 +12,12 @@ namespace SquadNET.Core.Squad.Events.Models
         /// <summary>
         /// The chat channel where the message was sent.
         /// </summary>
-        public ChatChannelInfo Channel { get; set; }
+        public ChatChannelType Channel { get; set; }
 
         /// <summary>
         /// The creator's online identifiers (EOS and Steam).
         /// </summary>
-        public CreatorOnlineIds CreatorIds { get; set; }
+        public CreatorOnlineModel CreatorIds { get; set; }
 
         /// <summary>
         /// The content of the message.
@@ -41,8 +41,8 @@ namespace SquadNET.Core.Squad.Events.Models
         {
             return new ChatMessageEventModel
             {
-                Channel = Enum.TryParse(channel, out ChatChannelInfo parsedChannel) ? parsedChannel : ChatChannelInfo.ChatAll,
-                CreatorIds = new CreatorOnlineIds(eosId, ulong.TryParse(steamId, out ulong parsedSteamId) ? parsedSteamId : 0),
+                Channel = Enum.TryParse(channel, out ChatChannelType parsedChannel) ? parsedChannel : ChatChannelType.ChatAll,
+                CreatorIds = new CreatorOnlineModel(eosId, ulong.TryParse(steamId, out ulong parsedSteamId) ? parsedSteamId : 0),
                 PlayerName = playerName,
                 Message = message,
                 Timestamp = DateTime.UtcNow

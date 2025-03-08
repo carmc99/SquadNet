@@ -1,11 +1,14 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-namespace SquadNET.Core.Squad.Entities
+// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+namespace SquadNET.Core.Squad.Models
 {
-    public class CreatorOnlineIds
+    public class CreatorOnlineModel
     {
-        public CreatorOnlineIds(string eosId, ulong steamId)
+        public CreatorOnlineModel(string eosId, ulong steamId)
         {
             EosId = eosId ?? throw new ArgumentNullException(nameof(eosId));
             SteamId = steamId;
@@ -15,12 +18,12 @@ namespace SquadNET.Core.Squad.Entities
         public ulong SteamId { get; private set; }
 
         /// <summary>
-        /// Creates an instance of <see cref="CreatorOnlineIds"/> from a string of identifiers in the format 'EOS: steam:'.
+        /// Creates an instance of <see cref="CreatorOnlineModel"/> from a string of identifiers in the format 'EOS: steam:'.
         /// </summary>
         /// <param name="onlineIds">String of identifiers in the format 'EOS: XXXX steam: XXXX'.</param>
-        /// <returns>An instance of <see cref="CreatorOnlineIds"/> with the parsed values.</returns>
+        /// <returns>An instance of <see cref="CreatorOnlineModel"/> with the parsed values.</returns>
 
-        public static CreatorOnlineIds FromString(string onlineIds)
+        public static CreatorOnlineModel FromString(string onlineIds)
         {
             if (string.IsNullOrWhiteSpace(onlineIds))
             {
@@ -45,10 +48,10 @@ namespace SquadNET.Core.Squad.Entities
                 }
             }
 
-            return new CreatorOnlineIds(eosId, steamId);
+            return new CreatorOnlineModel(eosId, steamId);
         }
 
-        public bool Equals(CreatorOnlineIds other)
+        public bool Equals(CreatorOnlineModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -57,7 +60,7 @@ namespace SquadNET.Core.Squad.Entities
 
         public override bool Equals(object obj)
         {
-            return ReferenceEquals(this, obj) || obj is CreatorOnlineIds other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is CreatorOnlineModel other && Equals(other);
         }
 
         public override int GetHashCode()

@@ -1,0 +1,18 @@
+[
+    {
+        "input": "[ChatAll] [Online IDs:EOS: abc123 steam: 76561198000000000] Player1 : Hello Squad!",
+        "expectedChannel": "ChatAll",
+        "expectedEosId": "abc123",
+        "expectedSteamId": 76561198000000000,
+        "expectedPlayerName": "Player1",
+        "expectedMessage": "Hello Squad!"
+    },
+    {
+        "input": "[ChatTeam] [Online IDs:EOS: def456 steam: 76561198011111111] Player2 : Move up!",
+        "expectedChannel": "ChatTeam",
+        "expectedEosId": "def456",
+        "expectedSteamId": 76561198011111111,
+        "expectedPlayerName": "Player2",
+        "expectedMessage": "Move up!"
+    }
+]
