@@ -1,0 +1,17 @@
+[
+    {
+        "input": "List of available levels :\nAlBasrah\nFallujah\nGorodok",
+        "expectedLevels": [
+            { "Name": "AlBasrah" },
+            { "Name": "Fallujah" },
+            { "Name": "Gorodok" }
+        ]
+    },
+    {
+        "input": "List of available levels :\nYehorivka\nNarva",
+        "expectedLevels": [
+            { "Name": "Yehorivka" },
+            { "Name": "Narva" }
+        ]
+    }
+]

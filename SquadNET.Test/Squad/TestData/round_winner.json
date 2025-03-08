@@ -1,0 +1,16 @@
+[
+    {
+        "input": "[2025.03.08-21:10:30:567][100]LogSquadTrace: [DedicatedServer] DetermineMatchWinner(): US Army won on AlBasrah_AAS_v1",
+        "expectedTime": "2025.03.08-21:10:30:567",
+        "expectedChainID": "100",
+        "expectedWinner": "US Army",
+        "expectedLayer": "AlBasrah_AAS_v1"
+    },
+    {
+        "input": "[2025.03.08-21:30:45:789][105]LogSquadTrace: [DedicatedServer] DetermineMatchWinner(): Russian Forces won on Gorodok_RAAS_v2",
+        "expectedTime": "2025.03.08-21:30:45:789",
+        "expectedChainID": "105",
+        "expectedWinner": "Russian Forces",
+        "expectedLayer": "Gorodok_RAAS_v2"
+    }
+]

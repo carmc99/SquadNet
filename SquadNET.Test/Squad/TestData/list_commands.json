@@ -1,0 +1,22 @@
+[
+    {
+        "input": "Available commands:\nban [player] [reason] (Bans a player from the server)\nkick [player] (Kicks a player from the server)\nrestart (Restarts the server)",
+        "expectedCommands": [
+            {
+                "Name": "ban",
+                "ParameterDescription": "[player] [reason]",
+                "Description": "Bans a player from the server"
+            },
+            {
+                "Name": "kick",
+                "ParameterDescription": "[player]",
+                "Description": "Kicks a player from the server"
+            },
+            {
+                "Name": "restart",
+                "ParameterDescription": "",
+                "Description": "Restarts the server"
+            }
+        ]
+    }
+]

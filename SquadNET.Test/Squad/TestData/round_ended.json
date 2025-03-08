@@ -1,0 +1,10 @@
+[
+    {
+        "input": "[2025.03.08-19:00:00:123][80]LogGameState: Match State Changed from InProgress to WaitingPostMatch",
+        "expectedTime": "2025.03.08-19:00:00:123"
+    },
+    {
+        "input": "[2025.03.08-19:30:45:789][85]LogGameState: Match State Changed from InProgress to WaitingPostMatch",
+        "expectedTime": "2025.03.08-19:30:45:789"
+    }
+]

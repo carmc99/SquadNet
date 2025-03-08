@@ -1,0 +1,18 @@
+[
+    {
+        "input": "[2025.03.08-18:10:20:123][60]LogSquadTrace: [DedicatedServer] OnUnPossess(): PC=PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000)",
+        "expectedTime": "2025.03.08-18:10:20:123",
+        "expectedChainID": "60",
+        "expectedPlayerSuffix": "PlayerOne",
+        "expectedPlayerEosId": "abc123",
+        "expectedPlayerSteamId": 76561198000000000
+    },
+    {
+        "input": "[2025.03.08-18:15:35:456][65]LogSquadTrace: [DedicatedServer] OnUnPossess(): PC=PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111)",
+        "expectedTime": "2025.03.08-18:15:35:456",
+        "expectedChainID": "65",
+        "expectedPlayerSuffix": "PlayerTwo",
+        "expectedPlayerEosId": "def456",
+        "expectedPlayerSteamId": 76561198011111111
+    }
+]

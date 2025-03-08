@@ -1,0 +1,16 @@
+[
+    {
+        "input": "[2025.03.08-12:30:45:123][10]LogSquad: ADMIN COMMAND: Message broadcasted <Server Restart in 5 minutes> from Admin1",
+        "expectedTime": "2025.03.08-12:30:45:123",
+        "expectedChainID": "10",
+        "expectedMessage": "Server Restart in 5 minutes",
+        "expectedFrom": "Admin1"
+    },
+    {
+        "input": "[2025.03.08-12:35:00:000][15]LogSquad: ADMIN COMMAND: Message broadcasted <Be respectful to others> from Moderator2",
+        "expectedTime": "2025.03.08-12:35:00:000",
+        "expectedChainID": "15",
+        "expectedMessage": "Be respectful to others",
+        "expectedFrom": "Moderator2"
+    }
+]

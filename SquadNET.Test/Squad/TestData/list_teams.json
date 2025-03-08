@@ -1,0 +1,19 @@
+[
+    {
+        "input": "----- Active Squads -----\n1 | US Army\n2 | Russian Forces\n3 | Insurgents",
+        "expectedTeams": [
+            {
+                "Id": 1,
+                "Name": "US Army"
+            },
+            {
+                "Id": 2,
+                "Name": "Russian Forces"
+            },
+            {
+                "Id": 3,
+                "Name": "Insurgents"
+            }
+        ]
+    }
+]

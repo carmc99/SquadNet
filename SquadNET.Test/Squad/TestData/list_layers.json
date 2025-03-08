@@ -1,0 +1,17 @@
+[
+    {
+        "input": "List of available layers :\nAlBasrah_AAS_v1\nAlBasrah_Invasion_v2\nFallujah_RAAS_v3",
+        "expectedLayers": [
+            { "Name": "AlBasrah_AAS_v1" },
+            { "Name": "AlBasrah_Invasion_v2" },
+            { "Name": "Fallujah_RAAS_v3" }
+        ]
+    },
+    {
+        "input": "List of available layers :\nGorodok_AAS_v1\nKohat_RAAS_v2",
+        "expectedLayers": [
+            { "Name": "Gorodok_AAS_v1" },
+            { "Name": "Kohat_RAAS_v2" }
+        ]
+    }
+]

@@ -1,0 +1,24 @@
+[
+    {
+        "input": "[2025.03.08-17:30:12:567][50]LogSquad: PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000) has revived PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111).",
+        "expectedTime": "2025.03.08-17:30:12:567",
+        "expectedChainID": "50",
+        "expectedReviverName": "PlayerOne",
+        "expectedVictimName": "PlayerTwo",
+        "expectedReviverEosId": "abc123",
+        "expectedReviverSteamId": 76561198000000000,
+        "expectedVictimEosId": "def456",
+        "expectedVictimSteamId": 76561198011111111
+    },
+    {
+        "input": "[2025.03.08-17:45:30:789][55]LogSquad: PlayerThree (Online IDs: EOS: ghi789 steam: 76561198022222222) has revived PlayerFour (Online IDs: EOS: jkl012 steam: 76561198033333333).",
+        "expectedTime": "2025.03.08-17:45:30:789",
+        "expectedChainID": "55",
+        "expectedReviverName": "PlayerThree",
+        "expectedVictimName": "PlayerFour",
+        "expectedReviverEosId": "ghi789",
+        "expectedReviverSteamId": 76561198022222222,
+        "expectedVictimEosId": "jkl012",
+        "expectedVictimSteamId": 76561198033333333
+    }
+]

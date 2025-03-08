@@ -1,0 +1,20 @@
+[
+    {
+        "input": "PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000) has created Squad 1 (Squad Name: Alpha Squad) on US Army",
+        "expectedPlayerName": "PlayerOne",
+        "expectedSquadId": 1,
+        "expectedSquadName": "Alpha Squad",
+        "expectedTeamName": "US Army",
+        "expectedCreatorEosId": "abc123",
+        "expectedCreatorSteamId": 76561198000000000
+    },
+    {
+        "input": "PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111) has created Squad 2 (Squad Name: Bravo Squad) on Russian Forces",
+        "expectedPlayerName": "PlayerTwo",
+        "expectedSquadId": 2,
+        "expectedSquadName": "Bravo Squad",
+        "expectedTeamName": "Russian Forces",
+        "expectedCreatorEosId": "def456",
+        "expectedCreatorSteamId": 76561198011111111
+    }
+]
