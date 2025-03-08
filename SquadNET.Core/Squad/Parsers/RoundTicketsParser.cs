@@ -1,11 +1,8 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
+using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {

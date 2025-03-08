@@ -14,7 +14,7 @@ namespace SquadNET.Core.Squad.Events.Models
         public string PossessClassname { get; set; }
         public string Time { get; set; }
 
-        public static PlayerPossessEventModel FromParsedData(string time, string chainID, string playerSuffix, string onlineIDs, string possessClassname)
+        public static PlayerPossessEventModel FromParsedData(string time, string chainID, string onlineIDs, string possessClassname)
         {
             return new PlayerPossessEventModel
             {

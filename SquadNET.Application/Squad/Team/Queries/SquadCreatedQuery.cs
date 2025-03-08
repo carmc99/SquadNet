@@ -1,6 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
+
 using FluentValidation;
 using MediatR;
 using SquadNET.Core;
@@ -10,7 +11,7 @@ namespace SquadNET.Application.Squad.Team.Queries
 {
     public static class SquadCreatedQuery
     {
-        public class Handler : IRequestHandler<Request, Core.Squad.Events.Models.SquadCreatedEventModel>
+        public class Handler : IRequestHandler<Request, SquadCreatedEventModel>
         {
             private readonly IParser<SquadCreatedEventModel> Parser;
 
@@ -26,7 +27,7 @@ namespace SquadNET.Application.Squad.Team.Queries
             }
         }
 
-        public class Request : IRequest<Core.Squad.Events.Models.SquadCreatedEventModel>
+        public class Request : IRequest<SquadCreatedEventModel>
         {
             public string RawMessage { get; set; }
         }
@@ -35,7 +36,8 @@ namespace SquadNET.Application.Squad.Team.Queries
         {
             public Validator()
             {
-                RuleFor(x => x.RawMessage).NotEmpty();
+                RuleFor(x => x.RawMessage)
+                    .NotEmpty();
             }
         }
     }
