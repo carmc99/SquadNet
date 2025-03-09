@@ -1,21 +1,481 @@
 [
     {
-        "input": "Available commands:\nban [player] [reason] (Bans a player from the server)\nkick [player] (Kicks a player from the server)\nrestart (Restarts the server)",
+        "input": "ListCommands <ShowDetails [0|1]> (Prints out the information for all commands in the game.)\nShowCommandInfo <CommandName> (Prints out the details of a particular command)\nListPermittedCommands <ShowDetails [0|1]> (Prints out the information for all commands the player is currently permitted to execute.)\nShowServerInfo (Get information about the current configuration and state of the server)\nAdminKillServer <Force [0|1]> (Tells the server to stop execution)\nAdminSetMaxNumPlayers <NumPlayers> (Set the maximum number of players for this server)\nAdminSetNumReservedSlots <NumReserved> (Set the number of reserved player slots)\nAdminSetServerPassword <Password> (Set the password for a server or use \"\" to remove it)\nAdminSlomo <TimeDilation> (Set the clock speed on the server 0.1 is 10% of normal speed 2.0 is twice the normal speed)\nAdminSetPublicQueueLimit <PublicQueueLimit> (Set the limit of the public queue size)\nAdminSetSeedTargetPlayerCount <SeedTargetPlayerCount> (Set the target player count for seeding. Bots will be used to fill the server up to this player count. Teams will be balanced so that both teams have an equal number of players+bots.)\nListPlayers (List player ids with associated player name and SteamId)\nListSquads (List Squads by their Index numbers's)\nAdminListDisconnectedPlayers (List recently disconnected player ids with associated player name and SteamId)\nAdminTeleportToPlayer <NameOrSteamId> (Teleports you to a given player on the server.)\nAdminTeleportToPlayerById <PlayerId> (Teleports you to a given player on the server by ID.)\nAdminKick \"<NameOrSteamId>\" <KickReason> (Kicks a player from the server)\nAdminKickById <PlayerId> <KickReason> (Kicks a player with Id from the server)\nAdminBan \"<NameOrEOSId>\" \"<BanLength>\" <BanReason> (Bans a player from the server for a length of time.  0 = Perm, 1d = 1 Day, 1M = 1 Month, etc)\nAdminBanById <PlayerId> \"<BanLength>\" <BanReason> (Bans player with Id from the server for length of time. 0 = Perm, 1d = 1 Day, 1M = 1 Month, etc)\nAdminWarn \"<NameOrEOSId>\" <WarnReason> (Warns a player from the server for being abusive.)\nAdminWarnById <PlayerId> <WarnReason> (Warns a player with Id from the server for being abusive.)\nAdminForceTeamChange <NameOrSteamId> (Changes a player's team.)\nAdminForceTeamChangeById <PlayerId> (Changes a player with a certain id's team.)\nAdminRemovePlayerFromSquadById <PlayerId> (Remove a player from their squad without kicking them via Id)\nAdminRemovePlayerFromSquad <PlayerName> (Remove a player from their squad without kicking them)\nAdminDemoteCommander <PlayerName> (Demote a commander specified by player name or EOS Id)\nAdminDemoteCommanderById <PlayerId> (Demote a commander with Id from the server)\nAdminDisbandSquad <TeamNumber = [1|2]> <SquadIndex> (Disbands the specified Squad)\nAdminRenameSquad <TeamNumber = [1|2]> <SquadIndex> (Renames the specified Squad)\nSLInviteMember <Name> (Invite a member to your squad, the name can be partial)\nListLevels (Prints out the list of available levels)\nListLayers (Prints out the list of available layers)\nAdminChangeLevel <LevelName> (Change the level ( and pick a random layer on it) and travel to it immediately)\nAdminChangeLayer <LayerName Faction1+Type Faction2+Type> (Change the layer and travel to it immediately)\nAdminSetNextLevel <LevelName> (Set the next Level ( and pick a random layer on it) to travel to after this match ends)\nAdminSetNextLayer <LayerName Faction1+Type Faction2+Type> (Set the next layer to travel to after this match ends)\nAdminClearNextLayer (Clear selection of next layer (only in voting mode))\nAdminReloadServerConfig (Reloads server config)\nShowCurrentMap (Ask the server what the current level & layer are)\nShowNextMap (Ask the server what the next level & layer are)\nAdminEnableVoting <Enable [0|1]> (Switch between voting and layer rotation mode)\nAdminBroadcast <Message> (Send system message to all players on the server)\nChatToAdmin <Message> (Send system message to all admins on the server)\nAdminVote \"<Question>\" \"<Possibles answers, concatenated by +>\" <Duration, in seconds> (Trigger a vote on given question and choices)\nAdminRestartMatch (Tell the server to restart the match)\nAdminEndMatch (Tell the server to immediately end the match)\nAdminPauseMatch (Tell the server to put the match on hold)\nAdminUnpauseMatch (Tell the server to take off the hold)\nAdminSetFogOfWar <Layer based setting [0|1]> (Sets the fog of war active in the match)\nAdminForceAllVehicleAvailability <Layer based setting, usually Disabled [0|1]> (Force all vehicle availability)\nAdminForceAllDeployableAvailability <Layer based setting, usually Disabled [0|1]> (Force all deployables availability)\nAdminForceAllRoleAvailability <Layer based setting, usually Disabled [0|1]> (Force all roles availability)\nAdminForceAllActionAvailability <Layer based setting, usually Disabled [0|1]> (Force all actions availability)\nAdminNoTeamChangeTimer <Layer based setting, usually Timers active [0|1]> (Disable Team change timer)\nAdminNoRespawnTimer <Layer based setting, usually Timers active [0|1]> (Disable respawn timer)\nAdminDisableVehicleClaiming <Layer based setting, usually Claiming Enabled [0|1]> (Sets the server to disable vehicle claiming)\nAdminDisableVehicleTeamRequirement <Layer based setting, usually Requirement active [0|1]> (Sets the server to disable vehicle Team Requirement)\nAdminDisableVehicleKitRequirement <Layer based setting, usually Requirement active [0|1]> (Sets the server to disable vehicle Kit Requirement)\nAdminAlwaysValidPlacement <AlwaysValid [0|1]> (Sets the server to ignore placement rules for deployables)\nAdminForceNetUpdateOnClientSaturation <Enabled [0|1]> (If true, when a connection becomes saturated, all remaining actors that couldn't complete replication will have ForceNetUpdate called on them)\nAdminAddCameraman <NameOrId> (Add a player to the camera man list)\nAdminCreateVehicle <ClassName> (Create a Vehicle for testing)\nAdminCreateDeployable <ClassName> (Create a Deployable for testing)\nAdminGiveEquipment <ClassName> (Create a inventory item for testing)\nAdminSpawnActor <Index> (Create an Actor for testing)\nAdminDemoPlay <FileName> (Plays back the demo recording, must have file from server)\nAdminDemoRec <FileName> (Records gameplay on the server into a demo file, which can be opened on a client. Also use the AdminDemoStop command to stop the replay. See command \"RecordingStart\" for making a local replay)\nAdminDemoStop (Stops recording and saves the demo to disk)\nAdminProfileServer <SecondsToProfileFor> <bUseRaw [0|1]> (Starts profiling on the server for a fixed length of time, after which the profiling data is saved to disk.)\nAdminProfileServerCSV <Start/Stop> (Runs a lightweight CSV profile. Results will be stored in memory until stopped, so be wary of long profiles.)\nDebugVehicleList <Mode 0 = just vehicle index + info. Mode 1 = same as mode 0, but also crew names and what seat they're in. Mode 2 = same as Mode 1 but also shows empty seats.> (Prints all vehicles in the level.)\nDebugVehicleSetComponentHealthByName \"<Vehicle Name/Index. If it is \"Current\", it will use the vehicle you are currently in.>\" <Component Index. If it is negative, it will set the health of the vehicle itself.> <New Component Health> (Sets a specific component health. Use DebugVehicleInterrogateComponents to figure out which component has what index.)\nDebugPrintCustomOptions (Prints the current server's custom options to the console.)\nAdminSetCustomOption \"<Key>\" <Value> (Set a server custom option.)\nAdminRemoveCustomOption <Key> (Remove a server custom option.)\nDebugAddBuildSupply <Amount> (Adds X amount of build supply to the nearest friendly FOB)\nDebugAddAmmoSupply <Amount> (Adds X amount of ammo supply to the nearest friendly FOB)\nDebugRearm (Rearm all weapons)\nDebugRearmPlayer <NameOrSteamId> (Rearm all weapons)\nDebugPrintPlayerStats <Player index> (Prints all stats of selected player.)\nDebugFactionVehicleCount (Prints number of vehicles for all the possible factions in current level)\nDebugPrintFactionsList <Mode 0 = On all possible layers. Mode 1 = On current layer only> (Prints all possible combinations of factions)\nMoveToNextFactionVariant <Mode 0 = Iterate on all layers. Mode 1 = Limit to current layer only> (Set next layer to next possible option)\nSQ.Skins.ListAllSkins <0 = brief mode, 1 = expanded mode with more info.> (Lists all skins that exist.)\nSQ.Skins.ListReplicatedEquippedSkins (Lists all skins that have been replicated back to our client for the current faction.)\nSQ.Skins.ListAllEquippedSkins (Lists all skins currently equipped for all factions from our game settings.)\nSQ.Skins.ClearEquippedSkins (Clears all equipped skins.)\nSQ.Skins.ToggleSkin <Skin name> (Toggles a specific skin on/off.)\nSQ.Skins.ForceAllowAll <0 = disable all, 1 = enable skins to be used on any faction, 2 = enable additional logging on both client and server> (Sets allowing all skins to function without checking requirements or not.)\nRecordingStart (Start recording a dated replay locally.)\nRecordingStart_Named <The name of the replay to create> (Start recording a named replay locally.)\nRecordingStop (Stop recording local replay.)\nDebugLoadingScreen (Print out debug information about the loading screen)\nRepGraphSetDSFTargetKBytesSec <New Target.> (Changes the target KBytes/Sec for the RepGraph's Dynamic Spatial Frequency node.)",
         "expectedCommands": [
             {
-                "Name": "ban",
-                "ParameterDescription": "[player] [reason]",
-                "Description": "Bans a player from the server"
+                "Name": "ListCommands",
+                "ParameterDescription": "<ShowDetails [0|1]>",
+                "Description": "Prints out the information for all commands in the game."
             },
             {
-                "Name": "kick",
-                "ParameterDescription": "[player]",
-                "Description": "Kicks a player from the server"
+                "Name": "ShowCommandInfo",
+                "ParameterDescription": "<CommandName>",
+                "Description": "Prints out the details of a particular command."
             },
             {
-                "Name": "restart",
+                "Name": "ListPermittedCommands",
+                "ParameterDescription": "<ShowDetails [0|1]>",
+                "Description": "Prints out the information for all commands the player is currently permitted to execute."
+            },
+            {
+                "Name": "ShowServerInfo",
                 "ParameterDescription": "",
-                "Description": "Restarts the server"
+                "Description": "Get information about the current configuration and state of the server."
+            },
+            {
+                "Name": "AdminKillServer",
+                "ParameterDescription": "<Force [0|1]>",
+                "Description": "Tells the server to stop execution."
+            },
+            {
+                "Name": "AdminSetMaxNumPlayers",
+                "ParameterDescription": "<NumPlayers>",
+                "Description": "Set the maximum number of players for this server."
+            },
+            {
+                "Name": "AdminSetNumReservedSlots",
+                "ParameterDescription": "<NumReserved>",
+                "Description": "Set the number of reserved player slots."
+            },
+            {
+                "Name": "AdminSetServerPassword",
+                "ParameterDescription": "<Password>",
+                "Description": "Set the password for a server or use \"\" to remove it."
+            },
+            {
+                "Name": "AdminSlomo",
+                "ParameterDescription": "<TimeDilation>",
+                "Description": "Set the clock speed on the server 0.1 is 10% of normal speed 2.0 is twice the normal speed."
+            },
+            {
+                "Name": "AdminSetPublicQueueLimit",
+                "ParameterDescription": "<PublicQueueLimit>",
+                "Description": "Set the limit of the public queue size."
+            },
+            {
+                "Name": "AdminSetSeedTargetPlayerCount",
+                "ParameterDescription": "<SeedTargetPlayerCount>",
+                "Description": "Set the target player count for seeding. Bots will be used to fill the server up to this player count. Teams will be balanced so that both teams have an equal number of players+bots."
+            },
+            {
+                "Name": "ListPlayers",
+                "ParameterDescription": "",
+                "Description": "List player ids with associated player name and SteamId."
+            },
+            {
+                "Name": "ListSquads",
+                "ParameterDescription": "",
+                "Description": "List Squads by their Index numbers's."
+            },
+            {
+                "Name": "AdminListDisconnectedPlayers",
+                "ParameterDescription": "",
+                "Description": "List recently disconnected player ids with associated player name and SteamId."
+            },
+            {
+                "Name": "AdminTeleportToPlayer",
+                "ParameterDescription": "<NameOrSteamId>",
+                "Description": "Teleports you to a given player on the server."
+            },
+            {
+                "Name": "AdminTeleportToPlayerById",
+                "ParameterDescription": "<PlayerId>",
+                "Description": "Teleports you to a given player on the server by ID."
+            },
+            {
+                "Name": "AdminKick",
+                "ParameterDescription": "\"<NameOrSteamId>\" <KickReason>",
+                "Description": "Kicks a player from the server."
+            },
+            {
+                "Name": "AdminKickById",
+                "ParameterDescription": "<PlayerId> <KickReason>",
+                "Description": "Kicks a player with Id from the server."
+            },
+            {
+                "Name": "AdminBan",
+                "ParameterDescription": "\"<NameOrEOSId>\" \"<BanLength>\" <BanReason>",
+                "Description": "Bans a player from the server for a length of time.  0 = Perm, 1d = 1 Day, 1M = 1 Month, etc."
+            },
+            {
+                "Name": "AdminBanById",
+                "ParameterDescription": "<PlayerId> \"<BanLength>\" <BanReason>",
+                "Description": "Bans player with Id from the server for length of time. 0 = Perm, 1d = 1 Day, 1M = 1 Month, etc."
+            },
+            {
+                "Name": "AdminWarn",
+                "ParameterDescription": "\"<NameOrEOSId>\" <WarnReason>",
+                "Description": "Warns a player from the server for being abusive."
+            },
+            {
+                "Name": "AdminWarnById",
+                "ParameterDescription": "<PlayerId> <WarnReason>",
+                "Description": "Warns a player with Id from the server for being abusive."
+            },
+            {
+                "Name": "AdminForceTeamChange",
+                "ParameterDescription": "<NameOrSteamId>",
+                "Description": "Changes a player's team."
+            },
+            {
+                "Name": "AdminForceTeamChangeById",
+                "ParameterDescription": "<PlayerId>",
+                "Description": "Changes a player with a certain id's team."
+            },
+            {
+                "Name": "AdminRemovePlayerFromSquadById",
+                "ParameterDescription": "<PlayerId>",
+                "Description": "Remove a player from their squad without kicking them via Id."
+            },
+            {
+                "Name": "AdminRemovePlayerFromSquad",
+                "ParameterDescription": "<PlayerName>",
+                "Description": "Remove a player from their squad without kicking them."
+            },
+            {
+                "Name": "AdminDemoteCommander",
+                "ParameterDescription": "<PlayerName>",
+                "Description": "Demote a commander specified by player name or EOS Id."
+            },
+            {
+                "Name": "AdminDemoteCommanderById",
+                "ParameterDescription": "<PlayerId>",
+                "Description": "Demote a commander with Id from the server."
+            },
+            {
+                "Name": "AdminDisbandSquad",
+                "ParameterDescription": "<TeamNumber = [1|2]> <SquadIndex>",
+                "Description": "Disbands the specified Squad."
+            },
+            {
+                "Name": "AdminRenameSquad",
+                "ParameterDescription": "<TeamNumber = [1|2]> <SquadIndex>",
+                "Description": "Renames the specified Squad."
+            },
+            {
+                "Name": "SLInviteMember",
+                "ParameterDescription": "<Name>",
+                "Description": "Invite a member to your squad, the name can be partial."
+            },
+            {
+                "Name": "ListLevels",
+                "ParameterDescription": "",
+                "Description": "Prints out the list of available levels."
+            },
+            {
+                "Name": "ListLayers",
+                "ParameterDescription": "",
+                "Description": "Prints out the list of available layers."
+            },
+            {
+                "Name": "AdminChangeLevel",
+                "ParameterDescription": "<LevelName>",
+                "Description": "Change the level ( and pick a random layer on it) and travel to it immediately."
+            },
+            {
+                "Name": "AdminChangeLayer",
+                "ParameterDescription": "<LayerName Faction1+Type Faction2+Type>",
+                "Description": "Change the layer and travel to it immediately."
+            },
+            {
+                "Name": "AdminSetNextLevel",
+                "ParameterDescription": "<LevelName>",
+                "Description": "Set the next Level ( and pick a random layer on it) to travel to after this match ends."
+            },
+            {
+                "Name": "AdminSetNextLayer",
+                "ParameterDescription": "<LayerName Faction1+Type Faction2+Type>",
+                "Description": "Set the next layer to travel to after this match ends."
+            },
+            {
+                "Name": "AdminClearNextLayer",
+                "ParameterDescription": "",
+                "Description": "Clear selection of next layer (only in voting mode)."
+            },
+            {
+                "Name": "AdminReloadServerConfig",
+                "ParameterDescription": "",
+                "Description": "Reloads server config."
+            },
+            {
+                "Name": "ShowCurrentMap",
+                "ParameterDescription": "",
+                "Description": "Ask the server what the current level & layer are."
+            },
+            {
+                "Name": "ShowNextMap",
+                "ParameterDescription": "",
+                "Description": "Ask the server what the next level & layer are."
+            },
+            {
+                "Name": "AdminEnableVoting",
+                "ParameterDescription": "<Enable [0|1]>",
+                "Description": "Switch between voting and layer rotation mode."
+            },
+            {
+                "Name": "AdminBroadcast",
+                "ParameterDescription": "<Message>",
+                "Description": "Send system message to all players on the server."
+            },
+            {
+                "Name": "ChatToAdmin",
+                "ParameterDescription": "<Message>",
+                "Description": "Send system message to all admins on the server."
+            },
+            {
+                "Name": "AdminVote",
+                "ParameterDescription": "\"<Question>\" \"<Possibles answers, concatenated by +>\" <Duration, in seconds>",
+                "Description": "Trigger a vote on given question and choices."
+            },
+            {
+                "Name": "AdminRestartMatch",
+                "ParameterDescription": "",
+                "Description": "Tell the server to restart the match."
+            },
+            {
+                "Name": "AdminEndMatch",
+                "ParameterDescription": "",
+                "Description": "Tell the server to immediately end the match."
+            },
+            {
+                "Name": "AdminPauseMatch",
+                "ParameterDescription": "",
+                "Description": "Tell the server to put the match on hold."
+            },
+            {
+                "Name": "AdminUnpauseMatch",
+                "ParameterDescription": "",
+                "Description": "Tell the server to take off the hold."
+            },
+            {
+                "Name": "AdminSetFogOfWar",
+                "ParameterDescription": "<Layer based setting [0|1]>",
+                "Description": "Sets the fog of war active in the match."
+            },
+            {
+                "Name": "AdminForceAllVehicleAvailability",
+                "ParameterDescription": "<Layer based setting, usually Disabled [0|1]>",
+                "Description": "Force all vehicle availability."
+            },
+            {
+                "Name": "AdminForceAllDeployableAvailability",
+                "ParameterDescription": "<Layer based setting, usually Disabled [0|1]>",
+                "Description": "Force all deployables availability."
+            },
+            {
+                "Name": "AdminForceAllRoleAvailability",
+                "ParameterDescription": "<Layer based setting, usually Disabled [0|1]>",
+                "Description": "Force all roles availability."
+            },
+            {
+                "Name": "AdminForceAllActionAvailability",
+                "ParameterDescription": "<Layer based setting, usually Disabled [0|1]>",
+                "Description": "Force all actions availability."
+            },
+            {
+                "Name": "AdminNoTeamChangeTimer",
+                "ParameterDescription": "<Layer based setting, usually Timers active [0|1]>",
+                "Description": "Disable Team change timer."
+            },
+            {
+                "Name": "AdminNoRespawnTimer",
+                "ParameterDescription": "<Layer based setting, usually Timers active [0|1]>",
+                "Description": "Disable respawn timer."
+            },
+            {
+                "Name": "AdminDisableVehicleClaiming",
+                "ParameterDescription": "<Layer based setting, usually Claiming Enabled [0|1]>",
+                "Description": "Sets the server to disable vehicle claiming."
+            },
+            {
+                "Name": "AdminDisableVehicleTeamRequirement",
+                "ParameterDescription": "<Layer based setting, usually Requirement active [0|1]>",
+                "Description": "Sets the server to disable vehicle Team Requirement."
+            },
+            {
+                "Name": "AdminDisableVehicleKitRequirement",
+                "ParameterDescription": "<Layer based setting, usually Requirement active [0|1]>",
+                "Description": "Sets the server to disable vehicle Kit Requirement."
+            },
+            {
+                "Name": "AdminAlwaysValidPlacement",
+                "ParameterDescription": "<AlwaysValid [0|1]>",
+                "Description": "Sets the server to ignore placement rules for deployables."
+            },
+            {
+                "Name": "AdminForceNetUpdateOnClientSaturation",
+                "ParameterDescription": "<Enabled [0|1]>",
+                "Description": "If true, when a connection becomes saturated, all remaining actors that couldn't complete replication will have ForceNetUpdate called on them."
+            },
+            {
+                "Name": "AdminAddCameraman",
+                "ParameterDescription": "<NameOrId>",
+                "Description": "Add a player to the camera man list."
+            },
+            {
+                "Name": "AdminCreateVehicle",
+                "ParameterDescription": "<ClassName>",
+                "Description": "Create a Vehicle for testing."
+            },
+            {
+                "Name": "AdminCreateDeployable",
+                "ParameterDescription": "<ClassName>",
+                "Description": "Create a Deployable for testing."
+            },
+            {
+                "Name": "AdminGiveEquipment",
+                "ParameterDescription": "<ClassName>",
+                "Description": "Create a inventory item for testing."
+            },
+            {
+                "Name": "AdminSpawnActor",
+                "ParameterDescription": "<Index>",
+                "Description": "Create an Actor for testing."
+            },
+            {
+                "Name": "AdminDemoPlay",
+                "ParameterDescription": "<FileName>",
+                "Description": "Plays back the demo recording, must have file from server."
+            },
+            {
+                "Name": "AdminDemoRec",
+                "ParameterDescription": "<FileName>",
+                "Description": "Records gameplay on the server into a demo file, which can be opened on a client. Also use the AdminDemoStop command to stop the replay. See command \"RecordingStart\" for making a local replay."
+            },
+            {
+                "Name": "AdminDemoStop",
+                "ParameterDescription": "",
+                "Description": "Stops recording and saves the demo to disk."
+            },
+            {
+                "Name": "AdminProfileServer",
+                "ParameterDescription": "<SecondsToProfileFor> <bUseRaw [0|1]>",
+                "Description": "Starts profiling on the server for a fixed length of time, after which the profiling data is saved to disk."
+            },
+            {
+                "Name": "AdminProfileServerCSV",
+                "ParameterDescription": "<Start/Stop>",
+                "Description": "Runs a lightweight CSV profile. Results will be stored in memory until stopped, so be wary of long profiles."
+            },
+            {
+                "Name": "DebugVehicleList",
+                "ParameterDescription": "<Mode 0 = just vehicle index + info. Mode 1 = same as mode 0, but also crew names and what seat they're in. Mode 2 = same as Mode 1 but also shows empty seats.>",
+                "Description": "Prints all vehicles in the level."
+            },
+            {
+                "Name": "DebugVehicleSetComponentHealthByName",
+                "ParameterDescription": "\"<Vehicle Name/Index. If it is \"Current\", it will use the vehicle you are currently in.>\" <Component Index. If it is negative, it will set the health of the vehicle itself.> <New Component Health>",
+                "Description": "Sets a specific component health. Use DebugVehicleInterrogateComponents to figure out which component has what index."
+            },
+            {
+                "Name": "DebugPrintCustomOptions",
+                "ParameterDescription": "",
+                "Description": "Prints the current server's custom options to the console."
+            },
+            {
+                "Name": "AdminSetCustomOption",
+                "ParameterDescription": "\"<Key>\" <Value>",
+                "Description": "Set a server custom option."
+            },
+            {
+                "Name": "AdminRemoveCustomOption",
+                "ParameterDescription": "<Key>",
+                "Description": "Remove a server custom option."
+            },
+            {
+                "Name": "DebugAddBuildSupply",
+                "ParameterDescription": "<Amount>",
+                "Description": "Adds X amount of build supply to the nearest friendly FOB."
+            },
+            {
+                "Name": "DebugAddAmmoSupply",
+                "ParameterDescription": "<Amount>",
+                "Description": "Adds X amount of ammo supply to the nearest friendly FOB."
+            },
+            {
+                "Name": "DebugRearm",
+                "ParameterDescription": "",
+                "Description": "Rearm all weapons."
+            },
+            {
+                "Name": "DebugRearmPlayer",
+                "ParameterDescription": "<NameOrSteamId>",
+                "Description": "Rearm all weapons."
+            },
+            {
+                "Name": "DebugPrintPlayerStats",
+                "ParameterDescription": "<Player index>",
+                "Description": "Prints all stats of selected player."
+            },
+            {
+                "Name": "DebugFactionVehicleCount",
+                "ParameterDescription": "",
+                "Description": "Prints number of vehicles for all the possible factions in current level."
+            },
+            {
+                "Name": "DebugPrintFactionsList",
+                "ParameterDescription": "<Mode 0 = On all possible layers. Mode 1 = On current layer only>",
+                "Description": "Prints all possible combinations of factions."
+            },
+            {
+                "Name": "MoveToNextFactionVariant",
+                "ParameterDescription": "<Mode 0 = Iterate on all layers. Mode 1 = Limit to current layer only>",
+                "Description": "Set next layer to next possible option."
+            },
+            {
+                "Name": "SQ.Skins.ListAllSkins",
+                "ParameterDescription": "<0 = brief mode, 1 = expanded mode with more info.>",
+                "Description": "Lists all skins that exist."
+            },
+            {
+                "Name": "SQ.Skins.ListReplicatedEquippedSkins",
+                "ParameterDescription": "",
+                "Description": "Lists all skins that have been replicated back to our client for the current faction."
+            },
+            {
+                "Name": "SQ.Skins.ListAllEquippedSkins",
+                "ParameterDescription": "",
+                "Description": "Lists all skins currently equipped for all factions from our game settings."
+            },
+            {
+                "Name": "SQ.Skins.ClearEquippedSkins",
+                "ParameterDescription": "",
+                "Description": "Clears all equipped skins."
+            },
+            {
+                "Name": "SQ.Skins.ToggleSkin",
+                "ParameterDescription": "<Skin name>",
+                "Description": "Toggles a specific skin on/off."
+            },
+            {
+                "Name": "SQ.Skins.ForceAllowAll",
+                "ParameterDescription": "<0 = disable all, 1 = enable skins to be used on any faction, 2 = enable additional logging on both client and server>",
+                "Description": "Sets allowing all skins to function without checking requirements or not."
+            },
+            {
+                "Name": "RecordingStart",
+                "ParameterDescription": "",
+                "Description": "Start recording a dated replay locally."
+            },
+            {
+                "Name": "RecordingStart_Named",
+                "ParameterDescription": "<The name of the replay to create>",
+                "Description": "Start recording a named replay locally."
+            },
+            {
+                "Name": "RecordingStop",
+                "ParameterDescription": "",
+                "Description": "Stop recording local replay."
+            },
+            {
+                "Name": "DebugLoadingScreen",
+                "ParameterDescription": "",
+                "Description": "Print out debug information about the loading screen."
+            },
+            {
+                "Name": "RepGraphSetDSFTargetKBytesSec",
+                "ParameterDescription": "<New Target.>",
+                "Description": "Changes the target KBytes/Sec for the RepGraph's Dynamic Spatial Frequency node."
             }
         ]
     }

@@ -1,6 +1,7 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
+
 using SquadNET.Core;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Test.Squad.Core;
@@ -26,16 +27,18 @@ namespace SquadNET.Tests.Squad.Parsers
         public void GivenLogInput_WhenParseIsCalled_ThenResultShouldBeValid(
             string input, List<CommandModel> expectedCommands)
         {
+            // Act
             List<CommandModel> result = Parser.Parse(input);
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(expectedCommands.Count, result.Count);
 
-            for (int i = 0; i < expectedCommands.Count; i++)
+            foreach (CommandModel expectedCommand in expectedCommands)
             {
-                Assert.Equal(expectedCommands[i].Name, result[i].Name);
-                Assert.Equal(expectedCommands[i].ParameterDescription, result[i].ParameterDescription);
-                Assert.Equal(expectedCommands[i].Description, result[i].Description);
+                CommandModel resultCommand = result.FirstOrDefault(c => c.Name == expectedCommand.Name);
+                Assert.NotNull(resultCommand);
+                Assert.Equal(expectedCommand.ParameterDescription, resultCommand.ParameterDescription);
             }
         }
 

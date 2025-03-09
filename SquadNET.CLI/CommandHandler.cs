@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
-using SquadNET.Application.Squad.Server.Queries;
+using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Core;
 
 public class CommandHandler
@@ -37,7 +37,7 @@ public class CommandHandler
                 break;
             }
 
-            var response = await Mediator.Send(new ServerInformationQuery.Request());
+            var response = await Mediator.Send(new ListCommandsQuery.Request());
 
             //BroadcastMessageCommand.Request request = new() { Message = input };
             //string response = await Mediator.Send(request);

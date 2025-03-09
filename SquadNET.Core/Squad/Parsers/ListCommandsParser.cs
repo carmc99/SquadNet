@@ -2,6 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core.Squad.Models;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -13,26 +14,22 @@ namespace SquadNET.Core.Squad.Parsers
             input = input.SanitizeInput();
             string[] lines = input.Split('\n');
 
-            if (lines.Length <= 1)
-            {
-                return [];
-            }
-
             List<CommandModel> commands = [];
 
-            foreach (string line in lines[1..])
+            foreach (string line in lines)
             {
                 Match match = RegexPatternHelper.GetRegex<CommandModel>().Match(line);
                 if (!match.Success)
                 {
+                    Debug.WriteLine($"Invalid line: {line}");
                     continue;
                 }
 
                 Dictionary<string, string> parsedValues = new()
                 {
-                    { "Name", match.Groups[1].Value },
-                    { "ParameterDescription", match.Groups[2].Value },
-                    { "Description", match.Groups[3].Value.Trim('(', ')') }
+                    { "Name", match.Groups[1].Value.Trim() },
+                    { "ParameterDescription", match.Groups[2].Success ? match.Groups[2].Value.Trim() : string.Empty },
+                    { "Description", match.Groups[3].Value.Trim('(', ')').Trim() }
                 };
 
                 CommandModel command = DictionaryModelConverter.ConvertDictionaryToModel<CommandModel>(parsedValues);

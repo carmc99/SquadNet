@@ -16,6 +16,11 @@ namespace SquadNET.Core
         /// <returns>A sanitized string with trimmed spaces and normalized line breaks.</returns>
         public static string SanitizeInput(this string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return null;
+            }
+
             return input?.Trim().Replace("\r\n", "\n").Replace("\t", " ") ?? string.Empty;
         }
 
