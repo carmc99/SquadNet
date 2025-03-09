@@ -1,24 +1,24 @@
 [
     {
-        "input": "[2025.03.08-17:30:12:567][50]LogSquad: PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000) has revived PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111).",
-        "expectedTime": "2025.03.08-17:30:12:567",
-        "expectedChainID": "50",
-        "expectedReviverName": "PlayerOne",
-        "expectedVictimName": "PlayerTwo",
-        "expectedReviverEosId": "abc123",
-        "expectedReviverSteamId": 76561198000000000,
-        "expectedVictimEosId": "def456",
-        "expectedVictimSteamId": 76561198011111111
+        "input": "[2025.03.07-16.39.26:233][115]LogSquad: [IFT] Yamakasi (Online IDs: EOS: 00029abc5df840a89c45b7c90de679cb steam: 76561198059699094) has revived gerald1wilde777 (Online IDs: EOS: 0002a4720ccd4f9591a94d8028fbdd0e steam: 76561198421043629).",
+        "expectedTime": "2025.03.07-16:39:26:233",
+        "expectedChainID": "115",
+        "expectedReviverName": "[IFT] Yamakasi",
+        "expectedVictimName": "gerald1wilde777",
+        "expectedReviverEosId": "00029abc5df840a89c45b7c90de679cb",
+        "expectedReviverSteamId": 76561198059699094,
+        "expectedVictimEosId": "0002a4720ccd4f9591a94d8028fbdd0e",
+        "expectedVictimSteamId": 76561198421043629
     },
     {
-        "input": "[2025.03.08-17:45:30:789][55]LogSquad: PlayerThree (Online IDs: EOS: ghi789 steam: 76561198022222222) has revived PlayerFour (Online IDs: EOS: jkl012 steam: 76561198033333333).",
-        "expectedTime": "2025.03.08-17:45:30:789",
-        "expectedChainID": "55",
-        "expectedReviverName": "PlayerThree",
-        "expectedVictimName": "PlayerFour",
-        "expectedReviverEosId": "ghi789",
-        "expectedReviverSteamId": 76561198022222222,
-        "expectedVictimEosId": "jkl012",
-        "expectedVictimSteamId": 76561198033333333
+        "input": "[2025.03.07-17.19.16:191][822]LogSquad: [LGDS] Raison (Online IDs: EOS: 0002de31514042c5aed32c350c1bac74 steam: 76561198195929487) has revived [LGDS] Gato cojone (Online IDs: EOS: 0002931d0d2f4915ae0e4de959d08413 steam: 76561198381593859).",
+        "expectedTime": "2025.03.07-17:19:16:191",
+        "expectedChainID": "822",
+        "expectedReviverName": "[LGDS] Raison",
+        "expectedVictimName": "[LGDS] Gato cojone",
+        "expectedReviverEosId": "0002de31514042c5aed32c350c1bac74",
+        "expectedReviverSteamId": 76561198195929487,
+        "expectedVictimEosId": "0002931d0d2f4915ae0e4de959d08413",
+        "expectedVictimSteamId": 76561198381593859
     }
 ]

@@ -1,14 +1,14 @@
 [
     {
-        "input": "[2025.03.08-22:15:30:123][110]LogSquad: USQGameState: Server Tick Rate: 30.5",
-        "expectedTime": "2025.03.08-22:15:30:123",
-        "expectedChainID": "110",
-        "expectedTickRate": 30.5
+        "input": "[2025.03.07-14.29.22:288][750]LogSquad: USQGameState: Server Tick Rate: 63.04",
+        "expectedTime": "2025.03.07-14.29.22:288",
+        "expectedChainID": "750",
+        "expectedTickRate": 63.04
     },
     {
-        "input": "[2025.03.08-22:45:45:456][115]LogSquad: USQGameState: Server Tick Rate: 28.2",
-        "expectedTime": "2025.03.08-22:45:45:456",
-        "expectedChainID": "115",
-        "expectedTickRate": 28.2
+        "input": "[2025.03.07-14.30.02:612][348]LogSquad: USQGameState: Server Tick Rate: 64.68",
+        "expectedTime": "2025.03.07-14.30.02:612",
+        "expectedChainID": "348",
+        "expectedTickRate": 64.68
     }
 ]
