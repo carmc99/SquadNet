@@ -1,0 +1,26 @@
+[
+    {
+        "input": "[2025.03.08-14:22:10:567][42]LogSquadTrace: [DedicatedServer] DamageEvent: PlayerOne took 25.5 damage from PlayerTwo (Online IDs: EOS: abc123 steam: 76561198000000000 | Player Controller ID: PC_01) caused by M4A1_C",
+        "expectedTime": "2025.03.08-14:22:10:567",
+        "expectedChainID": "42",
+        "expectedVictimName": "PlayerOne",
+        "expectedDamage": 25.5,
+        "expectedAttackerName": "PlayerTwo",
+        "expectedAttackerPlayerController": "PC_01",
+        "expectedWeapon": "M4A1",
+        "expectedAttackerEosId": "abc123",
+        "expectedAttackerSteamId": 76561198000000000
+    },
+    {
+        "input": "[2025.03.08-14:30:55:789][50]LogSquadTrace: [DedicatedServer] DamageEvent: PlayerThree took 10.0 damage from PlayerFour (Online IDs: EOS: def456 steam: 76561198011111111 | Player Controller ID: PC_02) caused by AK74_C",
+        "expectedTime": "2025.03.08-14:30:55:789",
+        "expectedChainID": "50",
+        "expectedVictimName": "PlayerThree",
+        "expectedDamage": 10.0,
+        "expectedAttackerName": "PlayerFour",
+        "expectedAttackerPlayerController": "PC_02",
+        "expectedWeapon": "AK74",
+        "expectedAttackerEosId": "def456",
+        "expectedAttackerSteamId": 76561198011111111
+    }
+]

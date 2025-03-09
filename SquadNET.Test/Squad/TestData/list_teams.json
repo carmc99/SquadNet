@@ -1,0 +1,15 @@
+[
+    {
+        "input": "----- Active Squads -----\nTeam ID: 1 (Manticore Security Task Force)\nTeam ID: 2 (3rd Brigade Combat Team, 1st Infantry Division)",
+        "expectedTeams": [
+            {
+                "Id": 1,
+                "Name": "Manticore Security Task Force"
+            },
+            {
+                "Id": 2,
+                "Name": "3rd Brigade Combat Team, 1st Infantry Division"
+            }
+        ]
+    }
+]

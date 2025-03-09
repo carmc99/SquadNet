@@ -1,0 +1,19 @@
+[
+    {
+        "input": "{ \"ServerName_s\": \"Squad Official Server\", \"MaxPlayers\": 100, \"PublicQueueLimit_I\": 10, \"PlayerReserveCount_I\": 5, \"PlayerCount_I\": 75, \"PublicQueue_I\": 3, \"ReservedQueue_I\": 2, \"MapName_s\": \"AlBasrah_AAS_v1\", \"NextLayer_s\": \"Fallujah_RAAS_v2\", \"TeamOne_s\": \"US Army\", \"TeamTwo_s\": \"Russian Forces\", \"MatchTimeout_d\": 300.0, \"GameVersion_s\": \"v3.5.0\" }",
+        "expectedServerName": "Squad Official Server",
+        "expectedMaxPlayers": 100,
+        "expectedPublicQueueLimit": 10,
+        "expectedReserveSlots": 5,
+        "expectedPlayerCount": 75,
+        "expectedA2sPlayerCount": 75,
+        "expectedPublicQueue": 3,
+        "expectedReserveQueue": 2,
+        "expectedCurrentLayer": "AlBasrah_AAS_v1",
+        "expectedNextLayer": "Fallujah_RAAS_v2",
+        "expectedTeamOne": "US Army",
+        "expectedTeamTwo": "Russian Forces",
+        "expectedMatchTimeout": 300.0,
+        "expectedGameVersion": "v3.5.0"
+    }
+]

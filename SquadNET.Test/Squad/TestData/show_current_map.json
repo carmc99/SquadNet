@@ -1,0 +1,12 @@
+[
+    {
+        "input": "Current map is AlBasrah_AAS_v1 (Level: AlBasrah)",
+        "expectedLevel": "AlBasrah",
+        "expectedName": "AlBasrah_AAS_v1"
+    },
+    {
+        "input": "Current map is Fallujah_RAAS_v2 (Level: Fallujah)",
+        "expectedLevel": "Fallujah",
+        "expectedName": "Fallujah_RAAS_v2"
+    }
+]

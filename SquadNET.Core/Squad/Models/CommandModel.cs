@@ -4,7 +4,7 @@
 
 namespace SquadNET.Core.Squad.Models
 {
-    [RegexPattern(@"^([A-Za-z]+)\s+(.*)\s+(\([A-Za-z\s\.\-]+\))$")]
+    [RegexPattern(@"^([\w\.\-]+)(?:\s+([^\(]+))?\s+(\(.*\))$")]
     public class CommandModel
     {
         public string Description { get; set; }

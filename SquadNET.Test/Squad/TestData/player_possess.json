@@ -1,0 +1,20 @@
+[
+    {
+        "input": "[2025.03.08-16:05:30:123][35]LogSquadTrace: [DedicatedServer] OnPossess(): PC=PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000) Pawn=APC_C",
+        "expectedTime": "2025.03.08-16:05:30:123",
+        "expectedChainID": "35",
+        "expectedPlayerSuffix": "PlayerOne",
+        "expectedPossessClassname": "APC_C",
+        "expectedCreatorEosId": "abc123",
+        "expectedCreatorSteamId": 76561198000000000
+    },
+    {
+        "input": "[2025.03.08-16:10:45:456][40]LogSquadTrace: [DedicatedServer] OnPossess(): PC=PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111) Pawn=Tank_C",
+        "expectedTime": "2025.03.08-16:10:45:456",
+        "expectedChainID": "40",
+        "expectedPlayerSuffix": "PlayerTwo",
+        "expectedPossessClassname": "Tank_C",
+        "expectedCreatorEosId": "def456",
+        "expectedCreatorSteamId": 76561198011111111
+    }
+]

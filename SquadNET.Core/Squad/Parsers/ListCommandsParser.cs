@@ -13,26 +13,22 @@ namespace SquadNET.Core.Squad.Parsers
             input = input.SanitizeInput();
             string[] lines = input.Split('\n');
 
-            if (lines.Length <= 1)
-            {
-                return [];
-            }
-
             List<CommandModel> commands = [];
 
-            foreach (string line in lines[1..])
+            foreach (string line in lines)
             {
                 Match match = RegexPatternHelper.GetRegex<CommandModel>().Match(line);
                 if (!match.Success)
                 {
+                    ParserLogger.LogInvalidInput(nameof(ListCommandsParser), input);
                     continue;
                 }
 
                 Dictionary<string, string> parsedValues = new()
                 {
-                    { "Name", match.Groups[1].Value },
-                    { "ParameterDescription", match.Groups[2].Value },
-                    { "Description", match.Groups[3].Value.Trim('(', ')') }
+                    { "Name", match.Groups[1].Value.Trim() },
+                    { "ParameterDescription", match.Groups[2].Success ? match.Groups[2].Value.Trim() : string.Empty },
+                    { "Description", match.Groups[3].Value.Trim('(', ')').Trim() }
                 };
 
                 CommandModel command = DictionaryModelConverter.ConvertDictionaryToModel<CommandModel>(parsedValues);

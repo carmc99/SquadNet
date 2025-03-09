@@ -7,50 +7,51 @@
 using FluentValidation;
 using MediatR;
 using SquadNET.Core;
+using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
 
 namespace SquadNET.Application.Squad.Team.Queries
 {
-    public static class GetSquadByIdQuery
+    public static class GetTeamByNameQuery
     {
-        public class Handler : IRequestHandler<Request, SquadModel>
+        public class Handler : IRequestHandler<Request, TeamModel>
         {
             private readonly Command<SquadCommand> Command;
-            private readonly IParser<List<SquadModel>> Parser;
+            private readonly IParser<List<TeamModel>> Parser;
             private readonly IRconService RconService;
 
             public Handler(IRconService rconService,
                 Command<SquadCommand> command,
-                IParser<List<SquadModel>> parser)
+                IParser<List<TeamModel>> parser)
             {
                 RconService = rconService;
                 Command = command;
                 Parser = parser;
             }
 
-            public async Task<SquadModel> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<TeamModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                SquadModel squad = new();
+                TeamModel team = new();
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListSquads, cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(result))
                 {
-                    List<SquadModel> squads = Parser.Parse(result);
-                    if (squads != null && squads.Count != 0)
+                    List<TeamModel> teams = Parser.Parse(result);
+                    if (teams != null && teams.Count != 0)
                     {
-                        squad = squads.FirstOrDefault(p =>
-                            p.TeamId == request.TeamId && p.Id == request.Id);
+                        team = teams.FirstOrDefault(p =>
+                            p.Name == request.Name && p.Id == request.TeamId);
                     }
                 }
 
-                return squad;
+                return team;
             }
         }
 
-        public class Request : IRequest<SquadModel>
+        public class Request : IRequest<TeamModel>
         {
-            public int Id { get; set; }
+            public string Name { get; set; }
             public TeamType TeamId { get; set; }
         }
 
@@ -58,7 +59,7 @@ namespace SquadNET.Application.Squad.Team.Queries
         {
             public Validator()
             {
-                RuleFor(x => x.Id)
+                RuleFor(x => x.Name)
                     .NotEmpty();
 
                 RuleFor(x => x.TeamId)

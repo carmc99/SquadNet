@@ -1,10 +1,8 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-using System.Text.RegularExpressions;
-using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
+using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -19,6 +17,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = NextMapRegex.Match(input);
             if (!match.Success || match.Groups.Count < 3)
             {
+                ParserLogger.LogInvalidInput(nameof(ShowNextMapParser), input);
                 return null;
             }
 

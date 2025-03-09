@@ -11,15 +11,18 @@ namespace SquadNET.Core.Squad.Events.Models
     {
         public string ChainID { get; set; }
         public CreatorOnlineModel CreatorIds { get; set; }
+        public string PlayerSuffix { get; set; }
         public string PossessClassname { get; set; }
         public string Time { get; set; }
 
-        public static PlayerPossessEventModel FromParsedData(string time, string chainID, string onlineIDs, string possessClassname)
+        public static PlayerPossessEventModel FromParsedData(
+            string time, string chainID, string playerSuffix, string onlineIDs, string possessClassname)
         {
             return new PlayerPossessEventModel
             {
                 Time = time,
                 ChainID = chainID,
+                PlayerSuffix = playerSuffix,
                 CreatorIds = CreatorOnlineModel.FromString(onlineIDs),
                 PossessClassname = possessClassname
             };

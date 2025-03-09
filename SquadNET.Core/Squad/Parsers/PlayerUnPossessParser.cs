@@ -1,12 +1,6 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
-// <copyright company="Carmc99 - SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
 
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
@@ -25,6 +19,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 5)
             {
+                ParserLogger.LogInvalidInput(nameof(PlayerUnPossessParser), input);
                 return null;
             }
 

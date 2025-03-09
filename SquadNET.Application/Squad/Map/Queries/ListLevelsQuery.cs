@@ -3,13 +3,8 @@
 // </copyright>
 using MediatR;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.Map.Queries
 {

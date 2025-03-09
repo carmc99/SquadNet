@@ -21,6 +21,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = ChatMessageRegex.Match(input);
             if (!match.Success || match.Groups.Count < 6)
             {
+                ParserLogger.LogInvalidInput(nameof(ChatMessageParser), input);
                 return null;
             }
 

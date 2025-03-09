@@ -17,6 +17,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 10)
             {
+                ParserLogger.LogInvalidInput(nameof(RoundTicketsParser), input);
                 return null;
             }
 

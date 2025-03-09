@@ -24,7 +24,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IParser<ListPlayerModel>, ListPlayersParser>();
         services.AddSingleton<IParser<List<CommandModel>>, ListCommandsParser>();
-        services.AddSingleton<IParser<List<SquadModel>>, ListSquadsParser>();
         services.AddSingleton<IParser<List<TeamModel>>, ListTeamsParser>();
         services.AddSingleton<IParser<CurrentMapModel>, ShowCurrentMapParser>();
         services.AddSingleton<IParser<NextMapModel>, ShowNextMapParser>();
