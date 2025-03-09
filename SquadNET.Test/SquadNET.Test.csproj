@@ -48,9 +48,6 @@
     <None Update="Squad\TestData\list_players.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Squad\TestData\list_squads.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Squad\TestData\list_teams.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

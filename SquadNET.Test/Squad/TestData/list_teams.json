@@ -1,18 +1,14 @@
 [
     {
-        "input": "----- Active Squads -----\n1 | US Army\n2 | Russian Forces\n3 | Insurgents",
+        "input": "----- Active Squads -----\nTeam ID: 1 (Manticore Security Task Force)\nTeam ID: 2 (3rd Brigade Combat Team, 1st Infantry Division)",
         "expectedTeams": [
             {
                 "Id": 1,
-                "Name": "US Army"
+                "Name": "Manticore Security Task Force"
             },
             {
                 "Id": 2,
-                "Name": "Russian Forces"
-            },
-            {
-                "Id": 3,
-                "Name": "Insurgents"
+                "Name": "3rd Brigade Combat Team, 1st Infantry Division"
             }
         ]
     }
