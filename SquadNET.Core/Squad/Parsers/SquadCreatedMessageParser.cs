@@ -18,6 +18,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = SquadCreatedRegex.Match(input);
             if (!match.Success || match.Groups.Count < 7)
             {
+                ParserLogger.LogInvalidInput(nameof(SquadCreatedMessageParser), input);
                 return null;
             }
 

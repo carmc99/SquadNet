@@ -19,6 +19,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 9)
             {
+                ParserLogger.LogInvalidInput(nameof(PlayerDamagedParser), input);
                 return null;
             }
 

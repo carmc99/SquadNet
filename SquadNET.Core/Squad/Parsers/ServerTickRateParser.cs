@@ -1,4 +1,7 @@
-﻿using SquadNET.Core.Squad.Events.Models;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using SquadNET.Core.Squad.Events.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +22,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 4)
             {
+                ParserLogger.LogInvalidInput(nameof(ServerTickRateParser), input);
                 return null;
             }
 

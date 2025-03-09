@@ -1,7 +1,8 @@
-﻿using SquadNET.Core;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -36,10 +37,15 @@ namespace SquadNET.Core.Squad.Parsers
                     teamName = teamMatch.Groups[2].Value;
                     continue;
                 }
+                else
+                {
+                    ParserLogger.LogInvalidInput(nameof(ListSquadsParser), line);
+                }
 
                 Match squadMatch = RegexPatternHelper.GetRegex<SquadModel>().Match(line);
                 if (!squadMatch.Success)
                 {
+                    ParserLogger.LogInvalidInput(nameof(ListSquadsParser), line);
                     continue;
                 }
 

@@ -17,6 +17,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 4)
             {
+                ParserLogger.LogInvalidInput(nameof(PlayerJoinSucceededParser), input);
                 return null;
             }
 

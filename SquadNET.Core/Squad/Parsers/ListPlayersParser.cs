@@ -1,8 +1,9 @@
-﻿using SquadNET.Core;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -51,6 +52,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = RegexPatternHelper.GetRegex<PlayerConnectedEventModel>().Match(line);
             if (!match.Success || match.Groups.Count < 9)
             {
+                ParserLogger.LogInvalidInput(nameof(ListPlayersParser), line);
                 return null;
             }
 
@@ -80,6 +82,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedEventModel>().Match(line);
             if (!match.Success || match.Groups.Count < 6)
             {
+                ParserLogger.LogInvalidInput(nameof(ListPlayersParser), line);
                 return null;
             }
 

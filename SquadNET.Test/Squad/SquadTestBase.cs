@@ -2,6 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using Microsoft.Extensions.DependencyInjection;
+using SquadNET.Core;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -18,6 +19,7 @@ namespace SquadNET.Test.Squad.Core
             Services = new ServiceCollection();
             Services.AddSquad();
             ServiceProvider = Services.BuildServiceProvider();
+            ParserLogger.EnableDebugLogging = true;
         }
 
         public void Dispose()

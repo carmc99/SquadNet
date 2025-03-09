@@ -17,6 +17,7 @@ namespace SquadNET.Core.Squad.Parsers
 
             if (!match.Success || match.Groups.Count < 3)
             {
+                ParserLogger.LogInvalidInput(nameof(RoundEndedParser), input);
                 return null;
             }
 

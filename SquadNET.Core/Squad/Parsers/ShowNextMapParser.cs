@@ -17,6 +17,7 @@ namespace SquadNET.Core.Squad.Parsers
             Match match = NextMapRegex.Match(input);
             if (!match.Success || match.Groups.Count < 3)
             {
+                ParserLogger.LogInvalidInput(nameof(ShowNextMapParser), input);
                 return null;
             }
 

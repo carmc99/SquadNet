@@ -2,7 +2,6 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core.Squad.Models;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -21,7 +20,7 @@ namespace SquadNET.Core.Squad.Parsers
                 Match match = RegexPatternHelper.GetRegex<CommandModel>().Match(line);
                 if (!match.Success)
                 {
-                    Debug.WriteLine($"Invalid line: {line}");
+                    ParserLogger.LogInvalidInput(nameof(ListCommandsParser), input);
                     continue;
                 }
 

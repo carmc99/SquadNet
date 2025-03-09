@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using SquadNET.Core;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Entities;
+using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
 {
@@ -23,6 +24,7 @@ namespace SquadNET.Core.Squad.Parsers
                 Match match = RegexPatternHelper.GetRegex<TeamModel>().Match(line);
                 if (!match.Success)
                 {
+                    ParserLogger.LogInvalidInput(nameof(ListTeamsParser), line);
                     continue;
                 }
 
