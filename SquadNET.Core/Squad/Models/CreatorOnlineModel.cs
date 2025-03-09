@@ -33,18 +33,20 @@ namespace SquadNET.Core.Squad.Models
             string eosId = string.Empty;
             ulong steamId = 0;
 
-            foreach (string part in onlineIds.Split('|'))
-            {
-                string[] segments = part.Split(':', 2, StringSplitOptions.TrimEntries);
-                if (segments.Length != 2) continue;
+            string[] segments = onlineIds.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (segments[0].Equals("EOS", StringComparison.OrdinalIgnoreCase))
+            for (int i = 0; i < segments.Length; i++)
+            {
+                if (segments[i].Equals("EOS:", StringComparison.OrdinalIgnoreCase) && i + 1 < segments.Length)
                 {
-                    eosId = segments[1];
+                    eosId = segments[i + 1];
                 }
-                else if (segments[0].Equals("steam", StringComparison.OrdinalIgnoreCase) && ulong.TryParse(segments[1], out ulong parsedSteamId))
+                else if (segments[i].Equals("steam:", StringComparison.OrdinalIgnoreCase) && i + 1 < segments.Length)
                 {
-                    steamId = parsedSteamId;
+                    if (ulong.TryParse(segments[i + 1], out ulong parsedSteamId))
+                    {
+                        steamId = parsedSteamId;
+                    }
                 }
             }
 

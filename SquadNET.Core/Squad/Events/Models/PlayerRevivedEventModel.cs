@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: (.+) \(Online IDs:([^)]+)\) has revived (.+) \(Online IDs:([^)]+)\)\.")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: (.+) \(Online IDs: EOS: ([^\s]+) steam: (\d+)\) has revived (.+) \(Online IDs: EOS: ([^\s]+) steam: (\d+)\)\.")]
     public class PlayerRevivedEventModel : ISquadEventData
     {
         public string ChainID { get; set; }
@@ -19,8 +19,9 @@ namespace SquadNET.Core.Squad.Events.Models
         /// <summary>
         /// Creates an instance of <see cref="PlayerRevivedEventModel"/> from parsed log data.
         /// </summary>
-        public static PlayerRevivedEventModel FromParsedData(string time, string chainID, string reviverName, string reviverOnlineIds,
-                                                             string victimName, string victimOnlineIds)
+        public static PlayerRevivedEventModel FromParsedData(
+            string time, string chainID, string reviverName, string reviverOnlineIds,
+            string victimName, string victimOnlineIds)
         {
             return new PlayerRevivedEventModel
             {
