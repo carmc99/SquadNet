@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -43,15 +44,34 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class RoundTicketsTestCase
         {
+            [JsonPropertyOrder(7)]
             public string ExpectedAction { get; set; }
+
+            [JsonPropertyOrder(3)]
             public string ExpectedChainID { get; set; }
+
+            [JsonPropertyOrder(6)]
             public string ExpectedFaction { get; set; }
+
+            [JsonPropertyOrder(9)]
             public string ExpectedLayer { get; set; }
+
+            [JsonPropertyOrder(10)]
             public string ExpectedLevel { get; set; }
+
+            [JsonPropertyOrder(5)]
             public string ExpectedSubfaction { get; set; }
+
+            [JsonPropertyOrder(4)]
             public int ExpectedTeam { get; set; }
+
+            [JsonPropertyOrder(8)]
             public int ExpectedTickets { get; set; }
+
+            [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

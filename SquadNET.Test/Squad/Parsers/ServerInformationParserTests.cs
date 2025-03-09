@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -49,20 +50,49 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class ServerInformationTestCase
         {
+            [JsonPropertyOrder(7)]
             public int ExpectedA2sPlayerCount { get; set; }
+
+            [JsonPropertyOrder(10)]
             public string ExpectedCurrentLayer { get; set; }
+
+            [JsonPropertyOrder(15)]
             public string ExpectedGameVersion { get; set; }
+
+            [JsonPropertyOrder(14)]
             public double ExpectedMatchTimeout { get; set; }
+
+            [JsonPropertyOrder(3)]
             public int ExpectedMaxPlayers { get; set; }
+
+            [JsonPropertyOrder(11)]
             public string ExpectedNextLayer { get; set; }
+
+            [JsonPropertyOrder(6)]
             public int ExpectedPlayerCount { get; set; }
+
+            [JsonPropertyOrder(8)]
             public int ExpectedPublicQueue { get; set; }
+
+            [JsonPropertyOrder(4)]
             public int ExpectedPublicQueueLimit { get; set; }
+
+            [JsonPropertyOrder(9)]
             public int ExpectedReserveQueue { get; set; }
+
+            [JsonPropertyOrder(5)]
             public int ExpectedReserveSlots { get; set; }
+
+            [JsonPropertyOrder(2)]
             public string ExpectedServerName { get; set; }
+
+            [JsonPropertyOrder(12)]
             public string ExpectedTeamOne { get; set; }
+
+            [JsonPropertyOrder(13)]
             public string ExpectedTeamTwo { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

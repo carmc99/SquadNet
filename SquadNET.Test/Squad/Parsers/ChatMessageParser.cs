@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -38,11 +39,22 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class ChatMessageTestCase
         {
+            [JsonPropertyOrder(2)]
             public string ExpectedChannel { get; set; }
+
+            [JsonPropertyOrder(3)]
             public string ExpectedEosId { get; set; }
+
+            [JsonPropertyOrder(6)]
             public string ExpectedMessage { get; set; }
+
+            [JsonPropertyOrder(5)]
             public string ExpectedPlayerName { get; set; }
+
+            [JsonPropertyOrder(4)]
             public ulong ExpectedSteamId { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

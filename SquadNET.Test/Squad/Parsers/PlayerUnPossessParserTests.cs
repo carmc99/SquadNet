@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -38,11 +39,22 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class PlayerUnPossessTestCase
         {
+            [JsonPropertyOrder(3)]
             public string ExpectedChainID { get; set; }
+
+            [JsonPropertyOrder(5)]
             public string ExpectedPlayerEosId { get; set; }
+
+            [JsonPropertyOrder(6)]
             public ulong ExpectedPlayerSteamId { get; set; }
+
+            [JsonPropertyOrder(4)]
             public string ExpectedPlayerSuffix { get; set; }
+
+            [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

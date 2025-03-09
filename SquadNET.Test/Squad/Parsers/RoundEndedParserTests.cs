@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -33,7 +34,10 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class RoundEndedTestCase
         {
+            [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

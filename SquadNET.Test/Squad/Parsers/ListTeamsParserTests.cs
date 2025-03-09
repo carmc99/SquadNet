@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -39,7 +40,10 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class ListTeamsTestCase
         {
+            [JsonPropertyOrder(2)]
             public List<TeamModel> ExpectedTeams { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

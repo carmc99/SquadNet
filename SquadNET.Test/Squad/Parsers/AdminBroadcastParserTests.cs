@@ -4,6 +4,7 @@
 using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Test.Squad.Core;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Tests.Squad.Parsers
 {
@@ -37,10 +38,19 @@ namespace SquadNET.Tests.Squad.Parsers
 
         private class AdminBroadcastTestCase
         {
+            [JsonPropertyOrder(3)]
             public string ExpectedChainID { get; set; }
+
+            [JsonPropertyOrder(5)]
             public string ExpectedFrom { get; set; }
+
+            [JsonPropertyOrder(4)]
             public string ExpectedMessage { get; set; }
+
+            [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
+
+            [JsonPropertyOrder(1)]
             public string Input { get; set; }
         }
     }

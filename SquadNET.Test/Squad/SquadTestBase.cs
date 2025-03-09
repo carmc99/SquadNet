@@ -3,6 +3,7 @@
 // </copyright>
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SquadNET.Test.Squad.Core
 {
@@ -43,7 +44,16 @@ namespace SquadNET.Test.Squad.Core
             }
 
             string json = File.ReadAllText(filePath);
-            List<T> testCases = JsonSerializer.Deserialize<List<T>>(json);
+            JsonSerializerOptions options = new()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<T> testCases = JsonSerializer.Deserialize<List<T>>(json, options);
+
+            if (testCases == null || !testCases.Any())
+            {
+                throw new InvalidOperationException($"Error al cargar datos de prueba desde {filePath}. Lista vacía o null.");
+            }
 
             foreach (T testCase in testCases)
             {
@@ -66,9 +76,15 @@ namespace SquadNET.Test.Squad.Core
         /// </summary>
         private static object[] ConvertToObjectArray<T>(T testCase)
         {
-            System.Reflection.PropertyInfo[] properties = typeof(T).GetProperties();
-            object[] values = new object[properties.Length];
+            var properties = typeof(T)
+                .GetProperties()
+                .OrderBy(p => p.GetCustomAttributes(typeof(JsonPropertyOrderAttribute), false)
+                               .Cast<JsonPropertyOrderAttribute>()
+                               .FirstOrDefault()?.Order ?? int.MaxValue)
+                .ThenBy(p => p.MetadataToken)
+                .ToArray();
 
+            object[] values = new object[properties.Length];
             for (int i = 0; i < properties.Length; i++)
             {
                 values[i] = properties[i].GetValue(testCase);
