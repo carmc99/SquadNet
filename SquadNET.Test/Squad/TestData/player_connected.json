@@ -1,0 +1,9 @@
+﻿[
+    {
+        "input": "[2025.03.07-20.36.38:369][254]LogSquad: PostLogin: NewPlayer: BP_PlayerController_AdminTools_C /Game/Maps/Anvil/Gameplay_Layers/Anvil_RAAS_v1.Anvil_RAAS_v1:PersistentLevel.BP_PlayerController_AdminTools_C_2145014881 (IP: 190.93.206.20 | Online IDs: EOS: 000221411fa248b19ebbd8b658f8d847 steam: 76561198412069566)",
+        "expectedName": "BP_PlayerController_AdminTools_C /Game/Maps/Anvil/Gameplay_Layers/Anvil_RAAS_v1.Anvil_RAAS_v1:PersistentLevel.BP_PlayerController_AdminTools_C_2145014881",
+        "expectedIP": "190.93.206.20",
+        "expectedEosId": "000221411fa248b19ebbd8b658f8d847",
+        "expectedSteamId": 76561198412069566
+    }
+]

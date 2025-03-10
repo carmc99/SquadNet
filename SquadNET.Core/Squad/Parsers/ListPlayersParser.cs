@@ -1,8 +1,6 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using System.Text.RegularExpressions;
 
@@ -30,8 +28,8 @@ namespace SquadNET.Core.Squad.Parsers
                     continue;
                 }
 
-                PlayerConnectedEventModel playerConnectedInfo = ParsePlayerConnected(line);
-                PlayerDisconnectedEventModel playerDisconnectedInfo = ParsePlayerDisconnected(line);
+                PlayerConnectedModel playerConnectedInfo = ParsePlayerConnected(line);
+                PlayerDisconnectedModel playerDisconnectedInfo = ParsePlayerDisconnected(line);
 
                 if (playerConnectedInfo != null)
                 {
@@ -47,9 +45,9 @@ namespace SquadNET.Core.Squad.Parsers
             return result;
         }
 
-        private PlayerConnectedEventModel ParsePlayerConnected(string line)
+        private PlayerConnectedModel ParsePlayerConnected(string line)
         {
-            Match match = RegexPatternHelper.GetRegex<PlayerConnectedEventModel>().Match(line);
+            Match match = RegexPatternHelper.GetRegex<PlayerConnectedModel>().Match(line);
             if (!match.Success || match.Groups.Count < 9)
             {
                 ParserLogger.LogInvalidInput(nameof(ListPlayersParser), line);
@@ -71,15 +69,15 @@ namespace SquadNET.Core.Squad.Parsers
             ulong steamId = ulong.Parse(match.Groups[3].Value);
             CreatorOnlineModel creatorIds = new(eosId, steamId);
 
-            PlayerConnectedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedEventModel>(parsedValues);
+            PlayerConnectedModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedModel>(parsedValues);
             result.CreatorIds = creatorIds;
 
             return result;
         }
 
-        private PlayerDisconnectedEventModel ParsePlayerDisconnected(string line)
+        private PlayerDisconnectedModel ParsePlayerDisconnected(string line)
         {
-            Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedEventModel>().Match(line);
+            Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedModel>().Match(line);
             if (!match.Success || match.Groups.Count < 6)
             {
                 ParserLogger.LogInvalidInput(nameof(ListPlayersParser), line);
@@ -95,7 +93,7 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Name", match.Groups[5].Value }
             };
 
-            PlayerDisconnectedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedEventModel>(parsedValues);
+            PlayerDisconnectedModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedModel>(parsedValues);
 
             return result;
         }

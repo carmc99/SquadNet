@@ -32,6 +32,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<List<LayerModel>>, ListLayersParser>();
         services.AddSingleton<IParser<List<LevelModel>>, ListLevelsParser>();
 
+        services.AddSingleton<IParser<PlayerConnectedEventModel>, PlayerConnectedParser>();
+        services.AddSingleton<IParser<PlayerDisconnectedEventModel>, PlayerDisconnectedParser>();
+        services.AddSingleton<IParser<PlayerDiedEventModel>, PlayerDiedParser>();
+        services.AddSingleton<IParser<PlayerWoundedEventModel>, PlayerWoundedParser>();
         services.AddSingleton<IParser<RoundEndedEventModel>, RoundEndedParser>();
         services.AddSingleton<IParser<RoundTicketsEventModel>, RoundTicketsParser>();
         services.AddSingleton<IParser<RoundWinnerEventModel>, RoundWinnerParser>();

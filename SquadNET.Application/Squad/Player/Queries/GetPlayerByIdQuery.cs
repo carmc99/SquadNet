@@ -10,10 +10,6 @@ using SquadNET.Core;
 using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SquadNET.Application.Squad.Player.Queries
 {
@@ -22,7 +18,7 @@ namespace SquadNET.Application.Squad.Player.Queries
     /// </summary>
     public static class GetPlayerByIdQuery
     {
-        public class Handler : IRequestHandler<Request, PlayerConnectedEventModel>
+        public class Handler : IRequestHandler<Request, PlayerConnectedModel>
         {
             private readonly Command<SquadCommand> Command;
             private readonly IParser<ListPlayerModel> Parser;
@@ -37,9 +33,9 @@ namespace SquadNET.Application.Squad.Player.Queries
                 Parser = parser;
             }
 
-            public async Task<PlayerConnectedEventModel> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<PlayerConnectedModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                PlayerConnectedEventModel player = new();
+                PlayerConnectedModel player = new();
                 string result = await RconService.ExecuteCommandAsync(Command, SquadCommand.ListPlayers, cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(result))
@@ -58,7 +54,7 @@ namespace SquadNET.Application.Squad.Player.Queries
         /// <summary>
         /// Request object containing the player ID.
         /// </summary>
-        public class Request : IRequest<PlayerConnectedEventModel>
+        public class Request : IRequest<PlayerConnectedModel>
         {
             public CreatorOnlineModel PlayerId { get; set; }
         }
