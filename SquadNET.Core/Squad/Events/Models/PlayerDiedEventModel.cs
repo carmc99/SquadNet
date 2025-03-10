@@ -6,34 +6,28 @@ using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQSoldier::)?Die\(\): Player:(.+) KillingDamage=(?:-)*([0-9.]+) from ([A-z_0-9]+) \(Online IDs:([^)|]+)\| Contoller ID: ([\w\d]+)\) caused by ([A-z_0-9-]+)_C")]
+    [RegexPattern(@"\[.*?\]LogSquadTrace: \[DedicatedServer\]ASQSoldier::Die\(\): Player: ([^ ]+) KillingDamage=([-\d.]+) from ([^ ]+) \(Online IDs: EOS: ([0-9a-f]+) steam: (\d+) \| Contoller ID: ([^ ]+)\) caused by ([^ ]+)")]
     public class PlayerDiedEventModel : ISquadEventData
     {
-        public CreatorOnlineModel AttackerIds { get; set; }
-        public string AttackerPlayerController { get; set; }
-        public int ChainID { get; set; }
-        public float Damage { get; set; }
-        public string Time { get; set; }
+        public CreatorOnlineModel CreatorIds { get; set; }
+        public string KillerControllerId { get; set; }
+        public string KillerName { get; set; }
+        public float KillingDamage { get; set; }
         public string VictimName { get; set; }
         public string Weapon { get; set; }
-        public string WoundTime { get; set; }
 
-        /// <summary>
-        /// Creates an instance of <see cref="PlayerDiedEventModel"/> from parsed log data.
-        /// </summary>
-        public static PlayerDiedEventModel FromParsedData(string time, string woundTime, int chainID, string victimName,
-                                                          float damage, string attackerPlayerController, string onlineIds, string weapon)
+        public static PlayerDiedEventModel FromParsedData(
+            string victimName, float killingDamage, string killerName,
+            string killerEosId, ulong killerSteamId, string killerControllerId, string weapon)
         {
             return new PlayerDiedEventModel
             {
-                Time = time,
-                WoundTime = woundTime,
-                ChainID = chainID,
                 VictimName = victimName,
-                Damage = damage,
-                AttackerPlayerController = attackerPlayerController,
-                Weapon = weapon,
-                AttackerIds = CreatorOnlineModel.FromString(onlineIds)
+                KillingDamage = killingDamage,
+                KillerName = killerName,
+                CreatorIds = CreatorOnlineModel.FromString($"EOS: {killerEosId} steam: {killerSteamId}"),
+                KillerControllerId = killerControllerId,
+                Weapon = weapon
             };
         }
     }

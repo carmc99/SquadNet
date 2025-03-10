@@ -2,8 +2,6 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Test.Squad.Core;
 using System.Text.Json.Serialization;
@@ -28,8 +26,8 @@ namespace SquadNET.Tests.Squad.Parsers
         [MemberData(nameof(GetListPlayersTestData))]
         public void GivenLogInput_WhenParseIsCalled_ThenResultShouldBeValid(
             string input,
-            List<PlayerConnectedEventModel> expectedActivePlayers,
-            List<PlayerDisconnectedEventModel> expectedDisconnectedPlayers)
+            List<PlayerConnectedModel> expectedActivePlayers,
+            List<PlayerDisconnectedModel> expectedDisconnectedPlayers)
         {
             ListPlayerModel result = Parser.Parse(input);
 
@@ -61,10 +59,10 @@ namespace SquadNET.Tests.Squad.Parsers
         private class ListPlayersTestCase
         {
             [JsonPropertyOrder(2)]
-            public List<PlayerConnectedEventModel> ExpectedActivePlayers { get; set; }
+            public List<PlayerConnectedModel> ExpectedActivePlayers { get; set; }
 
             [JsonPropertyOrder(3)]
-            public List<PlayerDisconnectedEventModel> ExpectedDisconnectedPlayers { get; set; }
+            public List<PlayerDisconnectedModel> ExpectedDisconnectedPlayers { get; set; }
 
             [JsonPropertyOrder(1)]
             public string Input { get; set; }

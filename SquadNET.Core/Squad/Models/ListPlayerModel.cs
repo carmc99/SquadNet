@@ -1,23 +1,23 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events.Models;
-
+// <copyright company="SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 namespace SquadNET.Core.Squad.Models
 {
     public sealed class ListPlayerModel
     {
         public ListPlayerModel(
-            List<PlayerConnectedEventModel> activePlayers,
-            List<PlayerDisconnectedEventModel> disconnectedPlayers
+            List<PlayerConnectedModel> activePlayers,
+            List<PlayerDisconnectedModel> disconnectedPlayers
         )
         {
             ActivePlayers = activePlayers;
             DisconnectedPlayers = disconnectedPlayers;
         }
 
-        public List<PlayerConnectedEventModel> ActivePlayers { get; }
-        public List<PlayerDisconnectedEventModel> DisconnectedPlayers { get; }
+        public List<PlayerConnectedModel> ActivePlayers { get; }
+        public List<PlayerDisconnectedModel> DisconnectedPlayers { get; }
     }
 }

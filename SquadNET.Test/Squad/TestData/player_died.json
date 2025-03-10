@@ -1,0 +1,12 @@
+﻿[
+    {
+        "input": "[2025.03.07-20.33.42:461][283]LogSquadTrace: [DedicatedServer]ASQSoldier::Die(): Player: Parada_5324 KillingDamage=-300.000000 from BP_PlayerController_AdminTools_C_2145161476 (Online IDs: EOS: 0002db63abbc494190434f632efd8920 steam: 76561198201339703 | Contoller ID: BP_PlayerController_AdminTools_C_2145161476) caused by BP_Soldier_ADF_LAT_C_2145303554",
+        "expectedVictimName": "Parada_5324",
+        "expectedKillingDamage": -300.0,
+        "expectedKillerName": "BP_PlayerController_AdminTools_C_2145161476",
+        "expectedKillerEosId": "0002db63abbc494190434f632efd8920",
+        "expectedKillerSteamId": 76561198201339703,
+        "expectedKillerControllerId": "BP_PlayerController_AdminTools_C_2145161476",
+        "expectedWeapon": "BP_Soldier_ADF_LAT_C_2145303554"
+    }
+]

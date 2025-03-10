@@ -1,0 +1,12 @@
+﻿[
+    {
+        "input": "[2025.03.07-20.37.22:028][ 24]LogSquadTrace: [DedicatedServer]ASQSoldier::Wound(): Player: Kaigan KillingDamage=186.000015 from BP_PlayerController_AdminTools_C_2145307552 (Online IDs: EOS: 00020171cf6a466b83385bf7a5df0f68 steam: 76561198275774208 | Controller ID: BP_PlayerController_AdminTools_C_2145307552) caused by BP_EF88_Specter_Frontgrip_C_2145272955",
+        "expectedVictimName": "Kaigan",
+        "expectedKillingDamage": 186.000015,
+        "expectedKillerName": "BP_PlayerController_AdminTools_C_2145307552",
+        "expectedKillerEosId": "00020171cf6a466b83385bf7a5df0f68",
+        "expectedKillerSteamId": 76561198275774208,
+        "expectedKillerControllerId": "BP_PlayerController_AdminTools_C_2145307552",
+        "expectedWeapon": "BP_EF88_Specter_Frontgrip_C_2145272955"
+    }
+]

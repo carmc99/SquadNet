@@ -1,11 +1,11 @@
 [
     {
-        "input": "Current map is AlBasrah_AAS_v1 (Level: AlBasrah)",
-        "expectedLevel": "AlBasrah",
-        "expectedName": "AlBasrah_AAS_v1"
+        "input": "Current level is Mutaha, layer is Mutaha_Skirmish_v1, factions MEA RGF",
+        "expectedLevel": "Mutaha",
+        "expectedName": "Mutaha_Skirmish_v1"
     },
     {
-        "input": "Current map is Fallujah_RAAS_v2 (Level: Fallujah)",
+        "input": "Current level is Fallujah, layer is Fallujah_RAAS_v2, factions MEA RGF",
         "expectedLevel": "Fallujah",
         "expectedName": "Fallujah_RAAS_v2"
     }

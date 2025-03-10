@@ -4,33 +4,31 @@
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^ID: ([0-9]+) \| SteamID: ([0-9]+) \| Since Disconnect: ([0-9]+)m\.([0-9]+)s \| Name: (.*)$")]
-    public class PlayerDisconnectedEventModel
+    [RegexPattern(@"\[.*?\]LogNet: UChannel::Close: Sending CloseBunch\. ChIndex == \d+\. Name: \[UChannel\] ChIndex: \d+, Closing: \d+ \[UNetConnection\] RemoteAddr: ([0-9.]+:\d+), Name: ([^,]+), Driver: ([^,]+), IsServer: (YES|NO), PC: ([^,]+), Owner: ([^,]+), UniqueId: RedpointEOS:([0-9a-f]+)")]
+    public class PlayerDisconnectedEventModel : ISquadEventData
     {
-        public TimeSpan DisconnectedSince { get; set; }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ulong SteamId { get; set; }
+        public string ConnectionName { get; set; }
+        public string Driver { get; set; }
+        public string EosId { get; set; }
+        public bool IsServer { get; set; }
+        public string Owner { get; set; }
+        public string PlayerController { get; set; }
+        public string RemoteAddress { get; set; }
 
-        public bool Equals(
-            PlayerDisconnectedEventModel other
-        )
+        public static PlayerDisconnectedEventModel FromParsedData(
+            string remoteAddress, string connectionName, string driver,
+            string isServer, string playerController, string owner, string eosId)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && SteamId == other.SteamId && DisconnectedSince.Equals(other.DisconnectedSince) && Name == other.Name;
-        }
-
-        public override bool Equals(
-            object obj
-        )
-        {
-            return ReferenceEquals(this, obj) || obj is PlayerDisconnectedEventModel other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Id, SteamId, DisconnectedSince, Name);
+            return new PlayerDisconnectedEventModel
+            {
+                RemoteAddress = remoteAddress,
+                ConnectionName = connectionName,
+                Driver = driver,
+                IsServer = isServer == "YES",
+                PlayerController = playerController,
+                Owner = owner,
+                EosId = eosId
+            };
         }
     }
 }

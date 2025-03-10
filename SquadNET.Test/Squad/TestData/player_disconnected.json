@@ -1,0 +1,12 @@
+﻿[
+    {
+        "input": "[2025.03.07-20.37.03:441][259]LogNet: UChannel::Close: Sending CloseBunch. ChIndex == 0. Name: [UChannel] ChIndex: 0, Closing: 0 [UNetConnection] RemoteAddr: 186.23.28.225:6761, Name: EOSIpNetConnection_2145063077, Driver: GameNetDriver EOSNetDriver_2147482521, IsServer: YES, PC: BP_PlayerController_AdminTools_C_2145058145, Owner: BP_PlayerController_AdminTools_C_2145058145, UniqueId: RedpointEOS:0002c87e865c4a33bf37f5c9b07b1b66",
+        "expectedRemoteAddress": "186.23.28.225:6761",
+        "expectedConnectionName": "EOSIpNetConnection_2145063077",
+        "expectedDriver": "GameNetDriver EOSNetDriver_2147482521",
+        "expectedIsServer": true,
+        "expectedPlayerController": "BP_PlayerController_AdminTools_C_2145058145",
+        "expectedOwner": "BP_PlayerController_AdminTools_C_2145058145",
+        "expectedEosId": "0002c87e865c4a33bf37f5c9b07b1b66"
+    }
+]
