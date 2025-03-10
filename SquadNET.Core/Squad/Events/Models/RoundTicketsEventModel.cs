@@ -3,7 +3,7 @@
 // </copyright>
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadGameEvents: Display: Team ([0-9]), (.*) \( ?(.*?) ?\) has (won|lost) the match with ([0-9]+) Tickets on layer (.*) \(level (.*)\)!")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadGameEvents: Display: Team ([0-9]+), (.*?) \( ?(.*?) ?\) has (won|lost) the match with ([0-9]+) Tickets on layer (.*?) \(level (.*?)\)!")]
     public class RoundTicketsEventModel : ISquadEventData
     {
         public string Action { get; set; }

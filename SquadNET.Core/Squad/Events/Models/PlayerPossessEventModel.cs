@@ -6,23 +6,23 @@ using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQPlayerController::)?OnPossess\(\): PC=(.+) \(Online IDs: ([^)]+)\) Pawn=([A-z0-9_]+)_C")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer\]ASQPlayerController::OnPossess\(\): PC=([^\s]+) \(Online IDs: EOS: ([^\s]+) steam: (\d+)\) (?:Entered Vehicle )?Pawn=([^\s]+)(?: \(Asset Name = ([^\s]+)\))?")]
     public class PlayerPossessEventModel : ISquadEventData
     {
-        public string ChainID { get; set; }
+        public int ChainID { get; set; }
         public CreatorOnlineModel CreatorIds { get; set; }
-        public string PlayerSuffix { get; set; }
+        public string PlayerName { get; set; }
         public string PossessClassname { get; set; }
         public string Time { get; set; }
 
         public static PlayerPossessEventModel FromParsedData(
-            string time, string chainID, string playerSuffix, string onlineIDs, string possessClassname)
+            string time, int chainID, string playerName, string onlineIDs, string possessClassname)
         {
             return new PlayerPossessEventModel
             {
                 Time = time,
                 ChainID = chainID,
-                PlayerSuffix = playerSuffix,
+                PlayerName = playerName,
                 CreatorIds = CreatorOnlineModel.FromString(onlineIDs),
                 PossessClassname = possessClassname
             };

@@ -21,11 +21,13 @@ namespace SquadNET.Core.Squad.Parsers
                 return null;
             }
 
+            string time = (match.Groups[1].Value.NormalizeTime());
+
             Dictionary<string, string> parsedValues = new()
             {
-                { "Time", match.Groups[1].Value },
+                { "Time", time },
                 { "ChainID", match.Groups[2].Value },
-                { "PlayerSuffix", match.Groups[3].Value }
+                { "PlayerName", match.Groups[3].Value }
             };
 
             return DictionaryModelConverter.ConvertDictionaryToModel<PlayerJoinSucceededEventModel>(parsedValues);

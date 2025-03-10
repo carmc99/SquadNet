@@ -1,16 +1,16 @@
 [
     {
-        "input": "[2025.03.08-21:10:30:567][100]LogSquadTrace: [DedicatedServer] DetermineMatchWinner(): US Army won on AlBasrah_AAS_v1",
-        "expectedTime": "2025.03.08-21:10:30:567",
-        "expectedChainID": "100",
-        "expectedWinner": "US Army",
-        "expectedLayer": "AlBasrah_AAS_v1"
+        "input": "[2025.03.07-19.00.37:086][ 36]LogSquadTrace: [DedicatedServer]ASQGameMode::DetermineMatchWinner(): 1st Brigade Combat Team, 10th Mountain Division won on Manicouagan",
+        "expectedTime": "2025.03.07-19.00.37:086",
+        "expectedChainID": "36",
+        "expectedWinner": "1st Brigade Combat Team, 10th Mountain Division",
+        "expectedLayer": "Manicouagan"
     },
     {
-        "input": "[2025.03.08-21:30:45:789][105]LogSquadTrace: [DedicatedServer] DetermineMatchWinner(): Russian Forces won on Gorodok_RAAS_v2",
-        "expectedTime": "2025.03.08-21:30:45:789",
-        "expectedChainID": "105",
-        "expectedWinner": "Russian Forces",
-        "expectedLayer": "Gorodok_RAAS_v2"
+        "input": "[2025.03.07-19.58.18:930][633]LogSquadTrace: [DedicatedServer]ASQGameMode::DetermineMatchWinner(): The game was a draw on Goose Bay",
+        "expectedTime": "2025.03.07-19.58.18:930",
+        "expectedChainID": "633",
+        "expectedWinner": "The game was a draw",
+        "expectedLayer": "Goose Bay"
     }
 ]

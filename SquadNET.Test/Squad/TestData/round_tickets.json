@@ -1,26 +1,26 @@
 [
     {
-        "input": "[2025.03.08-20:10:30:567][90]LogSquadGameEvents: Display: Team 1, US Army (Mechanized Infantry) has won the match with 120 Tickets on layer AlBasrah_AAS_v1 (level AlBasrah)",
-        "expectedTime": "2025.03.08-20:10:30:567",
-        "expectedChainID": "90",
-        "expectedTeam": 1,
-        "expectedSubfaction": "Mechanized Infantry",
-        "expectedFaction": "US Army",
+        "input": "[2025.03.07-19.58.18:935][633]LogSquadGameEvents: Display: Team 2, 3rd Motor Rifle Brigade ( Russian Ground Forces ) has won the match with 62 Tickets on layer Goose Bay RAAS v2 (level Goose Bay)!",
+        "expectedTime": "2025.03.07-19.58.18:935",
+        "expectedChainID": "633",
+        "expectedTeam": 2,
+        "expectedSubfaction": "3rd Motor Rifle Brigade",
+        "expectedFaction": "Russian Ground Forces",
         "expectedAction": "won",
-        "expectedTickets": 120,
-        "expectedLayer": "AlBasrah_AAS_v1",
-        "expectedLevel": "AlBasrah"
+        "expectedTickets": 62,
+        "expectedLayer": "Goose Bay RAAS v2",
+        "expectedLevel": "Goose Bay"
     },
     {
-        "input": "[2025.03.08-20:30:45:789][95]LogSquadGameEvents: Display: Team 2, Russian Forces (Motorized Infantry) has lost the match with 45 Tickets on layer Gorodok_RAAS_v2 (level Gorodok)",
-        "expectedTime": "2025.03.08-20:30:45:789",
-        "expectedChainID": "95",
-        "expectedTeam": 2,
-        "expectedSubfaction": "Motorized Infantry",
-        "expectedFaction": "Russian Forces",
+        "input": "[2025.03.07-19.58.18:935][633]LogSquadGameEvents: Display: Team 1, 1 Canadian Mechanized Brigade Group ( Canadian Armed Forces ) has lost the match with 0 Tickets on layer Goose Bay RAAS v2 (level Goose Bay)!",
+        "expectedTime": "2025.03.07-19.58.18:935",
+        "expectedChainID": "633",
+        "expectedTeam": 1,
+        "expectedSubfaction": "1 Canadian Mechanized Brigade Group",
+        "expectedFaction": "Canadian Armed Forces",
         "expectedAction": "lost",
-        "expectedTickets": 45,
-        "expectedLayer": "Gorodok_RAAS_v2",
-        "expectedLevel": "Gorodok"
+        "expectedTickets": 0,
+        "expectedLayer": "Goose Bay RAAS v2",
+        "expectedLevel": "Goose Bay"
     }
 ]

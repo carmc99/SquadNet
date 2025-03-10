@@ -27,7 +27,7 @@ namespace SquadNET.Core.Squad.Parsers
             {
                 { "Time", match.Groups[1].Value },
                 { "ChainID", match.Groups[2].Value },
-                { "PlayerSuffix", match.Groups[3].Value }
+                { "PlayerName", match.Groups[3].Value }
             };
 
             PlayerUnPossessEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerUnPossessEventModel>(parsedValues);

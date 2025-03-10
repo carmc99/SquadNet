@@ -12,7 +12,7 @@ namespace SquadNET.Core.Squad.Events.Models
         public string ChainID { get; set; }
         public CreatorOnlineModel PlayerIds { get; set; }
 
-        public string PlayerSuffix { get; set; }
+        public string PlayerName { get; set; }
 
         public bool SwitchPossess { get; set; }
         public string Time { get; set; }
@@ -20,13 +20,13 @@ namespace SquadNET.Core.Squad.Events.Models
         /// <summary>
         /// Creates an instance of <see cref="PlayerUnPossessEventModel"/> from parsed log data.
         /// </summary>
-        public static PlayerUnPossessEventModel FromParsedData(string time, string chainID, string playerSuffix, string onlineIds, bool switchPossess)
+        public static PlayerUnPossessEventModel FromParsedData(string time, string chainID, string playerName, string onlineIds, bool switchPossess)
         {
             return new PlayerUnPossessEventModel
             {
                 Time = time,
                 ChainID = chainID,
-                PlayerSuffix = playerSuffix,
+                PlayerName = playerName,
                 PlayerIds = CreatorOnlineModel.FromString(onlineIds),
                 SwitchPossess = switchPossess
             };

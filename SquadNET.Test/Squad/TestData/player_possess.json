@@ -1,20 +1,20 @@
 [
     {
-        "input": "[2025.03.08-16:05:30:123][35]LogSquadTrace: [DedicatedServer] OnPossess(): PC=PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000) Pawn=APC_C",
-        "expectedTime": "2025.03.08-16:05:30:123",
-        "expectedChainID": "35",
-        "expectedPlayerSuffix": "PlayerOne",
-        "expectedPossessClassname": "APC_C",
-        "expectedCreatorEosId": "abc123",
-        "expectedCreatorSteamId": 76561198000000000
+        "input": "[2025.03.07-16.48.43:895][697]LogSquadTrace: [DedicatedServer]ASQPlayerController::OnPossess(): PC=Yamakasi (Online IDs: EOS: 00029abc5df840a89c45b7c90de679cb steam: 76561198059699094) Pawn=BP_minsk_C_2147334670 FullPath=BP_minsk_C /Game/Maps/Mutaha/Gameplay_Layers/Mutaha_Seed_v1.Mutaha_Seed_v1:PersistentLevel.BP_minsk_C_2147334670",
+        "expectedTime": "2025.03.07-16.48.43:895",
+        "expectedChainID": 697,
+        "expectedPlayerName": "Yamakasi",
+        "expectedPossessClassname": "BP_minsk_C_2147334670",
+        "expectedCreatorEosId": "00029abc5df840a89c45b7c90de679cb",
+        "expectedCreatorSteamId": 76561198059699094
     },
     {
-        "input": "[2025.03.08-16:10:45:456][40]LogSquadTrace: [DedicatedServer] OnPossess(): PC=PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111) Pawn=Tank_C",
-        "expectedTime": "2025.03.08-16:10:45:456",
-        "expectedChainID": "40",
-        "expectedPlayerSuffix": "PlayerTwo",
-        "expectedPossessClassname": "Tank_C",
-        "expectedCreatorEosId": "def456",
-        "expectedCreatorSteamId": 76561198011111111
+        "input": "[2025.03.07-16.48.43:895][697]LogSquadTrace: [DedicatedServer]ASQPlayerController::OnPossess(): PC=Yamakasi (Online IDs: EOS: 00029abc5df840a89c45b7c90de679cb steam: 76561198059699094) Entered Vehicle Pawn=BP_minsk_C_2147334670 (Asset Name = BP_minsk_C) FullPath=BP_minsk_C /Game/Maps/Mutaha/Gameplay_Layers/Mutaha_Seed_v1.Mutaha_Seed_v1:PersistentLevel.BP_minsk_C_2147334670 Seat Number=0",
+        "expectedTime": "2025.03.07-16.48.43:895",
+        "expectedChainID": 697,
+        "expectedPlayerName": "Yamakasi",
+        "expectedPossessClassname": "BP_minsk_C_2147334670",
+        "expectedCreatorEosId": "00029abc5df840a89c45b7c90de679cb",
+        "expectedCreatorSteamId": 76561198059699094
     }
 ]

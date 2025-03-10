@@ -6,7 +6,7 @@ using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: Player:(.+) ActualDamage=([0-9.]+) from (.+) \(Online IDs:([^|]+)\| Player Controller ID: ([^ ]+)\)caused by ([A-z_0-9-]+)_C")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[(\d+)]LogSquad: Player:\s*(.+?)\s*ActualDamage=([0-9.]+) from (.+) \(Online IDs: ([^|)]+)\| Player Controller ID: ([^ ]+)\)caused by ([A-Za-z_0-9-]+_C_\d+)")]
     public class PlayerDamagedEventModel : ISquadEventData
     {
         public CreatorOnlineModel AttackerIds { get; set; }

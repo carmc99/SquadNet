@@ -24,14 +24,14 @@ namespace SquadNET.Tests.Squad.Parsers
         [Theory]
         [MemberData(nameof(GetPlayerJoinSucceededTestData))]
         public void GivenLogInput_WhenParseIsCalled_ThenResultShouldBeValid(
-            string input, string expectedTime, string expectedChainID, string expectedPlayerSuffix)
+            string input, string expectedTime, string expectedChainID, string expectedPlayerName)
         {
             PlayerJoinSucceededEventModel result = Parser.Parse(input);
 
             Assert.NotNull(result);
             Assert.Equal(expectedTime, result.Time);
             Assert.Equal(expectedChainID, result.ChainID);
-            Assert.Equal(expectedPlayerSuffix, result.PlayerName);
+            Assert.Equal(expectedPlayerName, result.PlayerName);
         }
 
         private class PlayerJoinSucceededTestCase
@@ -40,7 +40,7 @@ namespace SquadNET.Tests.Squad.Parsers
             public string ExpectedChainID { get; set; }
 
             [JsonPropertyOrder(4)]
-            public string ExpectedPlayerSuffix { get; set; }
+            public string ExpectedPlayerName { get; set; }
 
             [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
