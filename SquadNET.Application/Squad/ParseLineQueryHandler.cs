@@ -49,7 +49,7 @@ namespace SquadNET.Application.Squad.ParseLine
                     { SquadEventType.PlayerRevived, (line, ct) => ParsePlayerRevived(line, ct) },
                     { SquadEventType.AdminBroadcast, (line, ct) => ParseAdminBroadcast(line, ct) },
 
-                    { SquadEventType.DeployableDamaged, (line, ct) => ParseAdminBroadcast(line, ct) },
+                    { SquadEventType.DeployableDamaged, (line, ct) => ParseDeployableDamaged(line, ct) },
                     { SquadEventType.PlayerDied, (line, ct) => ParsePlayerDied(line, ct) },
                     { SquadEventType.PlayerWounded, (line, ct) => ParsePlayerWounded(line, ct) },
                     { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerConnected(line, ct) },
