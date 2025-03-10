@@ -22,7 +22,7 @@ namespace SquadNET.Core.Squad.Parsers
                 ParserLogger.LogInvalidInput(nameof(PlayerRevivedParser), input);
                 return null;
             }
-            string time = NormalizeTime(match.Groups[1].Value);
+            string time = (match.Groups[1].Value.NormalizeTime());
 
             Dictionary<string, string> parsedValues = new()
             {
@@ -37,22 +37,6 @@ namespace SquadNET.Core.Squad.Parsers
             model.VictimIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[7].Value} steam: {match.Groups[8].Value}");
 
             return model;
-        }
-
-        private static string NormalizeTime(string time)
-        {
-            string[] parts = time.Split('-');
-            if (parts.Length != 2)
-            {
-                return time;
-            }
-
-            string datePart = parts[0];
-            string timePart = parts[1];
-
-            timePart = timePart.Replace('.', ':');
-
-            return $"{datePart}-{timePart}";
         }
     }
 }

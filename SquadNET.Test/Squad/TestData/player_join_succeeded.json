@@ -1,14 +1,14 @@
 [
     {
-        "input": "[2025.03.08-15:10:30:567][25]LogNet: Join succeeded: PlayerOne",
-        "expectedTime": "2025.03.08-15:10:30:567",
-        "expectedChainID": "25",
-        "expectedPlayerSuffix": "PlayerOne"
+        "input": "[2025.03.07-17.19.41:236][420]LogNet: Join succeeded: Wachin",
+        "expectedTime": "2025.03.07-17.19.41:236",
+        "expectedChainID": "420",
+        "expectedPlayerName": "Wachin"
     },
     {
-        "input": "[2025.03.08-15:15:45:789][30]LogNet: Join succeeded: PlayerTwo",
-        "expectedTime": "2025.03.08-15:15:45:789",
-        "expectedChainID": "30",
-        "expectedPlayerSuffix": "PlayerTwo"
+        "input": "[2025.03.07-17.20.50:543][849]LogNet: Join succeeded: x_z3t4_x",
+        "expectedTime": "2025.03.07-17.20.50:543",
+        "expectedChainID": "849",
+        "expectedPlayerName": "x_z3t4_x"
     }
 ]
