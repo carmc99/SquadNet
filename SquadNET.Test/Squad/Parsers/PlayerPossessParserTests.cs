@@ -25,7 +25,7 @@ namespace SquadNET.Tests.Squad.Parsers
         [Theory]
         [MemberData(nameof(GetPlayerPossessTestData))]
         public void GivenLogInput_WhenParseIsCalled_ThenResultShouldBeValid(
-            string input, string expectedTime, string expectedChainID, string expectedPlayerSuffix,
+            string input, string expectedTime, int expectedChainID, string expectedPlayerName,
             string expectedPossessClassname, string expectedCreatorEosId, ulong expectedCreatorSteamId)
         {
             PlayerPossessEventModel result = Parser.Parse(input);
@@ -33,7 +33,7 @@ namespace SquadNET.Tests.Squad.Parsers
             Assert.NotNull(result);
             Assert.Equal(expectedTime, result.Time);
             Assert.Equal(expectedChainID, result.ChainID);
-            Assert.Equal(expectedPlayerSuffix, result.PlayerSuffix);
+            Assert.Equal(expectedPlayerName, result.PlayerName);
             Assert.Equal(expectedPossessClassname, result.PossessClassname);
             Assert.Equal(expectedCreatorEosId, result.CreatorIds.EosId);
             Assert.Equal(expectedCreatorSteamId, result.CreatorIds.SteamId);
@@ -42,7 +42,7 @@ namespace SquadNET.Tests.Squad.Parsers
         private class PlayerPossessTestCase
         {
             [JsonPropertyOrder(3)]
-            public string ExpectedChainID { get; set; }
+            public int ExpectedChainID { get; set; }
 
             [JsonPropertyOrder(6)]
             public string ExpectedCreatorEosId { get; set; }
@@ -51,7 +51,7 @@ namespace SquadNET.Tests.Squad.Parsers
             public ulong ExpectedCreatorSteamId { get; set; }
 
             [JsonPropertyOrder(4)]
-            public string ExpectedPlayerSuffix { get; set; }
+            public string ExpectedPlayerName { get; set; }
 
             [JsonPropertyOrder(5)]
             public string ExpectedPossessClassname { get; set; }

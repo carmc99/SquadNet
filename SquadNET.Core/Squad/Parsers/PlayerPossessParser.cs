@@ -23,16 +23,18 @@ namespace SquadNET.Core.Squad.Parsers
                 return null;
             }
 
+            string time = match.Groups[1].Value.NormalizeTime();
+
             Dictionary<string, string> parsedValues = new()
             {
-                { "Time", match.Groups[1].Value },
+                { "Time", time },
                 { "ChainID", match.Groups[2].Value },
-                { "PlayerSuffix", match.Groups[3].Value },
-                { "PossessClassname", match.Groups[5].Value }
+                { "PlayerName", match.Groups[3].Value },
+                { "PossessClassname", match.Groups[6].Success ? match.Groups[6].Value : match.Groups[5].Value }
             };
 
             PlayerPossessEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerPossessEventModel>(parsedValues);
-            model.CreatorIds = CreatorOnlineModel.FromString(match.Groups[4].Value);
+            model.CreatorIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[4].Value} steam: {match.Groups[5].Value}");
 
             return model;
         }

@@ -1,18 +1,18 @@
 [
     {
-        "input": "[2025.03.08-18:10:20:123][60]LogSquadTrace: [DedicatedServer] OnUnPossess(): PC=PlayerOne (Online IDs: EOS: abc123 steam: 76561198000000000)",
-        "expectedTime": "2025.03.08-18:10:20:123",
-        "expectedChainID": "60",
-        "expectedPlayerSuffix": "PlayerOne",
-        "expectedPlayerEosId": "abc123",
-        "expectedPlayerSteamId": 76561198000000000
+        "input": "[2025.03.07-16.40.40:207][832]LogSquadTrace: [DedicatedServer]ASQPlayerController::OnUnPossess(): PC=idk (Online IDs: EOS: 0002b2ce70de479e911e88423b947c4e steam: 76561198320496130) current health value -300.015991",
+        "expectedTime": "2025.03.07-16.40.40:207",
+        "expectedChainID": "832",
+        "expectedPlayerName": "idk",
+        "expectedPlayerEosId": "0002b2ce70de479e911e88423b947c4e",
+        "expectedPlayerSteamId": 76561198320496130
     },
     {
-        "input": "[2025.03.08-18:15:35:456][65]LogSquadTrace: [DedicatedServer] OnUnPossess(): PC=PlayerTwo (Online IDs: EOS: def456 steam: 76561198011111111)",
-        "expectedTime": "2025.03.08-18:15:35:456",
-        "expectedChainID": "65",
-        "expectedPlayerSuffix": "PlayerTwo",
-        "expectedPlayerEosId": "def456",
-        "expectedPlayerSteamId": 76561198011111111
+        "input": "[2025.03.07-16.40.37:104][636]LogSquadTrace: [DedicatedServer]ASQPlayerController::OnUnPossess(): PC=Sgt. Timmy (Online IDs: EOS: 0002082e488c466d9317b502784002b9 steam: 76561198080470520) Exited Vehicle Pawn=Sgt. Timmy (Asset Name=BP_Ural_375_Logi_INS_C) FullPath=BP_Ural_375_Logi_INS_C /Game/Maps/Mutaha/Gameplay_Layers/Mutaha_Seed_v1.Mutaha_Seed_v1:PersistentLevel.BP_Ural_375_Logi_INS_C_2147334110 Seat Number=0",
+        "expectedTime": "2025.03.07-16.40.37:104",
+        "expectedChainID": "636",
+        "expectedPlayerName": "Sgt. Timmy",
+        "expectedPlayerEosId": "0002082e488c466d9317b502784002b9",
+        "expectedPlayerSteamId": 76561198080470520
     }
 ]

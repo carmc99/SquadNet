@@ -25,14 +25,14 @@ namespace SquadNET.Tests.Squad.Parsers
         [MemberData(nameof(GetPlayerUnPossessTestData))]
         public void GivenLogInput_WhenParseIsCalled_ThenResultShouldBeValid(
             string input, string expectedTime, string expectedChainID,
-            string expectedPlayerSuffix, string expectedPlayerEosId, ulong expectedPlayerSteamId)
+            string expectedPlayerName, string expectedPlayerEosId, ulong expectedPlayerSteamId)
         {
             PlayerUnPossessEventModel result = Parser.Parse(input);
 
             Assert.NotNull(result);
             Assert.Equal(expectedTime, result.Time);
             Assert.Equal(expectedChainID, result.ChainID);
-            Assert.Equal(expectedPlayerSuffix, result.PlayerSuffix);
+            Assert.Equal(expectedPlayerName, result.PlayerName);
             Assert.Equal(expectedPlayerEosId, result.PlayerIds.EosId);
             Assert.Equal(expectedPlayerSteamId, result.PlayerIds.SteamId);
         }
@@ -45,11 +45,11 @@ namespace SquadNET.Tests.Squad.Parsers
             [JsonPropertyOrder(5)]
             public string ExpectedPlayerEosId { get; set; }
 
+            [JsonPropertyOrder(4)]
+            public string ExpectedPlayerName { get; set; }
+
             [JsonPropertyOrder(6)]
             public ulong ExpectedPlayerSteamId { get; set; }
-
-            [JsonPropertyOrder(4)]
-            public string ExpectedPlayerSuffix { get; set; }
 
             [JsonPropertyOrder(2)]
             public string ExpectedTime { get; set; }
