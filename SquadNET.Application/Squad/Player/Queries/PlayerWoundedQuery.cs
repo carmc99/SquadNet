@@ -3,7 +3,6 @@
 // </copyright>
 using FluentValidation;
 using MediatR;
-using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Application.Squad.Player.Queries
@@ -15,17 +14,19 @@ namespace SquadNET.Application.Squad.Player.Queries
         /// </summary>
         public class Handler : IRequestHandler<Request, PlayerWoundedEventModel>
         {
-            private readonly IParser<PlayerWoundedEventModel> Parser;
+            //private readonly IParser<PlayerWoundedEventModel> Parser;
 
-            public Handler(IParser<PlayerWoundedEventModel> parser)
-            {
-                Parser = parser;
-            }
+            //public Handler(IParser<PlayerWoundedEventModel> parser)
+            //{
+            //    Parser = parser;
+            //}
 
             public Task<PlayerWoundedEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                PlayerWoundedEventModel parsedEvent = Parser.Parse(request.RawMessage);
-                return Task.FromResult(parsedEvent);
+                //TODO: Complete
+                throw new NotImplementedException();
+                //PlayerWoundedEventModel parsedEvent = Parser.Parse(request.RawMessage);
+                //return Task.FromResult(parsedEvent);
             }
         }
 

@@ -1,11 +1,11 @@
 [
     {
-        "input": "Next map is AlBasrah_AAS_v1 (Level: AlBasrah)",
-        "expectedLevel": "AlBasrah",
-        "expectedName": "AlBasrah_AAS_v1"
+        "input": "Next level is Sanxian Islands, layer is Sanxian_Seed_v1, factions USMC PLA",
+        "expectedLevel": "Sanxian Islands",
+        "expectedName": "Sanxian_Seed_v1"
     },
     {
-        "input": "Next map is Fallujah_RAAS_v2 (Level: Fallujah)",
+        "input": "Next level is Fallujah, layer is Fallujah_RAAS_v2, factions MEA RGF",
         "expectedLevel": "Fallujah",
         "expectedName": "Fallujah_RAAS_v2"
     }

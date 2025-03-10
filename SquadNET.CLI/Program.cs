@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SquadNET.Application;
-using SquadNET.Rcon;
 
 using ServiceProvider serviceProvider = new ServiceCollection()
     .AddLogging(config =>
@@ -20,7 +19,6 @@ using ServiceProvider serviceProvider = new ServiceCollection()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
     })
-    .AddRconServices()
     .AddSquadApplication()
     .AddSingleton<CommandHandler>()
     .BuildServiceProvider();

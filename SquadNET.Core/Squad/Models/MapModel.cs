@@ -3,7 +3,7 @@
 // </copyright>
 namespace SquadNET.Core.Squad.Models
 {
-    [RegexPattern(@"^Current level is (.*), layer is (.*)$")]
+    [RegexPattern(@"^Current level is ([^,]+), layer is ([^,]+)")]
     public class CurrentMapModel
     {
         public string Level { get; set; }
@@ -16,7 +16,7 @@ namespace SquadNET.Core.Squad.Models
         public NextMapModel NextMap { get; set; }
     }
 
-    [RegexPattern(@"^Next level is (.*), layer is (.*)$")]
+    [RegexPattern(@"^Next level is ([^,]+), layer is ([^,]+)")]
     public class NextMapModel
     {
         public string Level { get; set; }
