@@ -1,26 +1,50 @@
 [
     {
-        "input": "[2025.03.08-14:22:10:567][42]LogSquadTrace: [DedicatedServer] DamageEvent: PlayerOne took 25.5 damage from PlayerTwo (Online IDs: EOS: abc123 steam: 76561198000000000 | Player Controller ID: PC_01) caused by M4A1_C",
-        "expectedTime": "2025.03.08-14:22:10:567",
-        "expectedChainID": "42",
-        "expectedVictimName": "PlayerOne",
-        "expectedDamage": 25.5,
-        "expectedAttackerName": "PlayerTwo",
-        "expectedAttackerPlayerController": "PC_01",
-        "expectedWeapon": "M4A1",
-        "expectedAttackerEosId": "abc123",
-        "expectedAttackerSteamId": 76561198000000000
+        "input": "[2025.03.07-20.08.48:680][923]LogSquad: Player:  RedWing ActualDamage=15.112472 from   RedWing (Online IDs: EOS: 00028cb0bc444297815e2fccef3e2be3 steam: 76561199157851190 | Player Controller ID: BP_PlayerController_AdminTools_C_2145292464)caused by BP_Soldier_ADF_Medic_C_2145285575",
+        "expectedTime": "2025.03.07-20.08.48:680",
+        "expectedChainID": "923",
+        "expectedVictimName": "RedWing",
+        "expectedDamage": 15.112472,
+        "expectedAttackerName": "RedWing",
+        "expectedAttackerPlayerController": "BP_PlayerController_AdminTools_C_2145292464",
+        "expectedWeapon": "BP_Soldier_ADF_Medic_C_2145285575",
+        "expectedAttackerEosId": "00028cb0bc444297815e2fccef3e2be3",
+        "expectedAttackerSteamId": 76561199157851190
     },
     {
-        "input": "[2025.03.08-14:30:55:789][50]LogSquadTrace: [DedicatedServer] DamageEvent: PlayerThree took 10.0 damage from PlayerFour (Online IDs: EOS: def456 steam: 76561198011111111 | Player Controller ID: PC_02) caused by AK74_C",
-        "expectedTime": "2025.03.08-14:30:55:789",
-        "expectedChainID": "50",
-        "expectedVictimName": "PlayerThree",
-        "expectedDamage": 10.0,
-        "expectedAttackerName": "PlayerFour",
-        "expectedAttackerPlayerController": "PC_02",
-        "expectedWeapon": "AK74",
-        "expectedAttackerEosId": "def456",
-        "expectedAttackerSteamId": 76561198011111111
+        "input": "[2025.03.07-20.11.53:733][821]LogSquad: Player: Dollar117 ActualDamage=40.000000 from [CEA] Asval (Online IDs: EOS: 0002033967c74bd4ab6b41b3d91d21bb steam: 76561199047968131 | Player Controller ID: BP_PlayerController_AdminTools_C_2147070671)caused by BP_F89_Specter_C_2145299709",
+        "expectedTime": "2025.03.07-20.11.53:733",
+        "expectedChainID": "821",
+        "expectedVictimName": "Dollar117",
+        "expectedDamage": 40.0,
+        "expectedAttackerName": "[CEA] Asval",
+        "expectedAttackerPlayerController": "BP_PlayerController_AdminTools_C_2147070671",
+        "expectedWeapon": "BP_F89_Specter_C_2145299709",
+        "expectedAttackerEosId": "0002033967c74bd4ab6b41b3d91d21bb",
+        "expectedAttackerSteamId": 76561199047968131
+    },
+    {
+        "input": "[2025.03.07-20.26.44:728][260]LogSquad: Player:  Borecka ActualDamage=2.931430 from WASD LechugaSix (Online IDs: EOS: 00022f7875d8424391398d27357e6cf5 steam: 76561198953819680 | Player Controller ID: BP_PlayerController_AdminTools_C_2145428519)caused by BP_Projectile_30mm_HE_Red_C_2145099005",
+        "expectedTime": "2025.03.07-20.26.44:728",
+        "expectedChainID": "260",
+        "expectedVictimName": "Borecka",
+        "expectedDamage": 2.931430,
+        "expectedAttackerName": "WASD LechugaSix",
+        "expectedAttackerPlayerController": "BP_PlayerController_AdminTools_C_2145428519",
+        "expectedWeapon": "BP_Projectile_30mm_HE_Red_C_2145099005",
+        "expectedAttackerEosId": "00022f7875d8424391398d27357e6cf5",
+        "expectedAttackerSteamId": 76561198953819680
+    },
+    {
+        "input": "[2025.03.07-20.30.16:968][697]LogSquad: Player:  bAB ActualDamage=36.119999 from  Bravo 1 J. Hayes (Online IDs: EOS: 0002efb2a54849e99b91c4e90b4c4b58 steam: 76561198344842945 | Player Controller ID: BP_PlayerController_AdminTools_C_2145354903)caused by BP_M256A1_coax_ADF_C_2145175307",
+        "expectedTime": "2025.03.07-20.30.16:968",
+        "expectedChainID": "697",
+        "expectedVictimName": "bAB",
+        "expectedDamage": 36.119999,
+        "expectedAttackerName": "Bravo 1 J. Hayes",
+        "expectedAttackerPlayerController": "BP_PlayerController_AdminTools_C_2145354903",
+        "expectedWeapon": "BP_M256A1_coax_ADF_C_2145175307",
+        "expectedAttackerEosId": "0002efb2a54849e99b91c4e90b4c4b58",
+        "expectedAttackerSteamId": 76561198344842945
     }
 ]
