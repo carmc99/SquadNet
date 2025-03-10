@@ -15,7 +15,7 @@ namespace SquadNET.Core.Squad.Parsers
             input = input.SanitizeInput();
             Match match = RoundWinnerRegex.Match(input);
 
-            if (!match.Success || match.Groups.Count < 5)
+            if (!match.Success || match.Groups.Count < 4)
             {
                 ParserLogger.LogInvalidInput(nameof(RoundWinnerParser), input);
                 return null;
@@ -23,10 +23,10 @@ namespace SquadNET.Core.Squad.Parsers
 
             Dictionary<string, string> parsedValues = new()
             {
-                { "Time", match.Groups[1].Value },
-                { "ChainID", match.Groups[2].Value },
-                { "Winner", match.Groups[3].Value },
-                { "Layer", match.Groups[4].Value }
+                { "Time", match.Groups[1].Value.Trim() },
+                { "ChainID", match.Groups[2].Value.Trim() },
+                { "Winner", match.Groups[3].Value.Trim() },
+                { "Layer", match.Groups[4].Value.Trim() }
             };
 
             return DictionaryModelConverter.ConvertDictionaryToModel<RoundWinnerEventModel>(parsedValues);

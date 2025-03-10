@@ -3,7 +3,7 @@
 // </copyright>
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQGameMode::)?DetermineMatchWinner\(\): (.+) won on (.+)")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[\s*([0-9]+)]LogSquadTrace: \[DedicatedServer](?:ASQGameMode::)?DetermineMatchWinner\(\): (.+?)(?: won on | on )(.+)$")]
     public class RoundWinnerEventModel : ISquadEventData
     {
         public string ChainID { get; set; }
