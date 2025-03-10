@@ -35,8 +35,8 @@ namespace SquadNET.Tests.Squad.Parsers
             Assert.Equal(expectedVictimName, result.VictimName);
             Assert.Equal(expectedKillingDamage, result.KillingDamage);
             Assert.Equal(expectedKillerName, result.KillerName);
-            Assert.Equal(expectedKillerEosId, result.KillerEosId);
-            Assert.Equal(expectedKillerSteamId, result.KillerSteamId);
+            Assert.Equal(expectedKillerEosId, result.CreatorIds.EosId);
+            Assert.Equal(expectedKillerSteamId, result.CreatorIds.SteamId);
             Assert.Equal(expectedKillerControllerId, result.KillerControllerId);
             Assert.Equal(expectedWeapon, result.Weapon);
         }

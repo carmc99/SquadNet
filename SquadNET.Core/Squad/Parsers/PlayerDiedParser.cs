@@ -3,6 +3,7 @@
 // </copyright>
 
 using SquadNET.Core.Squad.Events.Models;
+using SquadNET.Core.Squad.Models;
 using System.Text.RegularExpressions;
 
 namespace SquadNET.Core.Squad.Parsers
@@ -27,13 +28,14 @@ namespace SquadNET.Core.Squad.Parsers
                 { "VictimName", match.Groups[1].Value },
                 { "KillingDamage", match.Groups[2].Value },
                 { "KillerName", match.Groups[3].Value },
-                { "KillerEosId", match.Groups[4].Value },
-                { "KillerSteamId", match.Groups[5].Value },
                 { "KillerControllerId", match.Groups[6].Value },
                 { "Weapon", match.Groups[7].Value }
             };
 
-            return DictionaryModelConverter.ConvertDictionaryToModel<PlayerDiedEventModel>(parsedValues);
+            PlayerDiedEventModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDiedEventModel>(parsedValues);
+            model.CreatorIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[4].Value} steam: {match.Groups[5].Value}");
+
+            return model;
         }
     }
 }
