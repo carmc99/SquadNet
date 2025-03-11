@@ -1,16 +1,12 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SquadNET.Application.Squad.Admin.Commands;
 using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Map.Queries;
 using SquadNET.Application.Squad.Player.Queries;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
 
 /// <summary>

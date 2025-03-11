@@ -14,20 +14,20 @@ using System.Text;
 
 namespace SquadNET.MonitoringService
 {
-    public class SquadMonitoringService : BackgroundService
+    public class SquadEventProcessingService : BackgroundService
     {
         private readonly IConfiguration Configuration;
         private readonly List<string> ExcludePatterns;
         private readonly bool IsFilteringEnabled;
-        private readonly ILogger<SquadMonitoringService> Logger;
+        private readonly ILogger<SquadEventProcessingService> Logger;
         private readonly ILogReaderFactory LogReaderFactory;
         private readonly ILogReader LogReaderService;
         private readonly IMediator Mediator;
         private readonly PluginManager PluginManager;
         private readonly IRconService RconService;
 
-        public SquadMonitoringService(
-            ILogger<SquadMonitoringService> logger,
+        public SquadEventProcessingService(
+            ILogger<SquadEventProcessingService> logger,
             ILogReaderFactory logReaderFactory,
             IConfiguration configuration,
             PluginManager pluginManager,

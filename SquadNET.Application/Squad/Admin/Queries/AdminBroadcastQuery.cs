@@ -1,31 +1,15 @@
-﻿using FluentValidation;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+using FluentValidation;
 using MediatR;
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Application.Squad.Admin.Queries
 {
     public static class AdminBroadcastQuery
     {
-        public class Request : IRequest<AdminBroadcastEventModel>
-        {
-            public string RawMessage { get; set; }
-        }
-
-        public class Validator : AbstractValidator<Request>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.RawMessage).NotEmpty();
-            }
-        }
-
         public class Handler : IRequestHandler<Request, AdminBroadcastEventModel>
         {
             private readonly IParser<AdminBroadcastEventModel> Parser;
@@ -39,6 +23,19 @@ namespace SquadNET.Application.Squad.Admin.Queries
             {
                 AdminBroadcastEventModel adminBroadcast = Parser.Parse(request.RawMessage);
                 return Task.FromResult(adminBroadcast);
+            }
+        }
+
+        public class Request : IRequest<AdminBroadcastEventModel>
+        {
+            public string RawMessage { get; set; }
+        }
+
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.RawMessage).NotEmpty();
             }
         }
     }

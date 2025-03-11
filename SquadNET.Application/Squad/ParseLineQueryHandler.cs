@@ -1,12 +1,7 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
-// <copyright company="Carmc99 - SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
+
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SquadNET.Application.Squad.Admin.Queries;
@@ -36,24 +31,24 @@ namespace SquadNET.Application.Squad.ParseLine
 
                 Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>>
                 {
-                    { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
+                    { SquadEventType.PlayerDamaged, (line, ct) => ParsePlayerDamaged(line, ct) },
+                    { SquadEventType.PlayerPossessed, (line, ct) => ParsePlayerPossess(line, ct) },
+                    { SquadEventType.PlayerUnpossessed, (line, ct) => ParsePlayerUnposess(line, ct)},
+                    { SquadEventType.PlayerRevived, (line, ct) => ParsePlayerRevived(line, ct) },
+                    { SquadEventType.PlayerDied, (line, ct) => ParsePlayerDied(line, ct) },
+                    { SquadEventType.PlayerWounded, (line, ct) => ParsePlayerWounded(line, ct) },
+                    { SquadEventType.PlayerJoinSucceeded, (line, ct) => ParsePlayerJoinSucceeded(line, ct) },
+                    { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerConnected(line, ct) },
+                    { SquadEventType.PlayerDisconnected, (line, ct) => ParsePlayerDisconnected(line, ct) },
+                    { SquadEventType.DeployableDamaged, (line, ct) => ParseDeployableDamaged(line, ct) },
                     { SquadEventType.SquadCreated, (line, ct) => ParseSquadCreated(line, ct) },
+
+                    { SquadEventType.AdminBroadcast, (line, ct) => ParseAdminBroadcast(line, ct) },
+                    { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
                     { SquadEventType.GameEnded, (line, ct) => ParseRoundEnded(line, ct) },
                     { SquadEventType.RoundTickets, (line, ct) => ParseRoundTickets(line, ct) },
                     { SquadEventType.RoundWinner, (line, ct) => ParseRoundWinner(line, ct) },
                     { SquadEventType.ServerTickRateUpdated, (line, ct) => ParseServerTickRate(line, ct) },
-                    { SquadEventType.PlayerDamaged, (line, ct) => ParsePlayerDamaged(line, ct) },
-                    { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerJoinSucceeded(line, ct) },
-                    { SquadEventType.PlayerPossessed, (line, ct) => ParsePlayerPossess(line, ct) },
-                    { SquadEventType.PlayerUnpossessed, (line, ct) => ParsePlayerUnposess(line, ct)},
-                    { SquadEventType.PlayerRevived, (line, ct) => ParsePlayerRevived(line, ct) },
-                    { SquadEventType.AdminBroadcast, (line, ct) => ParseAdminBroadcast(line, ct) },
-
-                    { SquadEventType.DeployableDamaged, (line, ct) => ParseDeployableDamaged(line, ct) },
-                    { SquadEventType.PlayerDied, (line, ct) => ParsePlayerDied(line, ct) },
-                    { SquadEventType.PlayerWounded, (line, ct) => ParsePlayerWounded(line, ct) },
-                    { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerConnected(line, ct) },
-                    { SquadEventType.PlayerDisconnected, (line, ct) => ParsePlayerDisconnected(line, ct) },
                 };
             }
 

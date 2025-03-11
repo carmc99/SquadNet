@@ -5,7 +5,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SquadNET.Core;
 using SquadNET.Core.Squad.Commands;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Core.Squad.Parsers;
@@ -31,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IParser<SquadCreatedEventModel>, SquadCreatedMessageParser>();
         services.AddSingleton<IParser<List<LayerModel>>, ListLayersParser>();
         services.AddSingleton<IParser<List<LevelModel>>, ListLevelsParser>();
+        services.AddSingleton<IParser<DeployableDamagedEventModel>, DeployableDamageParser>();
 
         services.AddSingleton<IParser<PlayerConnectedEventModel>, PlayerConnectedParser>();
         services.AddSingleton<IParser<PlayerDisconnectedEventModel>, PlayerDisconnectedParser>();

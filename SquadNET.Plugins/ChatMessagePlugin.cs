@@ -1,9 +1,10 @@
-﻿using System;
-using System.Reflection;
-using SquadNET.Core.Squad.Entities;
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 using SquadNET.Core.Squad.Events;
 using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Plugins.Abstractions;
+using System.Reflection;
 
 namespace SquadNET.Plugins
 {
@@ -25,6 +26,7 @@ namespace SquadNET.Plugins
                 }
             }
         }
+
         private void WriteToLogFile(string message)
         {
             try

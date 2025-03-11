@@ -8,6 +8,7 @@ namespace SquadNET.Core.Squad.Events
     /// </summary>
     public enum SquadEventType
     {
+        PlayerJoinSucceeded,
         ChatMessage,
         AdminCameraPossessed,
         AdminCameraUnpossessed,
