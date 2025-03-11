@@ -4,6 +4,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SquadNET.Application.Squad.Server.Repositories.EF;
 using SquadNET.LogManagement;
 using SquadNET.Rcon;
 using System.Reflection;
@@ -16,7 +17,7 @@ namespace SquadNET.Application
         {
             services.AddLogManagement();
             services.AddRconServices();
-
+            services.AddServerRepository();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

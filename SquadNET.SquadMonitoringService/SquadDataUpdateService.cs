@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using SquadNET.Application.Squad.Map.Queries;
 using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Application.Squad.Server.Queries;
+using SquadNET.Application.Squad.Server.Repositories.EF;
 using SquadNET.Application.Squad.Team.Queries;
 using SquadNET.Core.Squad.Models;
 
@@ -16,12 +17,15 @@ namespace SquadNET.SquadMonitoringService
     {
         private readonly ILogger Logger;
         private readonly IMediator Mediator;
+        private readonly IServerInfoRepository ServerInfoRepository;
         private readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(30);
 
         public SquadDataUpdateService(
             IMediator mediator,
-            ILogger<SquadDataUpdateService> logger)
+            ILogger<SquadDataUpdateService> logger,
+            IServerInfoRepository serverInfoRepository)
         {
+            ServerInfoRepository = serverInfoRepository;
             Mediator = mediator;
             Logger = logger;
         }
@@ -67,6 +71,7 @@ namespace SquadNET.SquadMonitoringService
         private async Task UpdateServerInformationAsync()
         {
             ServerInformationModel serverInfo = await Mediator.Send(new ServerInformationQuery.Request());
+            await ServerInfoRepository.Store(serverInfo);
             Logger.LogInformation("Server information updated: {ServerName}", serverInfo?.ServerName);
         }
 
