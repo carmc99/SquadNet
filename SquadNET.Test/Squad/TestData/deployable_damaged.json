@@ -1,0 +1,24 @@
+﻿[
+    {
+        "input": "[2025.03.07-14.32.46:523][890]LogSquadTrace: [DedicatedServer]ASQDeployable::TakeDamage(): BP_I_Sandbag_41: 450.00 damage attempt by causer BP_Projectile_Hell_Cannon_C_2147477533 instigator nullptr with damage type BP_Explosives_Damagetype_C health remaining 225.00",
+        "expectedTime": "2025.03.07-14.32.46:523",
+        "expectedChainID": "890",
+        "expectedDeployable": "BP_I_Sandbag_41",
+        "expectedDamage": 450.0,
+        "expectedWeapon": "BP_Projectile_Hell_Cannon_C_2147477533",
+        "expectedAttackerName": "nullptr",
+        "expectedDamageType": "BP_Explosives_Damagetype_C",
+        "expectedHealthRemaining": 225.0
+    },
+    {
+        "input": "[2025.03.07-14.45.05:177][390]LogSquadTrace: [DedicatedServer]ASQDeployable::TakeDamage(): BP_FobRadio_INS_C_2147474935: 125.00 damage attempt by causer BP_Projectile_Hell_Cannon_C_2147474664 instigator Tripode with damage type BP_Fragmentation_DamageType_C health remaining 240.41",
+        "expectedTime": "2025.03.07-14.45.05:177",
+        "expectedChainID": "390",
+        "expectedDeployable": "BP_FobRadio_INS_C_2147474935",
+        "expectedDamage": 125.0,
+        "expectedWeapon": "BP_Projectile_Hell_Cannon_C_2147474664",
+        "expectedAttackerName": "Tripode",
+        "expectedDamageType": "BP_Fragmentation_DamageType_C",
+        "expectedHealthRemaining": 240.41
+    }
+]

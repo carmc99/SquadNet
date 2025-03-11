@@ -2,17 +2,15 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 
-using SquadNET.Core.Squad.Models;
-
 namespace SquadNET.Core.Squad.Events.Models
 {
-    [RegexPattern(@"^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQDeployable::)?TakeDamage\(\): ([A-z0-9_]+)_C_[0-9]+: ([0-9.]+) damage attempt by causer ([A-z0-9_]+)_C_[0-9]+ instigator (.+) with damage type ([A-z0-9_]+)_C health remaining ([0-9.]+)")]
+    [RegexPattern(@"^\[([0-9.:-]+)]\[([0-9]*)]LogSquadTrace: \[DedicatedServer]ASQDeployable::TakeDamage\(\): ([A-Za-z0-9_]+): ([0-9.]+) damage attempt by causer ([A-Za-z0-9_]+(?:_[A-Za-z0-9]+)*) instigator ([A-Za-z0-9_]+) with damage type ([A-Za-z0-9_]+_C) health remaining ([0-9.]+)")]
     public class DeployableDamagedEventModel : ISquadEventData
     {
         /// <summary>
-        /// The online identifiers (EOS, Steam) of the player who caused the damage.
+        /// The online identifiers of the player who caused the damage.
         /// </summary>
-        public CreatorOnlineModel AttackerIds { get; set; }
+        public string AttackerName { get; set; }
 
         /// <summary>
         /// The unique event chain ID.
@@ -52,9 +50,10 @@ namespace SquadNET.Core.Squad.Events.Models
         /// <summary>
         /// Parses log data to create an instance of <see cref="DeployableDamagedEventModel"/>.
         /// </summary>
-        public static DeployableDamagedEventModel FromParsedData(string time, string chainID, string deployable,
-                                                                 float damage, string weapon, string attackerIds,
-                                                                 string damageType, float healthRemaining)
+        public static DeployableDamagedEventModel FromParsedData(
+            string time, string chainID, string deployable,
+            float damage, string weapon, string attackerName,
+            string damageType, float healthRemaining)
         {
             return new DeployableDamagedEventModel
             {
@@ -63,7 +62,7 @@ namespace SquadNET.Core.Squad.Events.Models
                 Deployable = deployable,
                 Damage = damage,
                 Weapon = weapon,
-                AttackerIds = CreatorOnlineModel.FromString(attackerIds),
+                AttackerName = attackerName,
                 DamageType = damageType,
                 HealthRemaining = healthRemaining
             };
@@ -74,7 +73,7 @@ namespace SquadNET.Core.Squad.Events.Models
         /// </summary>
         public override string ToString()
         {
-            return $"[{Time}] Deployable '{Deployable}' took {Damage} damage from {AttackerIds} using {Weapon} (Type: {DamageType}). " +
+            return $"[{Time}] Deployable '{Deployable}' took {Damage} damage from {AttackerName} using {Weapon} (Type: {DamageType}). " +
                    $"Remaining health: {HealthRemaining}";
         }
     }

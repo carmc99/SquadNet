@@ -2,7 +2,7 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
+using SquadNET.Core.Squad.Models;
 using SquadNET.Test.Squad.Core;
 using System.Text.Json.Serialization;
 

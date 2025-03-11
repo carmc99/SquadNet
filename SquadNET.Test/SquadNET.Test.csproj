@@ -36,6 +36,9 @@
     <None Update="Squad\TestData\chat_messages.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Squad\TestData\deployable_damaged.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Squad\TestData\list_commands.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
