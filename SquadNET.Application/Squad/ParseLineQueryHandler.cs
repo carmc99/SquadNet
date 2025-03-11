@@ -11,7 +11,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Chat.Commands;
-using SquadNET.Application.Squad.Deployable.Queries;
 using SquadNET.Application.Squad.Player.Queries;
 using SquadNET.Application.Squad.Round.Queries;
 using SquadNET.Application.Squad.Server.Queries;
@@ -36,24 +35,24 @@ namespace SquadNET.Application.Squad.ParseLine
 
                 Parsers = new Dictionary<SquadEventType, Func<string, CancellationToken, Task<ISquadEventData>>>
                 {
-                    { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
                     { SquadEventType.SquadCreated, (line, ct) => ParseSquadCreated(line, ct) },
                     { SquadEventType.GameEnded, (line, ct) => ParseRoundEnded(line, ct) },
                     { SquadEventType.RoundTickets, (line, ct) => ParseRoundTickets(line, ct) },
                     { SquadEventType.RoundWinner, (line, ct) => ParseRoundWinner(line, ct) },
                     { SquadEventType.ServerTickRateUpdated, (line, ct) => ParseServerTickRate(line, ct) },
                     { SquadEventType.PlayerDamaged, (line, ct) => ParsePlayerDamaged(line, ct) },
-                    { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerJoinSucceeded(line, ct) },
+                    { SquadEventType.PlayerJoinSucceeded, (line, ct) => ParsePlayerJoinSucceeded(line, ct) },
                     { SquadEventType.PlayerPossessed, (line, ct) => ParsePlayerPossess(line, ct) },
                     { SquadEventType.PlayerUnpossessed, (line, ct) => ParsePlayerUnposess(line, ct)},
                     { SquadEventType.PlayerRevived, (line, ct) => ParsePlayerRevived(line, ct) },
                     { SquadEventType.AdminBroadcast, (line, ct) => ParseAdminBroadcast(line, ct) },
 
-                    { SquadEventType.DeployableDamaged, (line, ct) => ParseDeployableDamaged(line, ct) },
+                    //{ SquadEventType.DeployableDamaged, (line, ct) => ParseDeployableDamaged(line, ct) },
                     { SquadEventType.PlayerDied, (line, ct) => ParsePlayerDied(line, ct) },
                     { SquadEventType.PlayerWounded, (line, ct) => ParsePlayerWounded(line, ct) },
                     { SquadEventType.PlayerConnected, (line, ct) => ParsePlayerConnected(line, ct) },
                     { SquadEventType.PlayerDisconnected, (line, ct) => ParsePlayerDisconnected(line, ct) },
+                    { SquadEventType.ChatMessage, (line, ct) => ParseChatMessage(line, ct) },
                 };
             }
 
@@ -92,10 +91,11 @@ namespace SquadNET.Application.Squad.ParseLine
                 return await Mediator.Send(new ChatMessageQuery.Request { RawMessage = line }, cancellationToken);
             }
 
-            private async Task<ISquadEventData> ParseDeployableDamaged(string line, CancellationToken cancellationToken)
-            {
-                return await Mediator.Send(new DeployableDamagedQuery.Request { RawMessage = line }, cancellationToken);
-            }
+            //TODO: Implement this
+            //private async Task<ISquadEventData> ParseDeployableDamaged(string line, CancellationToken cancellationToken)
+            //{
+            //    return await Mediator.Send(new DeployableDamagedQuery.Request { RawMessage = line }, cancellationToken);
+            //}
 
             private async Task<ISquadEventData> ParsePlayerConnected(string line, CancellationToken cancellationToken)
             {

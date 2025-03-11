@@ -4,7 +4,6 @@
 using FluentValidation;
 using MediatR;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
 

@@ -4,6 +4,7 @@
 
 using FluentValidation;
 using MediatR;
+using SquadNET.Core;
 using SquadNET.Core.Squad.Events.Models;
 
 namespace SquadNET.Application.Squad.Deployable.Queries
@@ -15,19 +16,17 @@ namespace SquadNET.Application.Squad.Deployable.Queries
         /// </summary>
         public class Handler : IRequestHandler<Request, DeployableDamagedEventModel>
         {
-            //private readonly IParser<DeployableDamagedEventModel> Parser;
+            private readonly IParser<DeployableDamagedEventModel> Parser;
 
-            //public Handler(IParser<DeployableDamagedEventModel> parser)
-            //{
-            //    Parser = parser;
-            //}
+            public Handler(IParser<DeployableDamagedEventModel> parser)
+            {
+                Parser = parser;
+            }
 
             public Task<DeployableDamagedEventModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                //TODO: Complete
-                throw new NotImplementedException();
-                //DeployableDamagedEventModel parsedEvent = Parser.Parse(request.RawMessage);
-                //return Task.FromResult(parsedEvent);
+                DeployableDamagedEventModel parsedEvent = Parser.Parse(request.RawMessage);
+                return Task.FromResult(parsedEvent);
             }
         }
 

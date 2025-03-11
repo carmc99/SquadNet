@@ -10,6 +10,7 @@ using SquadNET.Application;
 using SquadNET.LogManagement;
 using SquadNET.MonitoringService;
 using SquadNET.Plugins.Abstractions;
+using SquadNET.SquadMonitoringService;
 
 Logger logger = new LoggerConfiguration()
     .WriteTo.Console(new CustomConsoleFormatter())
@@ -27,7 +28,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddLogManagement();
         services.AddSquadApplication();
         services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
-        services.AddHostedService<SquadMonitoringService>();
+        services.AddHostedService<SquadDataUpdateService>();
+        //services.AddHostedService<SquadEventProcessingService>();
     })
     .Build();
 

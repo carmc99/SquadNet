@@ -1,11 +1,9 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using FluentValidation;
 using MediatR;
 using SquadNET.Core;
-using SquadNET.Core.Squad.Entities;
-using SquadNET.Core.Squad.Events.Models;
 using SquadNET.Core.Squad.Models;
 using SquadNET.Rcon;
 
