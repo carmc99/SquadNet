@@ -92,7 +92,7 @@ namespace SquadNET.Plugins
 - [x] Log reading via FTP, Tail, and SFTP.
 - [x] Real-time event system.
 - [x] Basic RCON support.
-- [x] Implementation of a Windows service for continuous monitoring.
+- [x] Implementation of a service for continuous monitoring.
 - [ ] Plugin System Improvement.
 - [ ] CLI Development.
 - [ ] REST API Development.
