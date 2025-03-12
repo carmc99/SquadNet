@@ -4,7 +4,7 @@
 using Microsoft.EntityFrameworkCore;
 using SquadNET.Core.Squad.Models;
 
-namespace SquadNET.Application.Squad.Server.Repositories.EF
+namespace SquadNET.Application.Squad.Team.Repositories.EF
 {
     public class TeamDbContext : DbContext
     {
@@ -12,12 +12,12 @@ namespace SquadNET.Application.Squad.Server.Repositories.EF
         {
         }
 
-        public DbSet<ServerInformationModel> ServerInformationModels { get; set; }
+        public DbSet<TeamModel> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ServerInformationModel>()
-                .HasKey(s => s.ServerName);
+            modelBuilder.Entity<TeamModel>()
+                .HasKey(t => t.Id);
         }
     }
 }

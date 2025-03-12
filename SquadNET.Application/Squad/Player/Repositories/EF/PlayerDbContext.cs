@@ -12,10 +12,24 @@ namespace SquadNET.Application.Squad.Server.Repositories.EF
         {
         }
 
-        public DbSet<ListPlayerModel> Players { get; set; }
+        public DbSet<PlayerConnectedModel> ActivePlayers { get; set; }
+        public DbSet<PlayerDisconnectedModel> DisconnectedPlayers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CreatorOnlineModel>()
+                 .HasKey(c => c.Id);
+
+            modelBuilder.Entity<PlayerConnectedModel>()
+                .HasKey(p => p.CreatorId);
+
+            modelBuilder.Entity<PlayerConnectedModel>()
+                .HasOne(p => p.CreatorIds)
+                .WithOne()
+                .HasForeignKey<PlayerConnectedModel>(p => p.CreatorId);
+
+            modelBuilder.Entity<PlayerDisconnectedModel>()
+                .HasKey(t => t.Id);
         }
     }
 }

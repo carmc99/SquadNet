@@ -7,6 +7,7 @@ namespace SquadNET.Core.Squad.Models
     [RegexPattern(@"^ID: (\d+) \| Online IDs: EOS: ([0-9a-f]+) steam: (\d+) \| Name: (.+?) \| Team ID: (\d+) \| Squad ID: (N/A|\d+) \| Is Leader: (False|True) \| Role: ([A-Za-z0-9_-]+)$")]
     public class PlayerConnectedModel
     {
+        public string CreatorId { get; set; }
         public CreatorOnlineModel CreatorIds { get; set; }
         public int Id { get; set; }
         public bool IsLeader { get; set; }

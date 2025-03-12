@@ -1,9 +1,6 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-// <copyright company="SquadNet">
-// Licensed under the Business Source License 1.0 (BSL 1.0)
-// </copyright>
 namespace SquadNET.Core.Squad.Models
 {
     public class CreatorOnlineModel
@@ -12,9 +9,11 @@ namespace SquadNET.Core.Squad.Models
         {
             EosId = eosId ?? throw new ArgumentNullException(nameof(eosId));
             SteamId = steamId;
+            Id = GenerateId(eosId, steamId);
         }
 
         public string EosId { get; private set; }
+        public string Id { get; private set; }
         public ulong SteamId { get; private set; }
 
         /// <summary>
@@ -22,7 +21,6 @@ namespace SquadNET.Core.Squad.Models
         /// </summary>
         /// <param name="onlineIds">String of identifiers in the format 'EOS: XXXX steam: XXXX'.</param>
         /// <returns>An instance of <see cref="CreatorOnlineModel"/> with the parsed values.</returns>
-
         public static CreatorOnlineModel FromString(string onlineIds)
         {
             if (string.IsNullOrWhiteSpace(onlineIds))
@@ -57,7 +55,7 @@ namespace SquadNET.Core.Squad.Models
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return EosId == other.EosId && SteamId == other.SteamId;
+            return Id == other.Id && EosId == other.EosId && SteamId == other.SteamId;
         }
 
         public override bool Equals(object obj)
@@ -67,12 +65,32 @@ namespace SquadNET.Core.Squad.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(EosId, SteamId);
+            return HashCode.Combine(Id, EosId, SteamId);
         }
 
         public override string ToString()
         {
             return $"EOS: {EosId}, Steam: {SteamId}";
+        }
+
+        private string GenerateId(string eosId, ulong steamId)
+        {
+            if (!string.IsNullOrEmpty(eosId) && steamId != 0)
+            {
+                return $"{eosId}-{steamId}";
+            }
+            else if (!string.IsNullOrEmpty(eosId))
+            {
+                return eosId;
+            }
+            else if (steamId != 0)
+            {
+                return steamId.ToString();
+            }
+            else
+            {
+                throw new InvalidOperationException("Se requiere al menos EosId o SteamId.");
+            }
         }
     }
 }
