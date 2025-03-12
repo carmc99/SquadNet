@@ -5,10 +5,13 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SquadNET.Application.Squad.Map.Queries;
+using SquadNET.Application.Squad.Map.Repositories.EF;
 using SquadNET.Application.Squad.Player.Queries;
+using SquadNET.Application.Squad.Player.Repositories.EF;
 using SquadNET.Application.Squad.Server.Queries;
 using SquadNET.Application.Squad.Server.Repositories.EF;
 using SquadNET.Application.Squad.Team.Queries;
+using SquadNET.Application.Squad.Team.Repositories.EF;
 using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.SquadMonitoringService
@@ -16,18 +19,27 @@ namespace SquadNET.SquadMonitoringService
     public class SquadDataUpdateService : BackgroundService
     {
         private readonly ILogger Logger;
+        private readonly IMapRepository MapRepository;
         private readonly IMediator Mediator;
+        private readonly IPlayerRepository PlayerRepository;
         private readonly IServerInfoRepository ServerInfoRepository;
+        private readonly ITeamRepository TeamRepository;
         private readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(30);
 
         public SquadDataUpdateService(
             IMediator mediator,
             ILogger<SquadDataUpdateService> logger,
-            IServerInfoRepository serverInfoRepository)
+            IServerInfoRepository serverInfoRepository,
+            IPlayerRepository playerRepository,
+            IMapRepository mapRepository,
+            ITeamRepository teamRepository)
         {
             ServerInfoRepository = serverInfoRepository;
             Mediator = mediator;
             Logger = logger;
+            PlayerRepository = playerRepository;
+            MapRepository = mapRepository;
+            TeamRepository = teamRepository;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -59,12 +71,14 @@ namespace SquadNET.SquadMonitoringService
         private async Task UpdateLayerInformationAsync()
         {
             List<LayerModel> layers = await Mediator.Send(new ListLayersQuery.Request());
+            await MapRepository.Store(layers);
             Logger.LogInformation("Layer list updated: {LayerCount} layers", layers?.Count);
         }
 
         private async Task UpdatePlayerListAsync()
         {
             ListPlayerModel players = await Mediator.Send(new ListPlayersQuery.Request());
+            await PlayerRepository.Store(players);
             Logger.LogInformation("Player list updated: {PlayerCount} players", players?.ActivePlayers.Count);
         }
 
@@ -78,6 +92,7 @@ namespace SquadNET.SquadMonitoringService
         private async Task UpdateSquadListAsync()
         {
             List<TeamModel> squads = await Mediator.Send(new ListTeamsQuery.Request());
+            await TeamRepository.Store(squads);
             Logger.LogInformation("Squad list updated: {SquadCount} squads", squads?.Count);
         }
     }

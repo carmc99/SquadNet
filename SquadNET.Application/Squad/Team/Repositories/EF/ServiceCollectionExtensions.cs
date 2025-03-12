@@ -4,18 +4,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SquadNET.Application.Squad.Server.Repositories.EF
+namespace SquadNET.Application.Squad.Team.Repositories.EF
 {
     internal static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddServerRepository(this IServiceCollection services)
+        public static IServiceCollection AddTeamRepository(this IServiceCollection services)
         {
             //TODO: only in dev, define database later
             services.AddDbContextFactory<TeamDbContext>(options =>
             {
-                options.UseInMemoryDatabase("ServerDatabase");
+                options.UseInMemoryDatabase("TeamDatabase");
             });
-            services.AddScoped<IServerInfoRepository, ServerInfoRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
 
             return services;
         }

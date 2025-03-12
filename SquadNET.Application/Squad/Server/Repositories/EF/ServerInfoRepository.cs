@@ -8,9 +8,9 @@ namespace SquadNET.Application.Squad.Server.Repositories.EF
 {
     internal class ServerInfoRepository : IServerInfoRepository
     {
-        private readonly ServerDbContext Context;
+        private readonly TeamDbContext Context;
 
-        public ServerInfoRepository(IDbContextFactory<ServerDbContext> contextFactory)
+        public ServerInfoRepository(IDbContextFactory<TeamDbContext> contextFactory)
         {
             Context = contextFactory.CreateDbContext();
         }

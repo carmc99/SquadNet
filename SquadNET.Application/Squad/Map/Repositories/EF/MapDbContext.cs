@@ -12,10 +12,20 @@ namespace SquadNET.Application.Squad.Server.Repositories.EF
         {
         }
 
-        public DbSet<MapModel> Maps { get; set; }
+        public DbSet<CurrentMapModel> CurrentMap { get; set; }
+        public DbSet<LayerModel> Layers { get; set; }
+        public DbSet<NextMapModel> NextMap { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CurrentMapModel>()
+                .HasKey(c => c.Name);
+
+            modelBuilder.Entity<NextMapModel>()
+                .HasKey(c => c.Name);
+
+            modelBuilder.Entity<LayerModel>()
+                .HasKey(l => l.Name);
         }
     }
 }
