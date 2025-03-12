@@ -12,7 +12,7 @@ Additionally, it offers RCON integration, allowing administrative commands to be
 - **Event System**: Captures and processes real-time events from logs.
 - **RCON Support**: Allows command execution on Squad servers.
 - **Extensibility**: Plugin system to customize event logic.
-- **Background Service**: A Windows service that continuously monitors log changes.
+- **Background Service**: A service that continuously monitors log changes.
 - **Unit Testing**: Set of tests to ensure parser accuracy.
 
 ## Installation
