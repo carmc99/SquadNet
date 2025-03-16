@@ -29,8 +29,10 @@ namespace SquadNET.Tests.Squad.Parsers
             List<PlayerConnectedModel> expectedActivePlayers,
             List<PlayerDisconnectedModel> expectedDisconnectedPlayers)
         {
+            // Act
             ListPlayerModel result = Parser.Parse(input);
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(expectedActivePlayers.Count, result.ActivePlayers.Count);
             Assert.Equal(expectedDisconnectedPlayers.Count, result.DisconnectedPlayers.Count);
@@ -51,7 +53,8 @@ namespace SquadNET.Tests.Squad.Parsers
             {
                 Assert.Equal(expectedDisconnectedPlayers[i].Id, result.DisconnectedPlayers[i].Id);
                 Assert.Equal(expectedDisconnectedPlayers[i].Name, result.DisconnectedPlayers[i].Name);
-                Assert.Equal(expectedDisconnectedPlayers[i].SteamId, result.DisconnectedPlayers[i].SteamId);
+                Assert.Equal(expectedDisconnectedPlayers[i].CreatorIds.EosId, result.DisconnectedPlayers[i].CreatorIds.EosId);
+                Assert.Equal(expectedDisconnectedPlayers[i].CreatorIds.SteamId, result.DisconnectedPlayers[i].CreatorIds.SteamId);
                 Assert.Equal(expectedDisconnectedPlayers[i].DisconnectedSince, result.DisconnectedPlayers[i].DisconnectedSince);
             }
         }

@@ -1,38 +1,53 @@
 [
     {
-        "input": "----- Active Players -----\nID: 1 | Online IDs: EOS: abc123 steam: 76561198000000000 | Name: PlayerOne | Team ID: 1 | Squad ID: 2 | Is Leader: True | Role: Rifleman\nID: 2 | Online IDs: EOS: def456 steam: 76561198011111111 | Name: PlayerTwo | Team ID: 2 | Squad ID: 3 | Is Leader: False | Role: Medic\n----- Recently Disconnected Players [Max of 15] -----\nID: 3 | SteamID: 76561198022222222 | Since Disconnect: 10m.30s | Name: PlayerThree",
-        "expectedActivePlayers": [
+        "Input": "ID: 61 | Online IDs: EOS: 0002866132a642ed842f332c5920e1b3 steam: 76561197994426522 | Name: van gogh | Team ID: 2 | Squad ID: 1 | Is Leader: False | Role: VDV_LAT_01\nID: 102 | Online IDs: EOS: 000295ccd3fd4445ab819af2e28e34a6 steam: 76561198447324526 | Name: [PxT] ✟₱ela | Team ID: 2 | Squad ID: 4 | Is Leader: True | Role: VDV_SL_02\nID: 95 | Online IDs: EOS: 00026c53754f4a6aa131c856d7c22398 steam: 76561198081079020 | Name: ✪ BastriP | Team ID: 2 | Squad ID: 6 | Is Leader: False | Role: VDV_Grenadier_01\n----- Recently Disconnected Players [Max of 15] -----\nID: 109 | Online IDs: EOS: 0002000fab2e47298ff5017a6a4e3fed steam: 76561198411413730 | Since Disconnect: 03m.09s | Name: homero",
+        "ExpectedActivePlayers": [
             {
-                "Id": 1,
+                "Id": 61,
+                "Name": "van gogh",
+                "Team": 2,
+                "SquadId": 1,
+                "IsLeader": false,
+                "Role": "VDV_LAT_01",
                 "CreatorIds": {
-                    "EosId": "abc123",
-                    "SteamId": 76561198000000000
-                },
-                "Name": "PlayerOne",
-                "Team": 1,
-                "SquadId": 2,
-                "IsLeader": true,
-                "Role": "Rifleman"
+                    "EosId": "0002866132a642ed842f332c5920e1b3",
+                    "SteamId": 76561197994426522
+                }
             },
             {
-                "Id": 2,
-                "CreatorIds": {
-                    "EosId": "def456",
-                    "SteamId": 76561198011111111
-                },
-                "Name": "PlayerTwo",
+                "Id": 102,
+                "Name": "[PxT] ✟₱ela",
                 "Team": 2,
-                "SquadId": 3,
+                "SquadId": 4,
+                "IsLeader": true,
+                "Role": "VDV_SL_02",
+                "CreatorIds": {
+                    "EosId": "000295ccd3fd4445ab819af2e28e34a6",
+                    "SteamId": 76561198447324526
+                }
+            },
+            {
+                "Id": 95,
+                "Name": "✪ BastriP",
+                "Team": 2,
+                "SquadId": 6,
                 "IsLeader": false,
-                "Role": "Medic"
+                "Role": "VDV_Grenadier_01",
+                "CreatorIds": {
+                    "EosId": "00026c53754f4a6aa131c856d7c22398",
+                    "SteamId": 76561198081079020
+                }
             }
         ],
-        "expectedDisconnectedPlayers": [
+        "ExpectedDisconnectedPlayers": [
             {
-                "Id": 3,
-                "SteamId": 76561198022222222,
-                "DisconnectedSince": "00:10:30",
-                "Name": "PlayerThree"
+                "Id": 109,
+                "Name": "homero",
+                "CreatorIds": {
+                    "EosId": "0002000fab2e47298ff5017a6a4e3fed",
+                    "SteamId": 76561198411413730
+                },
+                "DisconnectedSince": "00:03:09"
             }
         ]
     }

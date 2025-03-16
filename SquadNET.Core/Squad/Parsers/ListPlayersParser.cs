@@ -64,13 +64,8 @@ namespace SquadNET.Core.Squad.Parsers
                 { "Role", match.Groups[8].Value }
             };
 
-            // Extraer los identificadores EOS y Steam
-            string eosId = match.Groups[2].Value;
-            ulong steamId = ulong.Parse(match.Groups[3].Value);
-            CreatorOnlineModel creatorIds = new(eosId, steamId);
-
             PlayerConnectedModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerConnectedModel>(parsedValues);
-            result.CreatorIds = creatorIds;
+            result.CreatorIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[2].Value} steam: {match.Groups[3].Value}");
 
             return result;
         }
@@ -78,7 +73,7 @@ namespace SquadNET.Core.Squad.Parsers
         private PlayerDisconnectedModel ParsePlayerDisconnected(string line)
         {
             Match match = RegexPatternHelper.GetRegex<PlayerDisconnectedModel>().Match(line);
-            if (!match.Success || match.Groups.Count < 6)
+            if (!match.Success || match.Groups.Count < 7)
             {
                 ParserLogger.LogInvalidInput(nameof(ListPlayersParser), line);
                 return null;
@@ -87,15 +82,17 @@ namespace SquadNET.Core.Squad.Parsers
             Dictionary<string, string> parsedValues = new()
             {
                 { "Id", match.Groups[1].Value },
-                { "SteamId", match.Groups[2].Value },
-                { "Minutes", match.Groups[3].Value },
-                { "Seconds", match.Groups[4].Value },
-                { "Name", match.Groups[5].Value }
+                { "Name", match.Groups[6].Value.Trim() },
             };
 
-            PlayerDisconnectedModel result = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedModel>(parsedValues);
+            PlayerDisconnectedModel model = DictionaryModelConverter.ConvertDictionaryToModel<PlayerDisconnectedModel>(parsedValues);
 
-            return result;
+            int minutes = int.Parse(match.Groups[4].Value);
+            int seconds = int.Parse(match.Groups[5].Value);
+            model.DisconnectedSince = new TimeSpan(0, minutes, seconds);
+            model.CreatorIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[2].Value} steam: {match.Groups[3].Value}");
+
+            return model;
         }
     }
 }
