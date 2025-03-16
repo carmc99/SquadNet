@@ -2,13 +2,14 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Application.Squad.Server.Repositories.EF
 {
-    public class TeamDbContext : DbContext
+    public class ServerDbContext : DbContextBase
     {
-        public TeamDbContext(DbContextOptions<TeamDbContext> options) : base(options)
+        public ServerDbContext(IConfiguration configuration) : base(configuration)
         {
         }
 

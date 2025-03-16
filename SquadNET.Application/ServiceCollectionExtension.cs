@@ -3,6 +3,7 @@
 // </copyright>
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SquadNET.Application.Squad.Map.Repositories.EF;
 using SquadNET.Application.Squad.Player.Repositories.EF;
@@ -16,18 +17,38 @@ namespace SquadNET.Application
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddSquadApplication(this IServiceCollection services)
+        public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddLogManagement();
-            services.AddRconServices();
+            AddDbContext<MapDbContext>(services, configuration);
+            AddDbContext<PlayerDbContext>(services, configuration);
+            AddDbContext<TeamDbContext>(services, configuration);
+            AddDbContext<ServerDbContext>(services, configuration);
+
             services.AddServerRepository();
             services.AddPlayerRepository();
             services.AddTeamRepository();
             services.AddMapRepository();
+
+            return services;
+        }
+
+        public static IServiceCollection AddSquadApplication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddLogManagement();
+            services.AddRconServices();
+            services.AddRepositories(configuration);
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             return services;
+        }
+
+        private static void AddDbContext<T>(IServiceCollection services, IConfiguration configuration) where T : DbContextBase
+        {
+            services.AddDbContextFactory<T>(options =>
+            {
+                DbContextBase.ConfigureDatabaseProvider(options, configuration);
+            });
         }
     }
 }

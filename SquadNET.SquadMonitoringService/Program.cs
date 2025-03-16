@@ -26,10 +26,10 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddLogManagement();
-        services.AddSquadApplication();
+        services.AddSquadApplication(context.Configuration);
         services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
         services.AddHostedService<SquadDataUpdateService>();
-        //services.AddHostedService<SquadEventProcessingService>();
+        services.AddHostedService<SquadEventProcessingService>();
     })
     .Build();
 

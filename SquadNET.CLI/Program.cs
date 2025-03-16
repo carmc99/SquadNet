@@ -6,20 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SquadNET.Application;
 
+IConfiguration configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
 using ServiceProvider serviceProvider = new ServiceCollection()
     .AddLogging(config =>
     {
         config.AddConsole();
         config.SetMinimumLevel(LogLevel.Information);
     })
-    .AddSingleton<IConfiguration>(_ =>
-    {
-        return new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
-    })
-    .AddSquadApplication()
+    .AddSingleton(configuration)
+    .AddSquadApplication(configuration)
     .AddSingleton<CommandHandler>()
     .BuildServiceProvider();
 

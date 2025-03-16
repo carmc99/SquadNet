@@ -1,3 +1,6 @@
+// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
 // <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
@@ -12,7 +15,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
 });
-builder.Services.AddSquadApplication();
+builder.Services.AddSquadApplication(builder.Configuration);
 
 WebApplication app = builder.Build();
 
