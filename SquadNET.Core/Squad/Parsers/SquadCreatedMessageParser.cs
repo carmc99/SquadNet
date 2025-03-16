@@ -22,10 +22,6 @@ namespace SquadNET.Core.Squad.Parsers
                 return null;
             }
 
-            string eosId = match.Groups[2].Value;
-            ulong steamId = ulong.Parse(match.Groups[3].Value);
-            CreatorOnlineModel creatorIds = new(eosId, steamId);
-
             Dictionary<string, string> parsedValues = new()
             {
                 { "PlayerName", match.Groups[1].Value },
@@ -34,10 +30,10 @@ namespace SquadNET.Core.Squad.Parsers
                 { "TeamName", match.Groups[6].Value }
             };
 
-            SquadCreatedEventModel squadCreated = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedEventModel>(parsedValues);
-            squadCreated.CreatorIds = creatorIds;
+            SquadCreatedEventModel result = DictionaryModelConverter.ConvertDictionaryToModel<SquadCreatedEventModel>(parsedValues);
+            result.CreatorIds = CreatorOnlineModel.FromString($"EOS: {match.Groups[2].Value} steam: {match.Groups[3].Value}");
 
-            return squadCreated;
+            return result;
         }
     }
 }
