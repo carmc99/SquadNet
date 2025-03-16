@@ -2,13 +2,14 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SquadNET.Core.Squad.Models;
 
 namespace SquadNET.Application.Squad.Server.Repositories.EF
 {
-    public class MapDbContext : DbContext
+    public class MapDbContext : DbContextBase
     {
-        public MapDbContext(DbContextOptions<MapDbContext> options) : base(options)
+        public MapDbContext(IConfiguration configuration) : base(configuration)
         {
         }
 

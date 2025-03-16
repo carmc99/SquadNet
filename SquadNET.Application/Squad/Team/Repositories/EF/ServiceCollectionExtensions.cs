@@ -1,7 +1,6 @@
 ﻿// <copyright company="Carmc99 - SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SquadNET.Application.Squad.Team.Repositories.EF
@@ -10,11 +9,6 @@ namespace SquadNET.Application.Squad.Team.Repositories.EF
     {
         public static IServiceCollection AddTeamRepository(this IServiceCollection services)
         {
-            //TODO: only in dev, define database later
-            services.AddDbContextFactory<TeamDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("TeamDatabase");
-            });
             services.AddScoped<ITeamRepository, TeamRepository>();
 
             return services;
