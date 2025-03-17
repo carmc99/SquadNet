@@ -27,7 +27,7 @@ namespace SquadNET.Application.Squad.Admin.Queries
 
             public async Task<AdminListModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                AdminListModel adminListModel = new AdminListModel
+                AdminListModel adminListModel = new()
                 {
                     Admins = [],
                     Groups = []
@@ -39,9 +39,12 @@ namespace SquadNET.Application.Squad.Admin.Queries
 
                     data = type switch
                     {
-                        LogReaderType.Ftp => await ((LogReaderFactory.Create(type) as FtpLogReader)!).DownloadFileAsync(source),
-                        LogReaderType.Sftp => await ((LogReaderFactory.Create(type) as SftpLogReader)!).DownloadFileAsync(source),
-                        LogReaderType.Tail => await ((LogReaderFactory.Create(type) as TailLogReader)!).ReadFileAsync(source),
+                        LogReaderType.Ftp => await ((LogReaderFactory.Create(type) as FtpLogReader)!)
+                            .DownloadFileAsync(source),
+                        LogReaderType.Sftp => await ((LogReaderFactory.Create(type) as SftpLogReader)!)
+                            .DownloadFileAsync(source),
+                        LogReaderType.Tail => await ((LogReaderFactory.Create(type) as TailLogReader)!)
+                            .ReadFileAsync(source),
                         _ => await FetchFromOtherSourcesAsync(source, type)
                     };
 
