@@ -37,6 +37,14 @@ namespace SquadNET.LogManagement.LogReaders
 
         public event Action OnWatchStopped;
 
+        public async Task<string> ReadFileAsync(string path)
+        {
+            if (!File.Exists(path))
+                throw new FileNotFoundException($"File not found: {path}");
+
+            return await File.ReadAllTextAsync(path);
+        }
+
         public Task UnwatchAsync()
         {
             Watcher?.Dispose();

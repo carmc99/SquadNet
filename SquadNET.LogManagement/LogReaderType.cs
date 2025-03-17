@@ -7,6 +7,7 @@ namespace SquadNET.LogManagement
     {
         Tail,
         Ftp,
-        Sftp
+        Sftp,
+        Https
     }
 }

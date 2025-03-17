@@ -44,6 +44,21 @@ namespace SquadNET.LogManagement.LogReaders
 
         public event Action OnWatchStopped;
 
+        public async Task<string> DownloadFileAsync(string remotePath)
+        {
+            if (!sftpClient.IsConnected)
+            {
+                sftpClient.Connect();
+            }
+
+            using MemoryStream stream = new();
+            await Task.Run(() => sftpClient.DownloadFile(remotePath, stream));
+
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            return await reader.ReadToEndAsync();
+        }
+
         public Task UnwatchAsync()
         {
             sftpClient.Disconnect();
