@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
 using SquadNET.Application;
-using SquadNET.LogManagement;
 using SquadNET.MonitoringService;
 using SquadNET.Plugins.Abstractions;
 using SquadNET.SquadMonitoringService;
@@ -25,7 +24,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     .UseSerilog(logger)
     .ConfigureServices((context, services) =>
     {
-        services.AddLogManagement();
         services.AddSquadApplication(context.Configuration);
         services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
         services.AddHostedService<SquadDataUpdateService>();

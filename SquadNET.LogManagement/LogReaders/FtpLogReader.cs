@@ -1,4 +1,7 @@
-﻿// <copyright company="SquadNet">
+﻿// <copyright company="Carmc99 - SquadNet">
+// Licensed under the Business Source License 1.0 (BSL 1.0)
+// </copyright>
+// <copyright company="SquadNet">
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 // <copyright company="Carmc99 - SquadNet">
@@ -41,6 +44,24 @@ namespace SquadNET.LogManagement.LogReaders
         public event Action OnWatchStarted;
 
         public event Action OnWatchStopped;
+
+        public async Task<string> DownloadFileAsync(string remotePath)
+        {
+            if (!FtpClient.IsConnected)
+                FtpClient.Connect();
+
+            using MemoryStream stream = new();
+            bool success = FtpClient.DownloadStream(stream, remotePath);
+
+            if (!success)
+            {
+                throw new Exception($"Error downloading file from FTP: {remotePath}");
+            }
+
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            return await reader.ReadToEndAsync();
+        }
 
         public Task UnwatchAsync()
         {

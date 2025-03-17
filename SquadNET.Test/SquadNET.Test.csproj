@@ -33,6 +33,9 @@
     <None Update="Squad\TestData\admin_broadcast_messages.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Squad\TestData\admin_list.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Squad\TestData\chat_messages.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

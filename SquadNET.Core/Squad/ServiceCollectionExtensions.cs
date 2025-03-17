@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddSquadParsers(this IServiceCollection services)
     {
+        services.AddSingleton<IParser<AdminListModel>, AdminListParser>();
         services.AddSingleton<IParser<ListPlayerModel>, ListPlayersParser>();
         services.AddSingleton<IParser<List<CommandModel>>, ListCommandsParser>();
         services.AddSingleton<IParser<List<TeamModel>>, ListTeamsParser>();
