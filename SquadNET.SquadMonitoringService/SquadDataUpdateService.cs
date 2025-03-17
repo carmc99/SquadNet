@@ -2,8 +2,10 @@
 // Licensed under the Business Source License 1.0 (BSL 1.0)
 // </copyright>
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SquadNET.Application.Squad.Admin.Queries;
 using SquadNET.Application.Squad.Map.Queries;
 using SquadNET.Application.Squad.Map.Repositories.EF;
 using SquadNET.Application.Squad.Player.Queries;
@@ -13,11 +15,13 @@ using SquadNET.Application.Squad.Server.Repositories.EF;
 using SquadNET.Application.Squad.Team.Queries;
 using SquadNET.Application.Squad.Team.Repositories.EF;
 using SquadNET.Core.Squad.Models;
+using SquadNET.LogManagement;
 
 namespace SquadNET.SquadMonitoringService
 {
     public class SquadDataUpdateService : BackgroundService
     {
+        private readonly IConfiguration Configuration;
         private readonly ILogger Logger;
         private readonly IMapRepository MapRepository;
         private readonly IMediator Mediator;
@@ -32,7 +36,8 @@ namespace SquadNET.SquadMonitoringService
             IServerInfoRepository serverInfoRepository,
             IPlayerRepository playerRepository,
             IMapRepository mapRepository,
-            ITeamRepository teamRepository)
+            ITeamRepository teamRepository,
+            IConfiguration configuration)
         {
             ServerInfoRepository = serverInfoRepository;
             Mediator = mediator;
@@ -40,6 +45,7 @@ namespace SquadNET.SquadMonitoringService
             PlayerRepository = playerRepository;
             MapRepository = mapRepository;
             TeamRepository = teamRepository;
+            Configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -54,6 +60,7 @@ namespace SquadNET.SquadMonitoringService
                     await UpdatePlayerListAsync();
                     await UpdateSquadListAsync();
                     await UpdateLayerInformationAsync();
+                    await UpdateAdminListAsync();
 
                     Logger.LogInformation("Squad data updated successfully.");
                 }
@@ -66,6 +73,37 @@ namespace SquadNET.SquadMonitoringService
             }
 
             Logger.LogInformation("Squad Data Update Service is stopping.");
+        }
+
+        private async Task UpdateAdminListAsync()
+        {
+            string selectedType = Configuration["AdminSources:Type"];
+
+            if (!Enum.TryParse(selectedType, out LogReaderType adminSourceType))
+            {
+                Logger.LogWarning("Invalid or missing AdminSources:Type in configuration.");
+                return;
+            }
+
+            List<(string source, LogReaderType type)> allAdminSources = Configuration
+                .GetSection("AdminSources:Sources").Get<List<(string source, LogReaderType type)>>() ?? [];
+
+            List<(string source, LogReaderType type)> adminSources = allAdminSources
+                .Where(s => s.type == adminSourceType).ToList();
+
+            if (adminSources.Count == 0)
+            {
+                Logger.LogWarning("No admin list sources found for selected type: {SelectedType}", selectedType);
+                return;
+            }
+
+            AdminListModel adminList = await Mediator.Send(new ListAdminsQuery.Request
+            {
+                AdminSources = adminSources
+            });
+
+            Logger.LogInformation("Admin list updated: {AdminCount} admins, {GroupCount} groups",
+                adminList?.Admins.Count, adminList?.Groups.Count);
         }
 
         private async Task UpdateLayerInformationAsync()

@@ -27,7 +27,7 @@ namespace SquadNET.Application.Squad.Admin.Queries
 
             public async Task<AdminListModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                var adminListModel = new AdminListModel
+                AdminListModel adminListModel = new AdminListModel
                 {
                     Admins = [],
                     Groups = []
@@ -37,20 +37,13 @@ namespace SquadNET.Application.Squad.Admin.Queries
                 {
                     string data = string.Empty;
 
-                    try
+                    data = type switch
                     {
-                        data = type switch
-                        {
-                            LogReaderType.Ftp => await ((LogReaderFactory.Create(type) as FtpLogReader)!).DownloadFileAsync(source),
-                            LogReaderType.Sftp => await ((LogReaderFactory.Create(type) as SftpLogReader)!).DownloadFileAsync(source),
-                            _ => await FetchFromOtherSourcesAsync(source, type)
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching {type} admin list from {source}: {ex.Message}");
-                        continue;
-                    }
+                        LogReaderType.Ftp => await ((LogReaderFactory.Create(type) as FtpLogReader)!).DownloadFileAsync(source),
+                        LogReaderType.Sftp => await ((LogReaderFactory.Create(type) as SftpLogReader)!).DownloadFileAsync(source),
+                        LogReaderType.Tail => await ((LogReaderFactory.Create(type) as TailLogReader)!).ReadFileAsync(source),
+                        _ => await FetchFromOtherSourcesAsync(source, type)
+                    };
 
                     AdminListModel parsedList = Parser.Parse(data);
                     adminListModel.Admins.AddRange(parsedList.Admins);
@@ -65,7 +58,6 @@ namespace SquadNET.Application.Squad.Admin.Queries
                 return type switch
                 {
                     _ when source.StartsWith("http") => await HttpClient.GetStringAsync(source),
-                    _ when File.Exists(source) => await File.ReadAllTextAsync(source),
                     _ => throw new Exception($"Unsupported source type: {source}")
                 };
             }
