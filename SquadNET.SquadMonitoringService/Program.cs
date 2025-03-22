@@ -27,7 +27,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSquadApplication(context.Configuration);
         services.AddPlugins(Path.Combine(AppContext.BaseDirectory, "plugins"));
         services.AddHostedService<SquadDataUpdateService>();
-        services.AddHostedService<SquadEventProcessingService>();
+        //services.AddHostedService<SquadEventProcessingService>();
     })
     .Build();
 

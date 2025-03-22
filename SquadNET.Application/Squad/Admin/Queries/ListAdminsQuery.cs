@@ -14,15 +14,17 @@ namespace SquadNET.Application.Squad.Admin.Queries
     {
         public class Handler : IRequestHandler<Request, AdminListModel>
         {
-            private readonly HttpClient HttpClient;
+            private readonly IHttpClientFactory HttpClientFactory;
             private readonly ILogReaderFactory LogReaderFactory;
             private readonly IParser<AdminListModel> Parser;
 
-            public Handler(IParser<AdminListModel> parser, ILogReaderFactory logReaderFactory, HttpClient httpClient)
+            public Handler(IParser<AdminListModel> parser,
+                ILogReaderFactory logReaderFactory,
+                IHttpClientFactory httpClientFactory)
             {
                 Parser = parser;
                 LogReaderFactory = logReaderFactory;
-                HttpClient = httpClient;
+                HttpClientFactory = httpClientFactory;
             }
 
             public async Task<AdminListModel> Handle(Request request, CancellationToken cancellationToken)
@@ -45,7 +47,7 @@ namespace SquadNET.Application.Squad.Admin.Queries
                             .DownloadFileAsync(source),
                         LogReaderType.Tail => await ((LogReaderFactory.Create(type) as TailLogReader)!)
                             .ReadFileAsync(source),
-                        _ => await FetchFromOtherSourcesAsync(source, type)
+                        _ => await FetchFromOtherSourcesAsync(source)
                     };
 
                     AdminListModel parsedList = Parser.Parse(data);
@@ -56,27 +58,29 @@ namespace SquadNET.Application.Squad.Admin.Queries
                 return adminListModel;
             }
 
-            private async Task<string> FetchFromOtherSourcesAsync(string source, LogReaderType type)
+            private async Task<string> FetchFromOtherSourcesAsync(string source)
             {
-                return type switch
+                if (source.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    _ when source.StartsWith("http") => await HttpClient.GetStringAsync(source),
-                    _ => throw new Exception($"Unsupported source type: {source}")
-                };
-            }
-        }
+                    using HttpClient httpClient = HttpClientFactory.CreateClient();
+                    return await httpClient.GetStringAsync(source);
+                }
 
-        public class Request : IRequest<AdminListModel>
-        {
-            public List<(string source, LogReaderType type)> AdminSources { get; set; }
-        }
-
-        public class Validator : AbstractValidator<Request>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.AdminSources).NotEmpty();
+                throw new Exception($"Unsupported source type: {source}");
             }
-        }
+        };
+    }
+}
+
+public class Request : IRequest<AdminListModel>
+{
+    public List<(string source, LogReaderType type)> AdminSources { get; set; }
+}
+
+public class Validator : AbstractValidator<Request>
+{
+    public Validator()
+    {
+        RuleFor(x => x.AdminSources).NotEmpty();
     }
 }
