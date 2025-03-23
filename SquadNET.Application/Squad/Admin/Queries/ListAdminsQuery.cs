@@ -68,19 +68,19 @@ namespace SquadNET.Application.Squad.Admin.Queries
 
                 throw new Exception($"Unsupported source type: {source}");
             }
-        };
-    }
-}
+        }
 
-public class Request : IRequest<AdminListModel>
-{
-    public List<(string source, LogReaderType type)> AdminSources { get; set; }
-}
+        public class Request : IRequest<AdminListModel>
+        {
+            public List<(string source, LogReaderType type)> AdminSources { get; set; }
+        }
 
-public class Validator : AbstractValidator<Request>
-{
-    public Validator()
-    {
-        RuleFor(x => x.AdminSources).NotEmpty();
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.AdminSources).NotEmpty();
+            }
+        }
     }
 }
