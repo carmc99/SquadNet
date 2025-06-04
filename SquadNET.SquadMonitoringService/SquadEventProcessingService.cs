@@ -49,6 +49,7 @@ namespace SquadNET.MonitoringService
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
             await LogReaderService.UnwatchAsync();
+            PluginManager.ShutdownPlugins();
             await base.StopAsync(stoppingToken);
         }
 

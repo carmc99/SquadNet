@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen(c =>
     c.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
 });
 builder.Services.AddSquadApplication(builder.Configuration);
+builder.Services.AddHttpClient();
 
 WebApplication app = builder.Build();
 
